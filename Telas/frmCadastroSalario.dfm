@@ -1,6 +1,7 @@
 inherited TelaCadastroSalario: TTelaCadastroSalario
   Caption = 'Salario'
   OnDestroy = FormDestroy
+  OnShow = FormShow
   PixelsPerInch = 96
   TextHeight = 17
   inherited pnlTop: TPanel
@@ -242,7 +243,7 @@ inherited TelaCadastroSalario: TTelaCadastroSalario
         Align = alClient
         Caption = 'Despesas'
         Flat = True
-        OnClick = btnPesquisarClick
+        OnClick = btnDespesasClick
         ExplicitLeft = -6
         ExplicitHeight = 29
       end

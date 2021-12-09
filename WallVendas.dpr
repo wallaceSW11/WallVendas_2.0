@@ -16,7 +16,13 @@ uses
   WallVendas.Model.Despesas in 'Model\WallVendas.Model.Despesas.pas',
   WallVendas.Model.Salario in 'Model\WallVendas.Model.Salario.pas',
   WallVendas.Helper.TEdit in 'Helper\WallVendas.Helper.TEdit.pas',
-  WallVendas.Helper.Numbers in 'Helper\WallVendas.Helper.Numbers.pas';
+  WallVendas.Helper.Numbers in 'Helper\WallVendas.Helper.Numbers.pas',
+  frmCadastroDespesas in 'Telas\frmCadastroDespesas.pas' {TelaCadastroDespesas},
+  WallVendas.Repository.Salario in 'Repository\WallVendas.Repository.Salario.pas',
+  WallVendas.Controller.Salario in 'Controller\WallVendas.Controller.Salario.pas',
+  WallVendas.Repository.Interfaces in 'Repository\WallVendas.Repository.Interfaces.pas',
+  WallVendas.Context.Conexao in 'Context\WallVendas.Context.Conexao.pas',
+  WallVendas.Context.Query in 'Context\WallVendas.Context.Query.pas';
 
 {$R *.res}
 
@@ -24,5 +30,6 @@ begin
   Application.Initialize;
   Application.MainFormOnTaskbar := True;
   Application.CreateForm(TfrmWallVendas, frmWallVendas);
+  Application.CreateForm(TTelaCadastroDespesas, TelaCadastroDespesas);
   Application.Run;
 end.

@@ -145,6 +145,15 @@
         <DCCReference Include="Model\WallVendas.Model.Salario.pas"/>
         <DCCReference Include="Helper\WallVendas.Helper.TEdit.pas"/>
         <DCCReference Include="Helper\WallVendas.Helper.Numbers.pas"/>
+        <DCCReference Include="Telas\frmCadastroDespesas.pas">
+            <Form>TelaCadastroDespesas</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
+        <DCCReference Include="Repository\WallVendas.Repository.Salario.pas"/>
+        <DCCReference Include="Controller\WallVendas.Controller.Salario.pas"/>
+        <DCCReference Include="Repository\WallVendas.Repository.Interfaces.pas"/>
+        <DCCReference Include="Context\WallVendas.Context.Conexao.pas"/>
+        <DCCReference Include="Context\WallVendas.Context.Query.pas"/>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>

@@ -73,12 +73,12 @@ object frmWallVendas: TfrmWallVendas
       ExplicitLeft = 1042
     end
     object lblNomeEmpresa: TLabel
-      Left = 126
+      Left = 132
       Top = 0
-      Width = 898
-      Height = 50
-      Align = alClient
+      Width = 845
+      Height = 49
       Alignment = taCenter
+      Anchors = [akLeft, akTop, akRight, akBottom]
       AutoSize = False
       Caption = 'Turquesa - Ateli'#234' criativo'
       DragCursor = crDefault
@@ -89,9 +89,6 @@ object frmWallVendas: TfrmWallVendas
       Font.Style = []
       ParentFont = False
       Layout = tlCenter
-      ExplicitLeft = 344
-      ExplicitWidth = 433
-      ExplicitHeight = 49
     end
     object lblSistema: TLabel
       Left = 10
@@ -106,7 +103,6 @@ object frmWallVendas: TfrmWallVendas
       Font.Name = 'Segoe UI'
       Font.Style = []
       ParentFont = False
-      ExplicitTop = 5
       ExplicitHeight = 17
     end
   end
@@ -144,7 +140,6 @@ object frmWallVendas: TfrmWallVendas
       Color = 6441249
       ParentBackground = False
       TabOrder = 0
-      ExplicitTop = -6
       object btnHome: TSpeedButton
         AlignWithMargins = True
         Left = 0
@@ -184,9 +179,6 @@ object frmWallVendas: TfrmWallVendas
       Color = 6441249
       ParentBackground = False
       TabOrder = 1
-      ExplicitLeft = 112
-      ExplicitTop = 352
-      ExplicitWidth = 185
       object btnVenda: TSpeedButton
         AlignWithMargins = True
         Left = 0
@@ -227,7 +219,6 @@ object frmWallVendas: TfrmWallVendas
       Color = 6441249
       ParentBackground = False
       TabOrder = 2
-      ExplicitLeft = -6
       object btnProduto: TSpeedButton
         AlignWithMargins = True
         Left = 0
@@ -308,8 +299,6 @@ object frmWallVendas: TfrmWallVendas
       Color = 6441249
       ParentBackground = False
       TabOrder = 4
-      ExplicitLeft = -6
-      ExplicitTop = 85
       object btnInventario: TSpeedButton
         AlignWithMargins = True
         Left = 0
@@ -350,7 +339,6 @@ object frmWallVendas: TfrmWallVendas
       Color = 6441249
       ParentBackground = False
       TabOrder = 5
-      ExplicitLeft = 10
       object btnSalario: TSpeedButton
         AlignWithMargins = True
         Left = 0
@@ -391,9 +379,6 @@ object frmWallVendas: TfrmWallVendas
       Color = 6441249
       ParentBackground = False
       TabOrder = 6
-      ExplicitLeft = 80
-      ExplicitTop = 432
-      ExplicitWidth = 185
       object btnOpcoes: TSpeedButton
         AlignWithMargins = True
         Left = 0
@@ -433,9 +418,6 @@ object frmWallVendas: TfrmWallVendas
       Color = 6441249
       ParentBackground = False
       TabOrder = 7
-      ExplicitLeft = 80
-      ExplicitTop = 432
-      ExplicitWidth = 185
       object btnLogs: TSpeedButton
         AlignWithMargins = True
         Left = 0
@@ -477,8 +459,6 @@ object frmWallVendas: TfrmWallVendas
       Color = 6441249
       ParentBackground = False
       TabOrder = 8
-      ExplicitLeft = -6
-      ExplicitTop = 624
       object btnMenuToggle: TSpeedButton
         AlignWithMargins = True
         Left = 0
