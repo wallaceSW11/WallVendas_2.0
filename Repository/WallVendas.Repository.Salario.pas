@@ -6,7 +6,9 @@ uses
   WallVendas.Repository.Interfaces,
   WallVendas.Model.Salario,
   WallVendas.Context.Query,
-  data.DB; // retirar esse cara
+  data.DB,
+  System.SysUtils,
+  WallVendas.Helper.Numbers; // retirar esse cara
 
 type
   TRepositorySalario = class(TInterfacedObject, IRepositorySalario)
@@ -18,16 +20,42 @@ type
     class function NovaInstancia(): IRepositorySalario;
 
     function ObterSalario(): TSalario;
-    procedure AtualizarSalario();
+    procedure AtualizarSalario(pSalario: TSalario);
   end;
 
 implementation
 
 { TRepositorySalario }
 
-procedure TRepositorySalario.AtualizarSalario();
+procedure TRepositorySalario.AtualizarSalario(pSalario: TSalario);
+const
+  UPDATE_SALARIO =
+                   'UPDATE'
+    + sLineBreak + '  Salario'
+    + sLineBreak + 'SET'
+    + sLineBreak + '  VlSalario = ''%s'','
+    + sLineBreak + '  TotalHorasPorDia = ''%s'','
+    + sLineBreak + '  TotalDiasSemana = ''%s'','
+    + sLineBreak + '  TotalHorasPorSemana = ''%s''';
+//    + sLineBreak + '  TotalHorasMes = ''TotalHorasMes'','
+//    + sLineBreak + '  VlCustoPorHora = ''VlCustoPorHora'','
+//    + sLineBreak + '  VlCustoPorMinuto = ''VlCustoPorMinuto'','
+//    + sLineBreak + '  VlTotalDespesas = ''VlTotalDespesas''';
+var
+  lDataSet: TDataSet;
 begin
-  //
+  FormatSettings.DecimalSeparator := ',';
+
+  FQuery.ExecSQL(
+    Format(UPDATE_SALARIO, [
+      pSalario.SalarioDesejado.ValorMonetario,
+      pSalario.TotalDeHorasPorDia.ToString,
+      pSalario.TotalDeDiasTrabalhadosNaSemana.ToString,
+      pSalario.TotalDeHorasTrabalhadasPorSemana.ToString]));
+
+
+//    FSalario.Despesas := lDataSet.FieldByName('VlTotalDespesas').AsCurrency;
+//    FSalario.QuantidadeDeSemanasPorMes := 4;
 end;
 
 constructor TRepositorySalario.Create();

@@ -17,7 +17,7 @@ type
   TControllerSalario = class(TInterfacedObject, IControllerSalario)
   private
     FRepositorySalario: IRepositorySalario;
-    FSalario_: TSalario;
+    FSalario: TSalario;
     constructor Create();
 
   public
@@ -35,18 +35,18 @@ implementation
 
 procedure TControllerSalario.Atualizar(const pSalario: TSalario);
 begin
-  //
+  FRepositorySalario.AtualizarSalario(pSalario);
 end;
 
 constructor TControllerSalario.Create;
 begin
   FRepositorySalario := TRepositorySalario.NovaInstancia();
-  FSalario_ := TSalario.Create();
+  FSalario := TSalario.Create();
 end;
 
 destructor TControllerSalario.Destroy;
 begin
-  FSalario_.Free();
+  FSalario.Free();
   inherited;
 end;
 
@@ -57,8 +57,8 @@ end;
 
 function TControllerSalario.Salario(): TSalario;
 begin
-  FSalario_ := FRepositorySalario.ObterSalario();
-  Result := FSalario_;
+  FSalario := FRepositorySalario.ObterSalario();
+  Result := FSalario;
 end;
 
 end.

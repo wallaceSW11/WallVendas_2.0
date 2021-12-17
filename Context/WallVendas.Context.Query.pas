@@ -42,6 +42,7 @@ end;
 
 destructor TQuery.Destroy;
 begin
+  FQuery.Close();
   FQuery.Connection.Connected := False;
   FreeAndNil(FQuery);
   inherited;
@@ -50,6 +51,17 @@ end;
 function TQuery.ExecSQL(const pComandoSQL: string): Integer;
 begin
   Result := 0;
+
+  ReiniciarQuery();
+  FQuery.SQL.Add(pComandoSQL);
+
+  try
+    FQuery.ExecSQL();
+    //Result := FQuery;
+  except
+    on E:Exception do
+      raise Exception.Create('Falha ao realizar a consulta: ' + E.Message);
+  end;
 end;
 
 class function TQuery.NovaInstancia: IQuery;
@@ -69,7 +81,6 @@ begin
     on E:Exception do
       raise Exception.Create('Falha ao realizar a consulta: ' + E.Message);
   end;
-
 end;
 
 procedure TQuery.ReiniciarQuery;

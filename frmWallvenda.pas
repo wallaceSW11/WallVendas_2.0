@@ -107,8 +107,7 @@ procedure TfrmWallVendas.ExibirTela<T>(Sender: TObject);
 var
   I: Integer;
 begin
-  if (Assigned(FTela)) then
-    FTela.Free();
+  //Validar troca de tela
 
   Application.CreateForm(T, FTela);
   FTela.Parent := pnlMain;
@@ -117,12 +116,11 @@ begin
   FTela.Show();
 
   for I := 0 to pnlMenu.ControlCount-1 do
-  begin
     if (TPanel(pnlMenu.Controls[I]).Name = string(TSpeedButton(Sender).Name).Replace('btn', 'pnl')) then
       TPanel(pnlMenu.Controls[I]).Color := COLOR_SECONDARY
     else
       TPanel(pnlMenu.Controls[I]).Color := COLOR_PRIMARY
-  end;
+
 end;
 
 procedure TfrmWallVendas.btnClienteClick(Sender: TObject);
@@ -132,6 +130,8 @@ end;
 
 procedure TfrmWallVendas.FormCreate(Sender: TObject);
 begin
+  ReportMemoryLeaksOnShutdown := True;
+
   Self.Top := 0;
   Self.Left := 0;
   Self.Height := Screen.Height - 40;
@@ -153,7 +153,7 @@ begin
   pnlMenu.Color := COLOR_PRIMARY;
   pnlMain.Color := COLOR_BACKGROUND;
 
-  ExibirTela<TTelaHome>(btnHome);
+  ExibirTela<TTelaCadastroSalario>(btnSalario);
   ToggleMenu();
 end;
 

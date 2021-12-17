@@ -54,8 +54,8 @@ end;
 
 destructor TConexao.Destroy;
 begin
-//  FConexao.Connected := False;
-//  FreeAndNil(FConexao);
+  FConexao.Connected := False;
+  FreeAndNil(FConexao);
   inherited;
 end;
 

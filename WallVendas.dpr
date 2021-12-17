@@ -22,7 +22,8 @@ uses
   WallVendas.Controller.Salario in 'Controller\WallVendas.Controller.Salario.pas',
   WallVendas.Repository.Interfaces in 'Repository\WallVendas.Repository.Interfaces.pas',
   WallVendas.Context.Conexao in 'Context\WallVendas.Context.Conexao.pas',
-  WallVendas.Context.Query in 'Context\WallVendas.Context.Query.pas';
+  WallVendas.Context.Query in 'Context\WallVendas.Context.Query.pas',
+  WallVendas.DAO.Generico in 'DAO\WallVendas.DAO.Generico.pas';
 
 {$R *.res}
 

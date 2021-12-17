@@ -4,9 +4,11 @@ interface
 
 uses
   System.Generics.Collections,
-  WallVendas.Model.Despesas;
+  WallVendas.Model.Despesas,
+  SimpleAttributes;
 
 type
+  [Tabela('Salario')]
   TSalario = class
   private
     FSalarioDesejado: Currency;
@@ -14,16 +16,25 @@ type
     FTotalDeHorasPorDia: Double;
     FDespesas: Currency;
     FQuantidadeDeSemanasPorMes: Integer;
+    FId: Integer;
     procedure SetDespesas(const Value: Currency);
     procedure SetSalarioDesejado(const Value: Currency);
     procedure SetTotalDeDiasTrabalhadosNaSemana(const Value: Integer);
     procedure SetTotalDeHorasPorDia(const Value: Double);
     procedure SetQuantidadeDeSemanasPorMes(const Value: Integer);
+    procedure SetId(const Value: Integer);
   public
+    [Campo('id'), Pk, AutoInc]
+    property Id: Integer read FId write SetId;
+    [Campo('VlSalario')]
     property SalarioDesejado: Currency read FSalarioDesejado write SetSalarioDesejado;
+    [Campo('TotalHorasPorDia')]
     property TotalDeHorasPorDia: Double read FTotalDeHorasPorDia write SetTotalDeHorasPorDia;
+    [Campo('TotalDiasSemana')]
     property TotalDeDiasTrabalhadosNaSemana: Integer read FTotalDeDiasTrabalhadosNaSemana write SetTotalDeDiasTrabalhadosNaSemana;
+    [Campo('QtSemanasMes')]
     property QuantidadeDeSemanasPorMes: Integer read FQuantidadeDeSemanasPorMes write SetQuantidadeDeSemanasPorMes;
+    [Campo('VlTotalDespesas')]
     property Despesas: Currency read FDespesas write SetDespesas;
 
     function ValorDoSalarioPorMinuto: Currency;
@@ -40,6 +51,11 @@ implementation
 procedure TSalario.SetDespesas(const Value: Currency);
 begin
   FDespesas := Value;
+end;
+
+procedure TSalario.SetId(const Value: Integer);
+begin
+  FId := Value;
 end;
 
 procedure TSalario.SetQuantidadeDeSemanasPorMes(const Value: Integer);
@@ -64,23 +80,7 @@ end;
 
 function TSalario.TotalDeHorasTrabalhadasPorMes: Double;
 begin
-//  edtTotalHorasPorSemana.Text := IntToStr(edtTotalHorasPorDia.ToInteger * edtTotalDiasSemana.ToInteger);
-//  edtTotalHorasMes.Text := IntToStr(edtTotalHorasPorSemana.ToInteger * 4);
-//
-//  edtVlSalarioSomandoDespesas.Text := Double(edtVlSalario.ToCurrency + edtVlTotalDespesas.ToCurrency).ValorMonetario;
-//
-//  if ((edtVlSalarioSomandoDespesas.ToCurrency >= 0.01) and (edtTotalHorasMes.ToInteger >= 0.01)) then
-//    edtVlCustoPorHora.Text := Double(edtVlSalarioSomandoDespesas.ToCurrency / edtTotalHorasMes.ToInteger).ValorMonetario
-//  else
-//    edtVlCustoPorHora.ZeradoComVirgula;
-//
-//  if (edtVlCustoPorHora.ToCurrency >= 0.01) then
-//    edtVlCustoPorMinuto.Text := Double(edtVlCustoPorHora.ToCurrency / 60).ValorMonetario
-//  else
-//    edtVlCustoPorMinuto.ZeradoComVirgula;
-
-  Result := TotalDeHorasTrabalhadasPorSemana * QuantidadeDeSemanasPorMes;
-
+  Result := TotalDeHorasTrabalhadasPorSemana() * QuantidadeDeSemanasPorMes;
 end;
 
 function TSalario.TotalDeHorasTrabalhadasPorSemana: Double;
@@ -90,16 +90,11 @@ end;
 
 function TSalario.TotalSalarioComDespesas: Currency;
 begin
-  Result := SalarioDesejado + Despesas;
+  Result := SalarioDesejado + 0; // Despesas;
 end;
 
 function TSalario.ValorDoSalarioPorHora: Currency;
 begin
-//  if ((edtVlSalarioSomandoDespesas.ToCurrency >= 0.01) and (edtTotalHorasMes.ToInteger >= 0.01)) then
-//    edtVlCustoPorHora.Text := Double(edtVlSalarioSomandoDespesas.ToCurrency / edtTotalHorasMes.ToInteger).ValorMonetario
-//  else
-//    edtVlCustoPorHora.ZeradoComVirgula;
-
   if ((TotalSalarioComDespesas >= 0.01) and (TotalDeHorasTrabalhadasPorMes >= 0.01)) then
     Exit(TotalSalarioComDespesas / TotalDeHorasTrabalhadasPorMes);
 
@@ -109,11 +104,6 @@ end;
 
 function TSalario.ValorDoSalarioPorMinuto: Currency;
 begin
-//  if (edtVlCustoPorHora.ToCurrency >= 0.01) then
-//    edtVlCustoPorMinuto.Text := Double(edtVlCustoPorHora.ToCurrency / 60).ValorMonetario
-//  else
-//    edtVlCustoPorMinuto.ZeradoComVirgula;
-
   if (ValorDoSalarioPorHora >= 0.01) then
     Exit(ValorDoSalarioPorHora / 60);
 

@@ -26,9 +26,9 @@ function TEditHelper.ToCurrency(): Currency;
 var
   lTexto: string;
 begin
-  FormatSettings.DecimalSeparator := ',';
-  lTexto := string(Self.Text).Replace('.', EmptyStr);
-  Result := StrToCurr(lTexto);
+ // FormatSettings.DecimalSeparator := ',';
+  lTexto := StringReplace(Self.Text, '.', EmptyStr, [rfReplaceAll]);
+  Result := StrToCurrDef(lTexto, 0);
 end;
 
 function TEditHelper.ToFloat(): Double;

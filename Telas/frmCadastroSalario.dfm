@@ -114,7 +114,7 @@ inherited TelaCadastroSalario: TTelaCadastroSalario
       TabStop = False
       Alignment = taRightJustify
       ReadOnly = True
-      TabOrder = 4
+      TabOrder = 2
       Text = '0'
     end
     object edtTotalHorasMes: TEdit
@@ -126,7 +126,7 @@ inherited TelaCadastroSalario: TTelaCadastroSalario
       TabStop = False
       Alignment = taRightJustify
       ReadOnly = True
-      TabOrder = 5
+      TabOrder = 3
       Text = '0'
     end
     object edtVlCustoPorHora: TEdit
@@ -138,7 +138,7 @@ inherited TelaCadastroSalario: TTelaCadastroSalario
       TabStop = False
       Alignment = taRightJustify
       ReadOnly = True
-      TabOrder = 6
+      TabOrder = 4
       Text = '0,00'
     end
     object edtVlCustoPorMinuto: TEdit
@@ -150,19 +150,7 @@ inherited TelaCadastroSalario: TTelaCadastroSalario
       TabStop = False
       Alignment = taRightJustify
       ReadOnly = True
-      TabOrder = 7
-      Text = '0,00'
-    end
-    object edtVlTotalDespesas: TEdit
-      Tag = 1
-      Left = 15
-      Top = 102
-      Width = 155
-      Height = 25
-      TabStop = False
-      Alignment = taRightJustify
-      Enabled = False
-      TabOrder = 8
+      TabOrder = 5
       Text = '0,00'
     end
     object edtVlSalarioSomandoDespesas: TEdit
@@ -174,18 +162,8 @@ inherited TelaCadastroSalario: TTelaCadastroSalario
       TabStop = False
       Alignment = taRightJustify
       ReadOnly = True
-      TabOrder = 9
+      TabOrder = 6
       Text = '0,00'
-    end
-    object edtQuantidadeSemanasMes: TEditNumber
-      Left = 511
-      Top = 31
-      Width = 155
-      Height = 25
-      Alignment = taRightJustify
-      TabOrder = 3
-      Text = '0'
-      OnChange = edtVlSalarioChange
     end
     object edtVlSalario: TEditCurrency
       Left = 15
@@ -195,27 +173,15 @@ inherited TelaCadastroSalario: TTelaCadastroSalario
       Alignment = taRightJustify
       TabOrder = 0
       Text = '0,00'
-      OnChange = edtVlSalarioChange
-    end
-    object edtTotalDiasSemana: TEditNumber
-      Left = 345
-      Top = 30
-      Width = 155
-      Height = 25
-      Alignment = taRightJustify
-      TabOrder = 2
-      Text = '0'
-      OnChange = edtVlSalarioChange
     end
     object edtTotalHorasPorDia: TEditNumber
-      Left = 180
-      Top = 30
+      Left = 184
+      Top = 31
       Width = 155
       Height = 25
       Alignment = taRightJustify
       TabOrder = 1
       Text = '0'
-      OnChange = edtVlSalarioChange
     end
     object pnlDespesas: TPanel
       Left = 180
@@ -230,7 +196,7 @@ inherited TelaCadastroSalario: TTelaCadastroSalario
       BevelOuter = bvNone
       Color = clWhite
       ParentBackground = False
-      TabOrder = 10
+      TabOrder = 7
       object btnDespesas: TSpeedButton
         Left = 0
         Top = 0
@@ -247,6 +213,34 @@ inherited TelaCadastroSalario: TTelaCadastroSalario
         ExplicitLeft = -6
         ExplicitHeight = 29
       end
+    end
+    object edtTotalDiasSemana: TEditNumber
+      Left = 345
+      Top = 31
+      Width = 155
+      Height = 25
+      Alignment = taRightJustify
+      TabOrder = 8
+      Text = '0'
+    end
+    object edtQuantidadeSemanasMes: TEditNumber
+      Left = 511
+      Top = 31
+      Width = 189
+      Height = 25
+      Alignment = taRightJustify
+      TabOrder = 9
+      Text = '0'
+      OnChange = edtQuantidadeSemanasMesChange
+    end
+    object edtVlTotalDespesas: TEditCurrency
+      Left = 15
+      Top = 103
+      Width = 155
+      Height = 25
+      Alignment = taRightJustify
+      TabOrder = 10
+      Text = '0,00'
     end
   end
 end
