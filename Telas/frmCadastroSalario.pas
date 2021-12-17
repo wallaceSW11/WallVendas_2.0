@@ -6,7 +6,7 @@ uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, frmCadastroPadrao, Vcl.StdCtrls, Vcl.Buttons, Vcl.ExtCtrls,
   WallVendas.Model.Salario, WallVendas.Helper.TEdit, EditCurrency, EditNumber, WallVendas.Helper.Numbers,
-  frmCadastroDespesas, WallVendas.Controller.Salario, WallVendas.DAO.Generico, SimpleAttributes;
+  frmCadastroDespesas, WallVendas.DAO.Generico, LibMessages;
 
 type
   TTelaCadastroSalario = class(TTelaCadastroPadrao)
@@ -34,18 +34,19 @@ type
     edtVlTotalDespesas: TEditCurrency;
     procedure FormCreate(Sender: TObject);
     procedure btnSalvarClick(Sender: TObject);
-    procedure edtVlSalarioChange(Sender: TObject);
     procedure btnDespesasClick(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
-    procedure edtQuantidadeSemanasMesExit(Sender: TObject);
+    procedure edtVlSalarioChange(Sender: TObject);
+    procedure edtTotalHorasPorDiaChange(Sender: TObject);
+    procedure edtTotalDiasSemanaChange(Sender: TObject);
     procedure edtQuantidadeSemanasMesChange(Sender: TObject);
+    procedure edtVlTotalDespesasChange(Sender: TObject);
   private
-    FControllerSalario: IControllerSalario;
     FSalario: TSalario;
     FDAOSalario: IDAO<TSalario>;
     procedure CalcularSalario();
-    procedure PreencherTela;
+    procedure PreencherTela();
   public
     { Public declarations }
   end;
@@ -57,18 +58,20 @@ implementation
 
 {$R *.dfm}
 
-
-
 procedure TTelaCadastroSalario.btnDespesasClick(Sender: TObject);
 begin
   edtVlTotalDespesas.Text := TTelaCadastroDespesas.ValorTotalDespesas().ValorMonetario;
 end;
 
 procedure TTelaCadastroSalario.btnSalvarClick(Sender: TObject);
+const
+  TITULO_VALOR_CUSTO_ZERADO = 'Custo do minuto zerado.';
+  MENSAGEM_VALOR_CUSTO_ZERADO = 'O valor do custo por minuto está zerado. Deseja continuar?';
 begin
-  // validar o cadastro
-  //preencher o objeto
-  //salvar no banco
+  if ((edtVlCustoPorMinuto.ToCurrency = 0) and
+      (not Confirma(MENSAGEM_VALOR_CUSTO_ZERADO, TITULO_VALOR_CUSTO_ZERADO))) then
+    Exit;
+
   FSalario.Id := 1;
   FSalario.SalarioDesejado := edtVlSalario.ToCurrency;
   FSalario.TotalDeHorasPorDia := edtTotalHorasPorDia.ToFloat;
@@ -107,21 +110,27 @@ end;
 
 procedure TTelaCadastroSalario.edtQuantidadeSemanasMesChange(Sender: TObject);
 begin
-  inherited;
   CalcularSalario();
 end;
 
-procedure TTelaCadastroSalario.edtQuantidadeSemanasMesExit(Sender: TObject);
+procedure TTelaCadastroSalario.edtTotalDiasSemanaChange(Sender: TObject);
 begin
- // inherited;
   CalcularSalario();
 end;
 
+procedure TTelaCadastroSalario.edtTotalHorasPorDiaChange(Sender: TObject);
+begin
+  CalcularSalario();
+end;
 
 procedure TTelaCadastroSalario.edtVlSalarioChange(Sender: TObject);
 begin
-  inherited;
-  //CalcularSalario();
+  CalcularSalario();
+end;
+
+procedure TTelaCadastroSalario.edtVlTotalDespesasChange(Sender: TObject);
+begin
+  CalcularSalario();
 end;
 
 procedure TTelaCadastroSalario.FormCreate(Sender: TObject);

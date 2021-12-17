@@ -148,7 +148,7 @@ object TelaCadastroPadrao: TTelaCadastroPadrao
           OnClick = btnNovoClick
           OnMouseEnter = OnMouseEnterButton
           OnMouseLeave = OnMouseLeaveButton
-          ExplicitLeft = 4
+          ExplicitLeft = -4
           ExplicitTop = 2
         end
       end
@@ -301,6 +301,7 @@ object TelaCadastroPadrao: TTelaCadastroPadrao
           Align = alClient
           Caption = 'Excluir'
           Flat = True
+          OnClick = btnExcluirClick
           ExplicitLeft = 56
           ExplicitWidth = 75
           ExplicitHeight = 33

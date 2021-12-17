@@ -15,10 +15,9 @@ type
     function ToCurrency(): Currency;
     function ToFloat(): Double;
     function ToInteger(): Integer;
+    procedure Focar();
+    function IsEmpty():Boolean;
   end;
-
-
-
 
 implementation
 
@@ -26,7 +25,7 @@ function TEditHelper.ToCurrency(): Currency;
 var
   lTexto: string;
 begin
- // FormatSettings.DecimalSeparator := ',';
+  FormatSettings.DecimalSeparator := ',';
   lTexto := StringReplace(Self.Text, '.', EmptyStr, [rfReplaceAll]);
   Result := StrToCurrDef(lTexto, 0);
 end;
@@ -39,6 +38,20 @@ end;
 function TEditHelper.ToInteger(): Integer;
 begin
   Result := StrToIntDef(Self.Text, 0);
+end;
+
+procedure TEditHelper.Focar();
+begin
+  if (Self.CanFocus) then
+  begin
+    Self.SetFocus;
+    Self.SelectAll;
+  end;
+end;
+
+function TEditHelper.IsEmpty():Boolean;
+begin
+  Result := Trim(Self.Text).IsEmpty();
 end;
 
 end.

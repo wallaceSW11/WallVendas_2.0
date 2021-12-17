@@ -17,6 +17,7 @@ type
     function FindOne(): T; overload;
     function FindOne(pIdentificador: Integer): T; overload;
     procedure Update(pEntidade: T);
+    procedure Insert(pEntidade: T);
 //    function FindAll(): TObjectList<T>;
   end;
 
@@ -33,6 +34,7 @@ type
     function FindOne(): T; overload;
     function FindOne(pIdentificador: Integer): T; overload;
     procedure Update(pEntidade: T);
+    procedure Insert(pEntidade: T);
   end;
 
 implementation
@@ -73,6 +75,11 @@ function TDAOGenerico<T>.FindOne(pIdentificador: Integer): T;
 begin
   FEntidade := FDAOGenerico.Find(pIdentificador);
   Result := FEntidade;
+end;
+
+procedure TDAOGenerico<T>.Insert(pEntidade: T);
+begin
+  FDAOGenerico.Insert(pEntidade);
 end;
 
 class function TDAOGenerico<T>.NovaInstancia(): IDAO<T>;

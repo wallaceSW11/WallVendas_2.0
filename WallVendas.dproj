@@ -150,12 +150,17 @@
             <Form>TelaCadastroDespesas</Form>
             <FormType>dfm</FormType>
         </DCCReference>
-        <DCCReference Include="Repository\WallVendas.Repository.Salario.pas"/>
-        <DCCReference Include="Controller\WallVendas.Controller.Salario.pas"/>
-        <DCCReference Include="Repository\WallVendas.Repository.Interfaces.pas"/>
         <DCCReference Include="Context\WallVendas.Context.Conexao.pas"/>
         <DCCReference Include="Context\WallVendas.Context.Query.pas"/>
         <DCCReference Include="DAO\WallVendas.DAO.Generico.pas"/>
+        <DCCReference Include="lib\LibMessages.pas"/>
+        <DCCReference Include="lib\LibTypes.pas"/>
+        <DCCReference Include="Model\WallVendas.Model.Pessoa.pas"/>
+        <DCCReference Include="Model\WallVendas.Model.Cliente.pas"/>
+        <DCCReference Include="Telas\frmPesquisaPadrao.pas">
+            <Form>TelaPesquisaPadrao</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>

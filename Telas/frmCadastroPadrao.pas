@@ -44,14 +44,18 @@ type
 
     procedure OnMouseEnterButton(Sender: TObject);
     procedure OnMouseLeaveButton(Sender: TObject);
+    procedure btnExcluirClick(Sender: TObject);
   private
     procedure PrepararBotoesEdicaoNovoCadastro();
     procedure PrepararBotoesIniciais;
     procedure HabilitarCampos(const pHabilitar: Boolean = True);
     procedure AplicarCorBotao(pPainel: TPanel; pButton: TSpeedButton; pCorPrimaria: Boolean);
     procedure HabilitarComponentes(pComponente: TWinControl; pHabilitar: Boolean);
+    procedure FocarPrimeiroCampo;
+    procedure LimparCampos;
+    procedure LimparCamposDeAcordoComATag(pComponente: TWinControl);
   public
-    { Public declarations }
+    FNovoCadastro: Boolean;
   end;
 
 var
@@ -64,6 +68,8 @@ implementation
 procedure TTelaCadastroPadrao.btnCancelarClick(Sender: TObject);
 begin
   PrepararBotoesIniciais();
+  LimparCampos();
+  FNovoCadastro := False;
 end;
 
 procedure TTelaCadastroPadrao.btnEditarClick(Sender: TObject);
@@ -71,9 +77,15 @@ begin
   PrepararBotoesEdicaoNovoCadastro();
 end;
 
+procedure TTelaCadastroPadrao.btnExcluirClick(Sender: TObject);
+begin
+  LimparCampos();
+end;
+
 procedure TTelaCadastroPadrao.btnNovoClick(Sender: TObject);
 begin
   PrepararBotoesEdicaoNovoCadastro();
+  FNovoCadastro := True;
 end;
 
 procedure TTelaCadastroPadrao.btnPesquisarClick(Sender: TObject);
@@ -87,6 +99,9 @@ end;
 procedure TTelaCadastroPadrao.btnSalvarClick(Sender: TObject);
 begin
   PrepararBotoesIniciais();
+  LimparCampos();
+  if (FNovoCadastro) then
+    btnNovoClick(nil);
 end;
 
 procedure TTelaCadastroPadrao.FormCreate(Sender: TObject);
@@ -97,6 +112,7 @@ begin
 
   PrepararBotoesIniciais();
   HabilitarCampos(False);
+  FNovoCadastro := False;
 end;
 
 procedure TTelaCadastroPadrao.FormKeyPress(Sender: TObject; var Key: Char);
@@ -123,6 +139,20 @@ begin
   AplicarCorBotao(pnlSalvar, btnSalvar, True);
 
   HabilitarCampos();
+  FocarPrimeiroCampo();
+end;
+
+procedure TTelaCadastroPadrao.FocarPrimeiroCampo();
+var
+  I: Integer;
+begin
+  for I := 0 to pnlMain.ControlCount -1 do
+    if (pnlMain.Controls[I] is TWinControl) then
+      if (pnlMain.Controls[I] as TWinControl).TabOrder = 0 then
+      begin
+        (pnlMain.Controls[I] as TWinControl).SetFocus;
+        Break;
+      end;
 end;
 
 procedure TTelaCadastroPadrao.PrepararBotoesIniciais();
@@ -181,6 +211,47 @@ begin
         pComponente.Controls[I].Enabled := False
       else
         pComponente.Controls[I].Enabled := pHabilitar;
+end;
+
+procedure TTelaCadastroPadrao.LimparCampos();
+var
+  I: Integer;
+begin
+  for I := 0 to pnlMain.ControlCount -1 do
+  begin
+    LimparCamposDeAcordoComATag(pnlMain);
+
+    if ((pnlMain.Controls[I] is TGroupBox) or (pnlMain.Controls[I] is TPanel)) then
+      LimparCamposDeAcordoComATag(TPanel(pnlMain.Controls[I]));
+  end;
+end;
+
+procedure TTelaCadastroPadrao.LimparCamposDeAcordoComATag(pComponente: TWinControl);
+var
+  I: Integer;
+begin
+  for I := 0 to pComponente.ControlCount -1 do
+  begin
+    if (pComponente.Controls[I] is TEdit) then
+    case TEdit(pComponente.Controls[I]).Tag of
+      0,
+      1: TEdit(pComponente.Controls[I]).Clear();
+      2: TEdit(pComponente.Controls[I]).Text := '0';
+      3: TEdit(pComponente.Controls[I]).Text := '0,00';
+    end;
+
+    if (pComponente.Controls[I] is TCheckBox) then
+      TCheckBox(pComponente.Controls[I]).Checked := False;
+
+    if (pComponente.Controls[I] is TDateTimePicker) then
+      TDateTimePicker(pComponente.Controls[I]).DateTime := Now();
+
+    if (pComponente.Controls[I] is TMemo) then
+      TMemo(pComponente.Controls[I]).Lines.Clear();
+
+    if (pComponente.Controls[I] is TComboBox) then
+      TComboBox(pComponente.Controls[I]).ItemIndex := 0;
+  end;
 end;
 
 

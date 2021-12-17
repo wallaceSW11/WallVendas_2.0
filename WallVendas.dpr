@@ -18,12 +18,14 @@ uses
   WallVendas.Helper.TEdit in 'Helper\WallVendas.Helper.TEdit.pas',
   WallVendas.Helper.Numbers in 'Helper\WallVendas.Helper.Numbers.pas',
   frmCadastroDespesas in 'Telas\frmCadastroDespesas.pas' {TelaCadastroDespesas},
-  WallVendas.Repository.Salario in 'Repository\WallVendas.Repository.Salario.pas',
-  WallVendas.Controller.Salario in 'Controller\WallVendas.Controller.Salario.pas',
-  WallVendas.Repository.Interfaces in 'Repository\WallVendas.Repository.Interfaces.pas',
   WallVendas.Context.Conexao in 'Context\WallVendas.Context.Conexao.pas',
   WallVendas.Context.Query in 'Context\WallVendas.Context.Query.pas',
-  WallVendas.DAO.Generico in 'DAO\WallVendas.DAO.Generico.pas';
+  WallVendas.DAO.Generico in 'DAO\WallVendas.DAO.Generico.pas',
+  LibMessages in 'lib\LibMessages.pas',
+  LibTypes in 'lib\LibTypes.pas',
+  WallVendas.Model.Pessoa in 'Model\WallVendas.Model.Pessoa.pas',
+  WallVendas.Model.Cliente in 'Model\WallVendas.Model.Cliente.pas',
+  frmPesquisaPadrao in 'Telas\frmPesquisaPadrao.pas' {TelaPesquisaPadrao};
 
 {$R *.res}
 
@@ -31,6 +33,5 @@ begin
   Application.Initialize;
   Application.MainFormOnTaskbar := True;
   Application.CreateForm(TfrmWallVendas, frmWallVendas);
-  Application.CreateForm(TTelaCadastroDespesas, TelaCadastroDespesas);
   Application.Run;
 end.

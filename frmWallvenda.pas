@@ -153,7 +153,7 @@ begin
   pnlMenu.Color := COLOR_PRIMARY;
   pnlMain.Color := COLOR_BACKGROUND;
 
-  ExibirTela<TTelaCadastroSalario>(btnSalario);
+  ExibirTela<TTelaCadastroCliente>(btnCliente);
   ToggleMenu();
 end;
 

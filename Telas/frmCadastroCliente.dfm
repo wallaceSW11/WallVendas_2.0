@@ -3,6 +3,7 @@ inherited TelaCadastroCliente: TTelaCadastroCliente
   PixelsPerInch = 96
   TextHeight = 17
   inherited pnlTop: TPanel
+    TabOrder = 1
     inherited lblTitulo: TLabel
       Width = 68
       Caption = 'Clientes'
@@ -10,36 +11,39 @@ inherited TelaCadastroCliente: TTelaCadastroCliente
     end
   end
   inherited pnlMain: TPanel
+    TabOrder = 0
     object lblCodigoPessoa: TLabel
-      Left = 10
+      Left = 15
       Top = 8
       Width = 43
       Height = 17
       Caption = 'C'#243'digo'
     end
     object lblNomePessoa: TLabel
-      Left = 65
+      Left = 74
       Top = 9
       Width = 36
       Height = 17
       Caption = 'Nome'
     end
     object edtIdPessoa: TEdit
-      Left = 10
+      Tag = 1
+      Left = 15
       Top = 31
       Width = 50
       Height = 25
+      TabStop = False
       Alignment = taRightJustify
       Enabled = False
-      TabOrder = 0
+      TabOrder = 1
     end
     object edtNomePessoa: TEdit
-      Left = 65
+      Left = 74
       Top = 31
       Width = 901
       Height = 25
       Anchors = [akLeft, akTop, akRight]
-      TabOrder = 1
+      TabOrder = 0
     end
   end
 end

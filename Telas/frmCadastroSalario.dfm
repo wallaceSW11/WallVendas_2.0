@@ -173,6 +173,7 @@ inherited TelaCadastroSalario: TTelaCadastroSalario
       Alignment = taRightJustify
       TabOrder = 0
       Text = '0,00'
+      OnChange = edtVlSalarioChange
     end
     object edtTotalHorasPorDia: TEditNumber
       Left = 184
@@ -182,6 +183,7 @@ inherited TelaCadastroSalario: TTelaCadastroSalario
       Alignment = taRightJustify
       TabOrder = 1
       Text = '0'
+      OnChange = edtTotalHorasPorDiaChange
     end
     object pnlDespesas: TPanel
       Left = 180
@@ -197,6 +199,7 @@ inherited TelaCadastroSalario: TTelaCadastroSalario
       Color = clWhite
       ParentBackground = False
       TabOrder = 7
+      Visible = False
       object btnDespesas: TSpeedButton
         Left = 0
         Top = 0
@@ -222,6 +225,7 @@ inherited TelaCadastroSalario: TTelaCadastroSalario
       Alignment = taRightJustify
       TabOrder = 8
       Text = '0'
+      OnChange = edtTotalDiasSemanaChange
     end
     object edtQuantidadeSemanasMes: TEditNumber
       Left = 511
@@ -241,6 +245,7 @@ inherited TelaCadastroSalario: TTelaCadastroSalario
       Alignment = taRightJustify
       TabOrder = 10
       Text = '0,00'
+      OnChange = edtVlTotalDespesasChange
     end
   end
 end

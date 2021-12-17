@@ -90,7 +90,7 @@ end;
 
 function TSalario.TotalSalarioComDespesas: Currency;
 begin
-  Result := SalarioDesejado + 0; // Despesas;
+  Result := SalarioDesejado + Despesas;
 end;
 
 function TSalario.ValorDoSalarioPorHora: Currency;
@@ -99,7 +99,6 @@ begin
     Exit(TotalSalarioComDespesas / TotalDeHorasTrabalhadasPorMes);
 
   Result := 0;
-
 end;
 
 function TSalario.ValorDoSalarioPorMinuto: Currency;
