@@ -9,7 +9,7 @@ uses
   SimpleQueryFiredac,
   WallVendas.Context.Conexao,
   System.Generics.Collections,
-  Vcl.Forms;
+  Vcl.Forms, Data.DB, LibTypes;
 
 type
   IDAO<T: class> = interface
@@ -18,6 +18,7 @@ type
     function FindOne(pIdentificador: Integer): T; overload;
     procedure Update(pEntidade: T);
     procedure Insert(pEntidade: T);
+    procedure Find(pCampos: TArrayCamposSQL);
 //    function FindAll(): TObjectList<T>;
   end;
 
@@ -27,19 +28,25 @@ type
     FConexao: IConexao;
     FDAOGenerico: iSimpleDAO<T>;
     FEntidade: T;
-    constructor Create();
+    constructor Create(); overload;
+    constructor Create(var pDataSource: TDataSource); overload;
+    constructor Create(var pBindForm: TForm); overload;
   public
     destructor Destroy; override;
-    class function NovaInstancia(): IDAO<T>;
+    class function NovaInstancia(): IDAO<T>; overload;
+    class function NovaInstancia(var pBindForm: TForm): IDAO<T>; overload;
+    class function NovaInstancia(var pDataSource: TDataSource): IDAO<T>; overload;
     function FindOne(): T; overload;
     function FindOne(pIdentificador: Integer): T; overload;
     procedure Update(pEntidade: T);
     procedure Insert(pEntidade: T);
+    procedure Find(pCampos: TArrayCamposSQL);
   end;
 
 implementation
 
 { TDAOSalario }
+
 
 constructor TDAOGenerico<T>.Create();
 begin
@@ -49,6 +56,25 @@ begin
                   .New(TSimpleQueryFiredac.New(FConexao.Conexao));
 end;
 
+constructor TDAOGenerico<T>.Create(var pDataSource: TDataSource);
+begin
+  FConexao := TConexao.NovaInstancia();
+
+  FDAOGenerico := TSimpleDAO<T>
+                  .New(TSimpleQueryFiredac.New(FConexao.Conexao))
+                  .DataSource(pDataSource);
+end;
+
+constructor TDAOGenerico<T>.Create(var pBindForm: TForm);
+begin
+  FConexao := TConexao.NovaInstancia();
+
+  FDAOGenerico := TSimpleDAO<T>
+                  .New(TSimpleQueryFiredac.New(FConexao.Conexao))
+                  .BindForm(pBindForm);
+end;
+
+
 destructor TDAOGenerico<T>.Destroy;
 begin
 
@@ -57,18 +83,27 @@ end;
 
 function TDAOGenerico<T>.FindOne(): T;
 var
-  Salarios : TObjectList<T>;
+  lListaObjetos : TObjectList<T>;
 begin
-  Salarios := TObjectList<T>.Create;
+  lListaObjetos := TObjectList<T>.Create;
 
   try
-    FDAOGenerico.Find(Salarios);
-    FEntidade := Salarios[0];
+    FDAOGenerico.Find(lListaObjetos);
+    FEntidade := lListaObjetos[0];
   finally
-    Salarios.Free;
+    lListaObjetos.Free;
   end;
 
   Result := FEntidade;
+end;
+
+procedure TDAOGenerico<T>.Find(pCampos: TArrayCamposSQL);
+begin
+  FDAOGenerico
+    .SQL
+      .Fields('id, Nome')
+    .&End
+  .Find();
 end;
 
 function TDAOGenerico<T>.FindOne(pIdentificador: Integer): T;
@@ -82,9 +117,19 @@ begin
   FDAOGenerico.Insert(pEntidade);
 end;
 
-class function TDAOGenerico<T>.NovaInstancia(): IDAO<T>;
+class function TDAOGenerico<T>.NovaInstancia(var pBindForm: TForm): IDAO<T>;
+begin
+  Result := Self.Create(pBindForm);
+end;
+
+class function TDAOGenerico<T>.NovaInstancia: IDAO<T>;
 begin
   Result := Self.Create();
+end;
+
+class function TDAOGenerico<T>.NovaInstancia(var pDataSource: TDataSource): IDAO<T>;
+begin
+  Result := Self.Create(pDataSource);
 end;
 
 procedure TDAOGenerico<T>.Update(pEntidade: T);

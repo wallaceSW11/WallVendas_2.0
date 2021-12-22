@@ -5,12 +5,15 @@ object TelaPesquisaPadrao: TTelaPesquisaPadrao
   ClientHeight = 561
   ClientWidth = 784
   Color = clBtnFace
+  Constraints.MinHeight = 600
+  Constraints.MinWidth = 800
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
   Font.Height = -13
   Font.Name = 'Segoe UI'
   Font.Style = []
   OldCreateOrder = False
+  Position = poMainFormCenter
   OnCreate = FormCreate
   PixelsPerInch = 96
   TextHeight = 17
@@ -34,6 +37,7 @@ object TelaPesquisaPadrao: TTelaPesquisaPadrao
     Width = 80
     Height = 22
     Caption = 'OK'
+    OnClick = btnOkClick
   end
   object btnCancelar: TSpeedButton
     Left = 696
@@ -41,6 +45,7 @@ object TelaPesquisaPadrao: TTelaPesquisaPadrao
     Width = 80
     Height = 22
     Caption = 'Cancelar'
+    OnClick = btnCancelarClick
   end
   object edtTrecho: TEdit
     Left = 161
@@ -57,18 +62,26 @@ object TelaPesquisaPadrao: TTelaPesquisaPadrao
     Style = csDropDownList
     TabOrder = 0
   end
-  object DBGrid1: TDBGrid
+  object dbgPesquisa: TDBGrid
     Left = 10
     Top = 63
     Width = 766
     Height = 462
     DataSource = dsPesquisa
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -16
+    Font.Name = 'Segoe UI'
+    Font.Style = []
+    Options = [dgTitles, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgConfirmDelete, dgCancelOnExit, dgTitleClick, dgTitleHotTrack]
+    ParentFont = False
     TabOrder = 2
     TitleFont.Charset = DEFAULT_CHARSET
     TitleFont.Color = clWindowText
-    TitleFont.Height = -13
+    TitleFont.Height = -16
     TitleFont.Name = 'Segoe UI'
     TitleFont.Style = []
+    OnDblClick = dbgPesquisaDblClick
   end
   object dsPesquisa: TDataSource
     Left = 384

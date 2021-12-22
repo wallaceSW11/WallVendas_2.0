@@ -56,6 +56,7 @@ type
     procedure LimparCamposDeAcordoComATag(pComponente: TWinControl);
   public
     FNovoCadastro: Boolean;
+    procedure HabilitarCamposPesquisaValida();
   end;
 
 var
@@ -90,10 +91,10 @@ end;
 
 procedure TTelaCadastroPadrao.btnPesquisarClick(Sender: TObject);
 begin
-  btnEditar.Enabled := True;
-  btnDuplicar.Enabled := True;
-  btnExcluir.Enabled := True;
-  btnCancelar.Enabled := True;
+//  btnEditar.Enabled := True;
+//  btnDuplicar.Enabled := True;
+//  btnExcluir.Enabled := True;
+//  btnCancelar.Enabled := True;
 end;
 
 procedure TTelaCadastroPadrao.btnSalvarClick(Sender: TObject);
@@ -196,6 +197,14 @@ begin
     if ((pnlMain.Controls[I] is TGroupBox) or (pnlMain.Controls[I] is TPanel)) then
       HabilitarComponentes(TPanel(pnlMain.Controls[I]), pHabilitar);
   end;
+end;
+
+procedure TTelaCadastroPadrao.HabilitarCamposPesquisaValida;
+begin
+  btnEditar.Enabled := True;
+  btnDuplicar.Enabled := True;
+  btnExcluir.Enabled := True;
+  btnCancelar.Enabled := True;
 end;
 
 procedure TTelaCadastroPadrao.HabilitarComponentes(pComponente: TWinControl; pHabilitar: Boolean);

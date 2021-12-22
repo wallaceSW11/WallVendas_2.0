@@ -42,6 +42,14 @@ Type
     MetroQuadrado: string;
   end;
 
+  TArrayCamposSQL = array of string;
+
+  TDadoLocalizado = record
+    Codigo: string;
+    Descricao: string;
+    Complemento: string;
+  end;
+
   const
     LOG_ALTERACAO = 'Alteração';
     LOG_INCLUSAO = 'Inclusao';

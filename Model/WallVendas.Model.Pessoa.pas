@@ -14,7 +14,7 @@ type
     procedure SetId(const Value: Integer);
     procedure SetNome(const Value: string);
   public
-    [Campo('id'), Pk, AutoInc]
+    [Campo('id'), Pk, AutoInc, Display('Código')]
     property Id: Integer read FId write SetId;
     [Campo('Nome')]
     property Nome: string read FNome write SetNome;
