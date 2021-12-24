@@ -2,8 +2,11 @@ unit WallVendas.Model.Despesas;
 
 interface
 
+uses
+  WallVendas.Model.Base;
+
 type
-  TDespesas = class
+  TDespesas = class(TModeloBase)
   private
     FValor: Currency;
     FDescricao: string;

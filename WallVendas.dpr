@@ -25,7 +25,12 @@ uses
   LibTypes in 'lib\LibTypes.pas',
   WallVendas.Model.Pessoa in 'Model\WallVendas.Model.Pessoa.pas',
   WallVendas.Model.Cliente in 'Model\WallVendas.Model.Cliente.pas',
-  frmPesquisaPadrao in 'Telas\frmPesquisaPadrao.pas' {TelaPesquisaPadrao};
+  frmPesquisaPadrao in 'Telas\frmPesquisaPadrao.pas' {TelaPesquisaPadrao},
+  WallVendas.Model.Base in 'Model\WallVendas.Model.Base.pas',
+  WallVendas.Model.Inventario in 'Model\WallVendas.Model.Inventario.pas',
+  WallVendas.Model.InventarioItem in 'Model\WallVendas.Model.InventarioItem.pas',
+  WallVendas.DAO.Inventario in 'DAO\WallVendas.DAO.Inventario.pas',
+  WallVendas.Helper.DBGrid in 'Helper\WallVendas.Helper.DBGrid.pas';
 
 {$R *.res}
 

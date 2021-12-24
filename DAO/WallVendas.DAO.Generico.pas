@@ -9,13 +9,14 @@ uses
   SimpleQueryFiredac,
   WallVendas.Context.Conexao,
   System.Generics.Collections,
-  Vcl.Forms, Data.DB, LibTypes;
+  Vcl.Forms, Data.DB, LibTypes, System.SysUtils;
 
 type
   IDAO<T: class> = interface
     ['{8A8D2025-68C3-4DD7-A747-C6141939FB82}']
     function FindOne(): T; overload;
     function FindOne(pIdentificador: Integer): T; overload;
+    function FindJoin(const pCamposSQL: string; const pJoinSQL: string; const pFiltroSQL: string): TObjectList<T>;
     procedure Update(pEntidade: T);
     procedure Insert(pEntidade: T);
     procedure Find(pCampos: TArrayCamposSQL);
@@ -28,6 +29,7 @@ type
     FConexao: IConexao;
     FDAOGenerico: iSimpleDAO<T>;
     FEntidade: T;
+    FListaEntidade: TObjectList<T>;
     constructor Create(); overload;
     constructor Create(var pDataSource: TDataSource); overload;
     constructor Create(var pBindForm: TForm); overload;
@@ -41,6 +43,7 @@ type
     procedure Update(pEntidade: T);
     procedure Insert(pEntidade: T);
     procedure Find(pCampos: TArrayCamposSQL);
+    function FindJoin(const pCamposSQL: string; const pJoinSQL: string; const pFiltroSQL: string): TObjectList<T>;
   end;
 
 implementation
@@ -54,6 +57,8 @@ begin
 
   FDAOGenerico := TSimpleDAO<T>
                   .New(TSimpleQueryFiredac.New(FConexao.Conexao));
+
+  FListaEntidade := TObjectList<T>.Create;
 end;
 
 constructor TDAOGenerico<T>.Create(var pDataSource: TDataSource);
@@ -63,6 +68,8 @@ begin
   FDAOGenerico := TSimpleDAO<T>
                   .New(TSimpleQueryFiredac.New(FConexao.Conexao))
                   .DataSource(pDataSource);
+
+  FListaEntidade := TObjectList<T>.Create;
 end;
 
 constructor TDAOGenerico<T>.Create(var pBindForm: TForm);
@@ -77,7 +84,7 @@ end;
 
 destructor TDAOGenerico<T>.Destroy;
 begin
-
+  FreeAndNil(FListaEntidade);
   inherited;
 end;
 
@@ -101,7 +108,7 @@ procedure TDAOGenerico<T>.Find(pCampos: TArrayCamposSQL);
 begin
   FDAOGenerico
     .SQL
-      .Fields('id, Nome')
+      .Fields(string.Join(', ', pCampos))
     .&End
   .Find();
 end;
@@ -110,6 +117,19 @@ function TDAOGenerico<T>.FindOne(pIdentificador: Integer): T;
 begin
   FEntidade := FDAOGenerico.Find(pIdentificador);
   Result := FEntidade;
+end;
+
+function TDAOGenerico<T>.FindJoin(const pCamposSQL: string; const pJoinSQL: string; const pFiltroSQL: string): TObjectList<T>;
+begin
+  FDAOGenerico
+      .SQL
+        .Fields(pCamposSQL)
+        .Join(pJoinSQL)
+        .Where(pFiltroSQL)
+      .&End
+      .Find(FListaEntidade);
+
+  Result := FListaEntidade;
 end;
 
 procedure TDAOGenerico<T>.Insert(pEntidade: T);

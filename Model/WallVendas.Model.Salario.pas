@@ -5,27 +5,24 @@ interface
 uses
   System.Generics.Collections,
   WallVendas.Model.Despesas,
+  WallVendas.Model.Base,
   SimpleAttributes;
 
 type
   [Tabela('Salario')]
-  TSalario = class
+  TSalario = class (TModeloBase)
   private
     FSalarioDesejado: Currency;
     FTotalDeDiasTrabalhadosNaSemana: Integer;
     FTotalDeHorasPorDia: Double;
     FDespesas: Currency;
     FQuantidadeDeSemanasPorMes: Integer;
-    FId: Integer;
     procedure SetDespesas(const Value: Currency);
     procedure SetSalarioDesejado(const Value: Currency);
     procedure SetTotalDeDiasTrabalhadosNaSemana(const Value: Integer);
     procedure SetTotalDeHorasPorDia(const Value: Double);
     procedure SetQuantidadeDeSemanasPorMes(const Value: Integer);
-    procedure SetId(const Value: Integer);
   public
-    [Campo('id'), Pk, AutoInc]
-    property Id: Integer read FId write SetId;
     [Campo('VlSalario')]
     property SalarioDesejado: Currency read FSalarioDesejado write SetSalarioDesejado;
     [Campo('TotalHorasPorDia')]
@@ -51,11 +48,6 @@ implementation
 procedure TSalario.SetDespesas(const Value: Currency);
 begin
   FDespesas := Value;
-end;
-
-procedure TSalario.SetId(const Value: Integer);
-begin
-  FId := Value;
 end;
 
 procedure TSalario.SetQuantidadeDeSemanasPorMes(const Value: Integer);

@@ -36,7 +36,7 @@ procedure TTelaCadastroCliente.btnPesquisarClick(Sender: TObject);
 var
   lDadoLocalizado: TDadoLocalizado;
 begin
-  lDadoLocalizado := TTelaPesquisaPadrao.Pesquisa<TPessoa>(['id, Nome']);
+  lDadoLocalizado := TTelaPesquisaPadrao.Pesquisa<TPessoa>(['id', 'Nome']);
 
   if (lDadoLocalizado.Codigo.IsEmpty()) then
     Exit;

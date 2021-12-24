@@ -161,6 +161,11 @@
             <Form>TelaPesquisaPadrao</Form>
             <FormType>dfm</FormType>
         </DCCReference>
+        <DCCReference Include="Model\WallVendas.Model.Base.pas"/>
+        <DCCReference Include="Model\WallVendas.Model.Inventario.pas"/>
+        <DCCReference Include="Model\WallVendas.Model.InventarioItem.pas"/>
+        <DCCReference Include="DAO\WallVendas.DAO.Inventario.pas"/>
+        <DCCReference Include="Helper\WallVendas.Helper.DBGrid.pas"/>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>

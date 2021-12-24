@@ -116,7 +116,6 @@ object TelaCadastroPadrao: TTelaCadastroPadrao
           Align = alClient
           Caption = 'Pesquisar'
           Flat = True
-          OnClick = btnPesquisarClick
           ExplicitLeft = 56
           ExplicitWidth = 75
           ExplicitHeight = 33

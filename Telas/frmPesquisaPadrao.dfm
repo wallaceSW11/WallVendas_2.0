@@ -12,9 +12,14 @@ object TelaPesquisaPadrao: TTelaPesquisaPadrao
   Font.Height = -13
   Font.Name = 'Segoe UI'
   Font.Style = []
+  KeyPreview = True
   OldCreateOrder = False
   Position = poMainFormCenter
-  OnCreate = FormCreate
+  OnResize = FormResize
+  OnShow = FormShow
+  DesignSize = (
+    784
+    561)
   PixelsPerInch = 96
   TextHeight = 17
   object lblCampo: TLabel
@@ -24,18 +29,12 @@ object TelaPesquisaPadrao: TTelaPesquisaPadrao
     Height = 17
     Caption = 'Campo'
   end
-  object btnPesquisar: TSpeedButton
-    Left = 655
-    Top = 32
-    Width = 121
-    Height = 25
-    Caption = 'Pesquisar'
-  end
   object btnOk: TSpeedButton
     Left = 610
     Top = 531
     Width = 80
     Height = 22
+    Anchors = [akRight, akBottom]
     Caption = 'OK'
     OnClick = btnOkClick
   end
@@ -44,15 +43,27 @@ object TelaPesquisaPadrao: TTelaPesquisaPadrao
     Top = 531
     Width = 80
     Height = 22
+    Anchors = [akRight, akBottom]
     Caption = 'Cancelar'
     OnClick = btnCancelarClick
+  end
+  object lblTrecho: TLabel
+    Left = 161
+    Top = 10
+    Width = 39
+    Height = 17
+    Caption = 'Trecho'
   end
   object edtTrecho: TEdit
     Left = 161
     Top = 32
-    Width = 488
+    Width = 615
     Height = 25
+    Anchors = [akLeft, akTop, akRight]
     TabOrder = 1
+    OnChange = edtTrechoChange
+    OnKeyDown = edtTrechoKeyDown
+    OnKeyPress = edtTrechoKeyPress
   end
   object cbCampo: TComboBox
     Left = 10
@@ -61,12 +72,14 @@ object TelaPesquisaPadrao: TTelaPesquisaPadrao
     Height = 25
     Style = csDropDownList
     TabOrder = 0
+    OnChange = cbCampoChange
   end
   object dbgPesquisa: TDBGrid
     Left = 10
     Top = 63
     Width = 766
     Height = 462
+    Anchors = [akLeft, akTop, akRight, akBottom]
     DataSource = dsPesquisa
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clWindowText

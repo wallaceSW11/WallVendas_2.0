@@ -5,7 +5,7 @@ interface
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.ExtCtrls, Vcl.Buttons, System.ImageList,
-  Vcl.ImgList, Styles, Vcl.ComCtrls, Vcl.DBGrids;
+  Vcl.ImgList, Styles, Vcl.ComCtrls, Vcl.DBGrids, WallVendas.Helper.DBGrid, Data.DB;
 
 type
   TTelaCadastroPadrao = class(TForm)
@@ -36,7 +36,6 @@ type
     Panel15: TPanel;
     procedure FormCreate(Sender: TObject);
     procedure btnEditarClick(Sender: TObject);
-    procedure btnPesquisarClick(Sender: TObject);
     procedure btnNovoClick(Sender: TObject);
     procedure btnSalvarClick(Sender: TObject);
     procedure btnCancelarClick(Sender: TObject);
@@ -87,14 +86,6 @@ procedure TTelaCadastroPadrao.btnNovoClick(Sender: TObject);
 begin
   PrepararBotoesEdicaoNovoCadastro();
   FNovoCadastro := True;
-end;
-
-procedure TTelaCadastroPadrao.btnPesquisarClick(Sender: TObject);
-begin
-//  btnEditar.Enabled := True;
-//  btnDuplicar.Enabled := True;
-//  btnExcluir.Enabled := True;
-//  btnCancelar.Enabled := True;
 end;
 
 procedure TTelaCadastroPadrao.btnSalvarClick(Sender: TObject);

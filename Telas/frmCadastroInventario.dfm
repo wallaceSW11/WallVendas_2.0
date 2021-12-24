@@ -1,5 +1,6 @@
 inherited TelaCadastroInventario: TTelaCadastroInventario
   Caption = 'Inventario'
+  OnResize = FormResize
   PixelsPerInch = 96
   TextHeight = 17
   inherited pnlTop: TPanel
@@ -211,6 +212,7 @@ inherited TelaCadastroInventario: TTelaCadastroInventario
       Width = 948
       Height = 401
       Anchors = [akLeft, akTop, akRight, akBottom]
+      DataSource = dsInventarioItem
       Options = [dgTitles, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgConfirmDelete, dgCancelOnExit, dgTitleClick, dgTitleHotTrack]
       TabOrder = 3
       TitleFont.Charset = DEFAULT_CHARSET
@@ -221,55 +223,37 @@ inherited TelaCadastroInventario: TTelaCadastroInventario
       Columns = <
         item
           Expanded = False
-          FieldName = 'id'
-          Visible = False
-        end
-        item
-          Expanded = False
-          FieldName = 'idInventario'
-          Title.Caption = 'C'#243'd. Inventario'
-          Visible = False
-        end
-        item
-          Alignment = taRightJustify
-          Expanded = False
-          FieldName = 'idProduto'
-          Title.Caption = 'C'#243'd. Produto'
-          Width = 87
+          FieldName = 'IdProduto'
+          Title.Caption = 'C'#243'digo'
           Visible = True
         end
         item
           Expanded = False
-          FieldName = 'DescricaoProduto'
-          Title.Caption = 'Produto'
-          Width = 197
+          FieldName = 'Descricao'
+          Title.Caption = 'Descri'#231#227'o'
           Visible = True
         end
         item
           Expanded = False
           FieldName = 'Unidade'
-          Width = 102
+          Width = 110
           Visible = True
         end
         item
-          Alignment = taRightJustify
           Expanded = False
           FieldName = 'Altura'
-          Title.Caption = 'Altura (cm)'
-          Width = 71
           Visible = True
         end
         item
-          Alignment = taRightJustify
           Expanded = False
           FieldName = 'Largura'
-          Title.Caption = 'Largura (cm)'
-          Width = 84
+          Width = 59
           Visible = True
         end
         item
           Expanded = False
           FieldName = 'Quantidade'
+          Width = 88
           Visible = True
         end>
     end
@@ -332,5 +316,9 @@ inherited TelaCadastroInventario: TTelaCadastroInventario
       ParentFont = False
       TabOrder = 7
     end
+  end
+  object dsInventarioItem: TDataSource
+    Left = 120
+    Top = 353
   end
 end
