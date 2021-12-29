@@ -203,6 +203,7 @@ var
   I: Integer;
 begin
   for I := 0 to pComponente.ControlCount -1 do
+  begin
     if (pComponente.Controls[I] is TEdit) or (pComponente.Controls[I] is TComboBox) or
        (pComponente.Controls[I] is TMemo) or (pComponente.Controls[I] is TCheckBox) or
        (pComponente.Controls[I] is TSpeedButton) or (pComponente.Controls[I] is TButton) or
@@ -211,6 +212,10 @@ begin
         pComponente.Controls[I].Enabled := False
       else
         pComponente.Controls[I].Enabled := pHabilitar;
+
+    if (pComponente.Controls[I] is TDBGrid) then
+      TDBGrid(pComponente.Controls[I]).Refresh();
+  end;
 end;
 
 procedure TTelaCadastroPadrao.LimparCampos();
@@ -251,6 +256,13 @@ begin
 
     if (pComponente.Controls[I] is TComboBox) then
       TComboBox(pComponente.Controls[I]).ItemIndex := 0;
+
+    if (pComponente.Controls[I] is TDBGrid) then
+    begin
+      TDBGrid(pComponente.Controls[I]).DataSource.DataSet.Close();
+      TDBGrid(pComponente.Controls[I]).AjustarColunas(1);
+
+    end;
   end;
 end;
 

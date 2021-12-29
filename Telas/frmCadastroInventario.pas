@@ -7,7 +7,7 @@ uses
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, frmCadastroPadrao, Data.DB, Vcl.ComCtrls, Vcl.Grids, Vcl.DBGrids,
   Vcl.StdCtrls, Vcl.Buttons, Vcl.ExtCtrls, LibTypes, frmPesquisaPadrao, WallVendas.DAO.Generico,
   WallVendas.Model.Inventario, WallVendas.Model.InventarioItem,
-  System.Generics.Collections, WallVendas.Helper.DBGrid;
+  System.Generics.Collections, WallVendas.Helper.DBGrid, LibMessages, wallvendas.Helper.TEdit;
 
 type
   TTelaCadastroInventario = class(TTelaCadastroPadrao)
@@ -36,6 +36,7 @@ type
     procedure btnSalvarClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormResize(Sender: TObject);
+    procedure btnEditarClick(Sender: TObject);
   private
    FDAOInventario: IDAO<TInventario>;
    FDAOInventarioItem: IDAO<TInventarioItem>;
@@ -49,6 +50,12 @@ var
 implementation
 
 {$R *.dfm}
+
+procedure TTelaCadastroInventario.btnEditarClick(Sender: TObject);
+begin
+  inherited;
+  dbgInventario.Refresh;
+end;
 
 procedure TTelaCadastroInventario.btnPesquisarClick(Sender: TObject);
 var
@@ -75,30 +82,54 @@ begin
 end;
 
 procedure TTelaCadastroInventario.btnSalvarClick(Sender: TObject);
-//var
- // lCliente: TPessoa;
+var
+  lInventario: TInventario;
+  lInventarioItem: TInventarioItem;
+  I: Integer;
 begin
-//  MensagemCritica(
-//    edtNomePessoa.IsEmpty,
-//    'Por favor, informe o nome do cliente.',
-//    edtNomePessoa);
-//
-//  lCliente := TPessoa.Create;
+  MensagemCritica(
+    dsInventarioItem.DataSet.IsEmpty,
+    'Nenhum produto foi informado no inventário.',
+    edtIdProdutoInventario);
+
+  lInventario := TInventario.Create;
+  try
+    lInventario.Id := edtIdInventario.ToInteger;
+    lInventario.Descricao := edtDescricaoInventario.Text;
+    lInventario.Data := dtInventario.DateTime;
+
+    if (FNovoCadastro) then
+      FDAOInventario.Insert(lInventario)
+    else
+      FDAOInventario.Update(lInventario);
+  finally
+    lInventario.Free();
+  end;
+
+ // FDAOInventarioItem.Insert();
+
+ FDAOInventarioItem.Delete('idInventario', edtIdInventario.Text);
+
+
+//  //dsInventarioItem.DataSet.DisableControls();
+//  dsInventarioItem.DataSet.First();
 //  try
-//    lCliente.Nome := edtNomePessoa.Text;
-//
-//    if (FNovoCadastro) then
+//    while not dsInventarioItem.DataSet.Eof do
 //    begin
-//      FDAOCliente.Insert(lCliente);
-//      Exit;
+//      lInventarioItem := TInventarioItem.Create();
+//      lInventarioItem.IdInventario := edtIdInventario.ToInteger;
+//      lInventarioItem.IdProduto := dsInventarioItem.DataSet.FieldByName('IdProduto').AsInteger;
+//      lInventarioItem.Unidade := dsInventarioItem.DataSet.FieldByName('Unidade').AsString;
+//      lInventarioItem.Altura := dsInventarioItem.DataSet.FieldByName('Altura').AsString;
+//      lInventarioItem.Largura := dsInventarioItem.DataSet.FieldByName('Largura').AsString;
+//      lInventarioItem.Quantidade := dsInventarioItem.DataSet.FieldByName('Quantidade').AsFloat;
+//      FDAOInventarioItem.Insert(lInventarioItem);
+//      dsInventarioItem.DataSet.Next();
 //    end;
-//
-//    lCliente.Id := edtIdPessoa.ToInteger;
-//    FDAOCliente.Update(lCliente);
 //  finally
-//    lCliente.Free();
+//  //  dsInventarioItem.DataSet.First();
+//    //dsInventarioItem.DataSet.EnableControls();
 //  end;
-//
 
   inherited;
 end;
@@ -116,3 +147,4 @@ begin
 end;
 
 end.
+

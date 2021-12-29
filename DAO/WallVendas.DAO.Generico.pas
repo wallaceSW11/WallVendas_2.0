@@ -18,8 +18,10 @@ type
     function FindOne(pIdentificador: Integer): T; overload;
     function FindJoin(const pCamposSQL: string; const pJoinSQL: string; const pFiltroSQL: string): TObjectList<T>;
     procedure Update(pEntidade: T);
-    procedure Insert(pEntidade: T);
+    procedure Insert(); overload;
+    procedure Insert(pEntidade: T); overload;
     procedure Find(pCampos: TArrayCamposSQL);
+    procedure Delete(const pCampo: string; const pValor: string);
 //    function FindAll(): TObjectList<T>;
   end;
 
@@ -41,9 +43,11 @@ type
     function FindOne(): T; overload;
     function FindOne(pIdentificador: Integer): T; overload;
     procedure Update(pEntidade: T);
-    procedure Insert(pEntidade: T);
+    procedure Insert(); overload;
+    procedure Insert(pEntidade: T); overload;
     procedure Find(pCampos: TArrayCamposSQL);
     function FindJoin(const pCamposSQL: string; const pJoinSQL: string; const pFiltroSQL: string): TObjectList<T>;
+    procedure Delete(const pCampo: string; const pValor: string);
   end;
 
 implementation
@@ -77,10 +81,14 @@ begin
   FConexao := TConexao.NovaInstancia();
 
   FDAOGenerico := TSimpleDAO<T>
-                  .New(TSimpleQueryFiredac.New(FConexao.Conexao))
-                  .BindForm(pBindForm);
+                  .New(TSimpleQueryFiredac.New(FConexao.Conexao));
+                  //.BindForm(pBindForm);
 end;
 
+procedure TDAOGenerico<T>.Delete(const pCampo: string; const pValor: string);
+begin
+  FDAOGenerico.Delete(pCampo, pValor);
+end;
 
 destructor TDAOGenerico<T>.Destroy;
 begin
@@ -135,6 +143,11 @@ end;
 procedure TDAOGenerico<T>.Insert(pEntidade: T);
 begin
   FDAOGenerico.Insert(pEntidade);
+end;
+
+procedure TDAOGenerico<T>.Insert();
+begin
+  FDAOGenerico.Insert();
 end;
 
 class function TDAOGenerico<T>.NovaInstancia(var pBindForm: TForm): IDAO<T>;

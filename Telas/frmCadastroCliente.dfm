@@ -9,6 +9,13 @@ inherited TelaCadastroCliente: TTelaCadastroCliente
       Caption = 'Clientes'
       ExplicitWidth = 68
     end
+    inherited pnlBotoes: TPanel
+      inherited pnlPesquisar: TPanel
+        inherited btnPesquisar: TSpeedButton
+          OnClick = btnPesquisarClick
+        end
+      end
+    end
   end
   inherited pnlMain: TPanel
     TabOrder = 0

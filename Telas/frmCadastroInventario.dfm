@@ -11,6 +11,13 @@ inherited TelaCadastroInventario: TTelaCadastroInventario
       ExplicitLeft = 10
       ExplicitWidth = 88
     end
+    inherited pnlBotoes: TPanel
+      inherited pnlPesquisar: TPanel
+        inherited btnPesquisar: TSpeedButton
+          OnClick = btnPesquisarClick
+        end
+      end
+    end
   end
   inherited pnlMain: TPanel
     object Label2: TLabel
@@ -225,6 +232,7 @@ inherited TelaCadastroInventario: TTelaCadastroInventario
           Expanded = False
           FieldName = 'IdProduto'
           Title.Caption = 'C'#243'digo'
+          Width = 76
           Visible = True
         end
         item
@@ -240,14 +248,17 @@ inherited TelaCadastroInventario: TTelaCadastroInventario
           Visible = True
         end
         item
+          Alignment = taRightJustify
           Expanded = False
           FieldName = 'Altura'
+          Width = 70
           Visible = True
         end
         item
+          Alignment = taRightJustify
           Expanded = False
           FieldName = 'Largura'
-          Width = 59
+          Width = 70
           Visible = True
         end
         item
