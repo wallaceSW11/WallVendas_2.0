@@ -85,7 +85,6 @@ procedure TTelaCadastroInventario.btnSalvarClick(Sender: TObject);
 var
   lInventario: TInventario;
   lInventarioItem: TInventarioItem;
-  I: Integer;
 begin
   MensagemCritica(
     dsInventarioItem.DataSet.IsEmpty,

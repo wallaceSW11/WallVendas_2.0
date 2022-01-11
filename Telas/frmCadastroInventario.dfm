@@ -182,6 +182,7 @@ inherited TelaCadastroInventario: TTelaCadastroInventario
       TabOrder = 0
     end
     object edtDescricaoProdutoInventario: TEdit
+      Tag = 1
       Left = 106
       Top = 139
       Width = 663
@@ -220,7 +221,7 @@ inherited TelaCadastroInventario: TTelaCadastroInventario
       Height = 401
       Anchors = [akLeft, akTop, akRight, akBottom]
       DataSource = dsInventarioItem
-      Options = [dgTitles, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgConfirmDelete, dgCancelOnExit, dgTitleClick, dgTitleHotTrack]
+      Options = [dgTitles, dgColumnResize, dgRowLines, dgTabs, dgRowSelect, dgConfirmDelete, dgCancelOnExit, dgTitleClick, dgTitleHotTrack]
       TabOrder = 3
       TitleFont.Charset = DEFAULT_CHARSET
       TitleFont.Color = clWindowText
@@ -311,6 +312,7 @@ inherited TelaCadastroInventario: TTelaCadastroInventario
       TabOrder = 6
     end
     object edtUnidade: TEdit
+      Tag = 1
       Left = 775
       Top = 139
       Width = 120

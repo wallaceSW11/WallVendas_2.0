@@ -14,10 +14,10 @@ type
   private
     FDescricao: string;
     FData: TDateTime;
-    FProdutos: TObjectList<TInventarioItem>;
+//    FProdutos: TObjectList<TInventarioItem>;
     procedure SetData(const Value: TDateTime);
     procedure SetDescricao(const Value: string);
-    procedure SetProdutos(const Value: TObjectList<TInventarioItem>);
+//    procedure SetProdutos(const Value: TObjectList<TInventarioItem>);
 
   public
     [Campo('Descricao'), Display('Descrição')]
@@ -42,9 +42,9 @@ begin
   FDescricao := Value;
 end;
 
-procedure TInventario.SetProdutos(const Value: TObjectList<TInventarioItem>);
-begin
-  FProdutos := Value;
-end;
+//procedure TInventario.SetProdutos(const Value: TObjectList<TInventarioItem>);
+//begin
+//  FProdutos := Value;
+//end;
 
 end.

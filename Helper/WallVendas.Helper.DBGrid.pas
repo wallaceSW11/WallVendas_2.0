@@ -3,7 +3,7 @@ unit WallVendas.Helper.DBGrid;
 interface
 
 uses
-  vcl.DBGrids;
+  vcl.DBGrids, Classes;
 
 type
   TDBGrid_Helper = class helper for TDBGrid
