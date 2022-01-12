@@ -5,7 +5,7 @@ interface
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.ExtCtrls, Vcl.Buttons, System.ImageList,
-  Vcl.ImgList, Styles, Vcl.ComCtrls, Vcl.DBGrids, WallVendas.Helper.DBGrid, Data.DB;
+  Vcl.ImgList, Styles, Vcl.ComCtrls, Vcl.DBGrids, WallVendas.Helper.DBGrid, Data.DB, Datasnap.DBClient;
 
 type
   TTelaCadastroPadrao = class(TForm)
@@ -86,6 +86,7 @@ procedure TTelaCadastroPadrao.btnNovoClick(Sender: TObject);
 begin
   PrepararBotoesEdicaoNovoCadastro();
   FNovoCadastro := True;
+  LimparCampos();
 end;
 
 procedure TTelaCadastroPadrao.btnSalvarClick(Sender: TObject);
@@ -221,6 +222,7 @@ end;
 procedure TTelaCadastroPadrao.LimparCampos();
 var
   I: Integer;
+  J: Integer;
 begin
   for I := 0 to pnlMain.ControlCount -1 do
   begin
@@ -229,6 +231,9 @@ begin
     if ((pnlMain.Controls[I] is TGroupBox) or (pnlMain.Controls[I] is TPanel)) then
       LimparCamposDeAcordoComATag(TPanel(pnlMain.Controls[I]));
   end;
+
+  //for J := 0 to ComponentCount do
+
 end;
 
 procedure TTelaCadastroPadrao.LimparCamposDeAcordoComATag(pComponente: TWinControl);
@@ -261,7 +266,6 @@ begin
     begin
       TDBGrid(pComponente.Controls[I]).DataSource.DataSet.Close();
       TDBGrid(pComponente.Controls[I]).AjustarColunas(1);
-
     end;
   end;
 end;

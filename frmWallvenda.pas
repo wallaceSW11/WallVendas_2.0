@@ -129,12 +129,17 @@ begin
 end;
 
 procedure TfrmWallVendas.FormCreate(Sender: TObject);
+var
+  TaskBarH: THandle;
+  TaskBarR: TRect;
 begin
   ReportMemoryLeaksOnShutdown := True;
 
+  TaskBarH := FindWindow('Shell_TrayWnd', nil);
+  GetWindowRect(TaskBarH, TaskBarR);
   Self.Top := 0;
   Self.Left := 0;
-  Self.Height := Screen.Height - 40;
+  Self.Height := Screen.Height - (TaskBarR.Bottom - TaskBarR.Top);
   Self.Width := Screen.Width;
 end;
 

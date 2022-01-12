@@ -30,7 +30,9 @@ uses
   WallVendas.Model.Inventario in 'Model\WallVendas.Model.Inventario.pas',
   WallVendas.Model.InventarioItem in 'Model\WallVendas.Model.InventarioItem.pas',
   WallVendas.DAO.Inventario in 'DAO\WallVendas.DAO.Inventario.pas',
-  WallVendas.Helper.DBGrid in 'Helper\WallVendas.Helper.DBGrid.pas';
+  WallVendas.Helper.DBGrid in 'Helper\WallVendas.Helper.DBGrid.pas',
+  Vcl.Themes,
+  Vcl.Styles;
 
 {$R *.res}
 

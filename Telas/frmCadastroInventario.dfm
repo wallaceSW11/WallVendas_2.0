@@ -230,8 +230,9 @@ inherited TelaCadastroInventario: TTelaCadastroInventario
       TitleFont.Style = []
       Columns = <
         item
+          Alignment = taRightJustify
           Expanded = False
-          FieldName = 'IdProduto'
+          FieldName = 'Codigo'
           Title.Caption = 'C'#243'digo'
           Width = 76
           Visible = True
@@ -331,7 +332,32 @@ inherited TelaCadastroInventario: TTelaCadastroInventario
     end
   end
   object dsInventarioItem: TDataSource
+    DataSet = cdsInventarioItem
     Left = 120
     Top = 353
+  end
+  object cdsInventarioItem: TClientDataSet
+    Aggregates = <>
+    Params = <>
+    Left = 216
+    Top = 353
+    object cdsInventarioItemCodigo: TStringField
+      FieldName = 'Codigo'
+    end
+    object cdsInventarioItemDescricao: TStringField
+      FieldName = 'Descricao'
+    end
+    object cdsInventarioItemUnidade: TStringField
+      FieldName = 'Unidade'
+    end
+    object cdsInventarioItemAltura: TStringField
+      FieldName = 'Altura'
+    end
+    object cdsInventarioItemLargura: TStringField
+      FieldName = 'Largura'
+    end
+    object cdsInventarioItemQuantidade: TFloatField
+      FieldName = 'Quantidade'
+    end
   end
 end

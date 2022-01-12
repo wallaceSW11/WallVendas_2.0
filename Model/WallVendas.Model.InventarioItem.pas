@@ -16,18 +16,22 @@ type
     FLargura: string;
     FUnidade: string;
     FQuantidade: Double;
+    FDescricao: string;
     procedure SetAltura(const Value: string);
     procedure SetIdInventario(const Value: Integer);
     procedure SetIdProduto(const Value: Integer);
     procedure SetLargura(const Value: string);
     procedure SetQuantidade(const Value: Double);
     procedure SetUnidade(const Value: string);
+    procedure SetDescricao(const Value: string);
 
   public
     [Campo('idInventario'), Fk]
     property IdInventario: Integer read FIdInventario write SetIdInventario;
     [Campo('IdProduto')]
     property IdProduto: Integer read FIdProduto write SetIdProduto;
+    [Ignore]
+    property Descricao: string read FDescricao write SetDescricao;
     [Campo('Unidade')]
     property Unidade: string read FUnidade write SetUnidade;
     [Campo('Altura')]
@@ -45,6 +49,11 @@ implementation
 procedure TInventarioItem.SetAltura(const Value: string);
 begin
   FAltura := Value;
+end;
+
+procedure TInventarioItem.SetDescricao(const Value: string);
+begin
+  FDescricao := Value;
 end;
 
 procedure TInventarioItem.SetIdInventario(const Value: Integer);
