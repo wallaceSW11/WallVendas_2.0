@@ -79,7 +79,7 @@ end;
 
 procedure TTelaCadastroPadrao.btnExcluirClick(Sender: TObject);
 begin
-  LimparCampos();
+  btnCancelarClick(nil);
 end;
 
 procedure TTelaCadastroPadrao.btnNovoClick(Sender: TObject);
@@ -232,8 +232,12 @@ begin
       LimparCamposDeAcordoComATag(TPanel(pnlMain.Controls[I]));
   end;
 
-  //for J := 0 to ComponentCount do
-
+  for J := 0 to ComponentCount-1 do
+    if (Components[J] is TClientDataSet) then
+    begin
+      TClientDataSet(Components[J]).Close();
+      TClientDataSet(Components[J]).CreateDataSet();
+    end;
 end;
 
 procedure TTelaCadastroPadrao.LimparCamposDeAcordoComATag(pComponente: TWinControl);
@@ -248,6 +252,7 @@ begin
       1: TEdit(pComponente.Controls[I]).Clear();
       2: TEdit(pComponente.Controls[I]).Text := '0';
       3: TEdit(pComponente.Controls[I]).Text := '0,00';
+      4: TEdit(pComponente.Controls[I]).Text := '1';
     end;
 
     if (pComponente.Controls[I] is TCheckBox) then

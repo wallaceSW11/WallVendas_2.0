@@ -145,6 +145,7 @@ end;
 
 procedure TTelaPesquisaPadrao.FormShow(Sender: TObject);
 begin
+  dbgPesquisa.AjustarColunas(1);
   edtTrecho.SetFocus();
 end;
 

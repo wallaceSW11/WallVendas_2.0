@@ -32,7 +32,8 @@ uses
   WallVendas.DAO.Inventario in 'DAO\WallVendas.DAO.Inventario.pas',
   WallVendas.Helper.DBGrid in 'Helper\WallVendas.Helper.DBGrid.pas',
   Vcl.Themes,
-  Vcl.Styles;
+  Vcl.Styles,
+  WallVendas.Model.Produto in 'Model\WallVendas.Model.Produto.pas';
 
 {$R *.res}
 

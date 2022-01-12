@@ -168,6 +168,7 @@
         <DCCReference Include="Model\WallVendas.Model.InventarioItem.pas"/>
         <DCCReference Include="DAO\WallVendas.DAO.Inventario.pas"/>
         <DCCReference Include="Helper\WallVendas.Helper.DBGrid.pas"/>
+        <DCCReference Include="Model\WallVendas.Model.Produto.pas"/>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>

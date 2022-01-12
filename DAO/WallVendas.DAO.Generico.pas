@@ -9,7 +9,8 @@ uses
   SimpleQueryFiredac,
   WallVendas.Context.Conexao,
   System.Generics.Collections,
-  Vcl.Forms, Data.DB, LibTypes, System.SysUtils;
+  Vcl.Forms, Data.DB, LibTypes, System.SysUtils,
+  FireDAC.Comp.Client;
 
 type
   IDAO<T: class> = interface
@@ -18,8 +19,8 @@ type
     function FindOne(pIdentificador: Integer): T; overload;
     function FindJoin(const pCamposSQL: string; const pJoinSQL: string; const pFiltroSQL: string): TObjectList<T>;
     procedure Update(pEntidade: T);
-    procedure Insert(); overload;
-    procedure Insert(pEntidade: T); overload;
+//    procedure Insert();
+    function Insert(pEntidade: T): Integer;
     procedure Find(pCampos: TArrayCamposSQL);
     procedure Delete(const pCampo: string; const pValor: string);
 //    function FindAll(): TObjectList<T>;
@@ -35,6 +36,7 @@ type
     constructor Create(); overload;
     constructor Create(var pDataSource: TDataSource); overload;
     constructor Create(var pBindForm: TForm); overload;
+    function LastId(const pTabela: string): Integer;
   public
     destructor Destroy; override;
     class function NovaInstancia(): IDAO<T>; overload;
@@ -43,8 +45,8 @@ type
     function FindOne(): T; overload;
     function FindOne(pIdentificador: Integer): T; overload;
     procedure Update(pEntidade: T);
-    procedure Insert(); overload;
-    procedure Insert(pEntidade: T); overload;
+ //   procedure Insert();
+    function Insert(pEntidade: T): Integer;
     procedure Find(pCampos: TArrayCamposSQL);
     function FindJoin(const pCamposSQL: string; const pJoinSQL: string; const pFiltroSQL: string): TObjectList<T>;
     procedure Delete(const pCampo: string; const pValor: string);
@@ -140,15 +142,34 @@ begin
   Result := FListaEntidade;
 end;
 
-procedure TDAOGenerico<T>.Insert(pEntidade: T);
+function TDAOGenerico<T>.Insert(pEntidade: T): Integer;
 begin
   FDAOGenerico.Insert(pEntidade);
+  Result := Self.LastId(pEntidade.ClassName);
 end;
 
-procedure TDAOGenerico<T>.Insert();
+function TDAOGenerico<T>.LastId(const pTabela: string): Integer;
+var
+  lQuery: TFDQuery;
 begin
-  FDAOGenerico.Insert();
+  lQuery := TFDQuery.Create(nil);
+  try
+    lQuery.Connection := FConexao.Conexao;
+    lQuery.SQL.Add('select seq from sqlite_sequence where name=:Tabela');
+    lQuery.Params.ParamByName('Tabela').AsString := Copy(pTabela, 2, Length(pTabela));
+    lQuery.Open();
+
+    Result := lQuery.FieldByName('seq').AsInteger;
+  finally
+    lQuery.Connection.Close;
+    lQuery.Free();
+  end;
 end;
+
+//procedure TDAOGenerico<T>.Insert();
+//begin
+//  FDAOGenerico.Insert();
+//end;
 
 class function TDAOGenerico<T>.NovaInstancia(var pBindForm: TForm): IDAO<T>;
 begin

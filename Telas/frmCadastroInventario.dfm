@@ -12,6 +12,11 @@ inherited TelaCadastroInventario: TTelaCadastroInventario
       ExplicitWidth = 88
     end
     inherited pnlBotoes: TPanel
+      inherited pnlDuplicar: TPanel
+        inherited btnDuplicar: TSpeedButton
+          OnClick = btnDuplicarClick
+        end
+      end
       inherited pnlPesquisar: TPanel
         inherited btnPesquisar: TSpeedButton
           OnClick = btnPesquisarClick
@@ -58,6 +63,7 @@ inherited TelaCadastroInventario: TTelaCadastroInventario
       Font.Name = 'Tahoma'
       Font.Style = []
       ParentFont = False
+      OnClick = btnPesquisarProdutoInventarioClick
     end
     object Label4: TLabel
       Left = 901
@@ -179,7 +185,8 @@ inherited TelaCadastroInventario: TTelaCadastroInventario
       Font.Name = 'Tahoma'
       Font.Style = []
       ParentFont = False
-      TabOrder = 0
+      TabOrder = 2
+      OnExit = edtIdProdutoInventarioExit
     end
     object edtDescricaoProdutoInventario: TEdit
       Tag = 1
@@ -197,9 +204,10 @@ inherited TelaCadastroInventario: TTelaCadastroInventario
       Font.Style = []
       MaxLength = 500
       ParentFont = False
-      TabOrder = 1
+      TabOrder = 3
     end
     object edtQtProdutoInventario: TEdit
+      Tag = 4
       Left = 901
       Top = 139
       Width = 67
@@ -212,7 +220,9 @@ inherited TelaCadastroInventario: TTelaCadastroInventario
       Font.Name = 'Tahoma'
       Font.Style = []
       ParentFont = False
-      TabOrder = 2
+      TabOrder = 4
+      Text = '1'
+      OnExit = edtQtProdutoInventarioExit
     end
     object dbgInventario: TDBGrid
       Left = 20
@@ -220,14 +230,18 @@ inherited TelaCadastroInventario: TTelaCadastroInventario
       Width = 948
       Height = 401
       Anchors = [akLeft, akTop, akRight, akBottom]
+      Ctl3D = True
       DataSource = dsInventarioItem
-      Options = [dgTitles, dgColumnResize, dgRowLines, dgTabs, dgRowSelect, dgConfirmDelete, dgCancelOnExit, dgTitleClick, dgTitleHotTrack]
-      TabOrder = 3
+      Options = [dgTitles, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgConfirmDelete, dgCancelOnExit, dgTitleClick, dgTitleHotTrack]
+      ParentCtl3D = False
+      TabOrder = 5
       TitleFont.Charset = DEFAULT_CHARSET
       TitleFont.Color = clWindowText
       TitleFont.Height = -13
       TitleFont.Name = 'Segoe UI'
       TitleFont.Style = []
+      OnDblClick = dbgInventarioDblClick
+      OnKeyDown = dbgInventarioKeyDown
       Columns = <
         item
           Alignment = taRightJustify
@@ -285,7 +299,7 @@ inherited TelaCadastroInventario: TTelaCadastroInventario
       Font.Style = []
       ParentFont = False
       ReadOnly = True
-      TabOrder = 4
+      TabOrder = 6
     end
     object edtDescricaoInventario: TEdit
       Left = 77
@@ -300,7 +314,7 @@ inherited TelaCadastroInventario: TTelaCadastroInventario
       Font.Style = []
       MaxLength = 500
       ParentFont = False
-      TabOrder = 5
+      TabOrder = 0
     end
     object dtInventario: TDateTimePicker
       Left = 860
@@ -310,7 +324,7 @@ inherited TelaCadastroInventario: TTelaCadastroInventario
       Anchors = [akTop, akRight]
       Date = 44509.000000000000000000
       Time = 0.717828263892442900
-      TabOrder = 6
+      TabOrder = 1
     end
     object edtUnidade: TEdit
       Tag = 1
