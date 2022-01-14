@@ -121,7 +121,7 @@ inherited TelaCadastroSalario: TTelaCadastroSalario
       Tag = 1
       Left = 511
       Top = 172
-      Width = 155
+      Width = 189
       Height = 25
       TabStop = False
       Alignment = taRightJustify
@@ -176,7 +176,7 @@ inherited TelaCadastroSalario: TTelaCadastroSalario
       OnChange = edtVlSalarioChange
     end
     object edtTotalHorasPorDia: TEditNumber
-      Left = 184
+      Left = 180
       Top = 31
       Width = 155
       Height = 25

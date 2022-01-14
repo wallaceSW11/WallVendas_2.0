@@ -158,7 +158,7 @@ begin
   pnlMenu.Color := COLOR_PRIMARY;
   pnlMain.Color := COLOR_BACKGROUND;
 
-  ExibirTela<TTelaCadastroInventario>(btnInventario);
+  ExibirTela<TTelaCadastroProduto>(btnProduto);
   ToggleMenu();
 end;
 

@@ -4,7 +4,8 @@ interface
 
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
-  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, frmCadastroPadrao, Vcl.Buttons, Vcl.StdCtrls, Vcl.ExtCtrls, Data.DB, Vcl.Grids, Vcl.DBGrids, Vcl.ComCtrls;
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, frmCadastroPadrao, Vcl.Buttons, Vcl.StdCtrls, Vcl.ExtCtrls, Data.DB, Vcl.Grids, Vcl.DBGrids, Vcl.ComCtrls,
+  LibTypes, wallvendas.Model.Produto, frmPesquisaPadrao, System.Generics.Collections, WallVendas.DAO.Generico;
 
 type
   TTelaCadastroProduto = class(TTelaCadastroPadrao)
@@ -65,8 +66,11 @@ type
     edtIdProduto: TEdit;
     edtDescricaoProduto: TEdit;
     chkPossuiComposicao: TCheckBox;
+    procedure btnPesquisarClick(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
   private
-    { Private declarations }
+    FDAOProduto: IDAO<TProduto>;
+    procedure PreencherCampos(const pProduto: TProduto);
   public
     { Public declarations }
   end;
@@ -77,5 +81,38 @@ var
 implementation
 
 {$R *.dfm}
+
+procedure TTelaCadastroProduto.btnPesquisarClick(Sender: TObject);
+var
+  lDadoLocalizado: TDadoLocalizado;
+  lProduto: TProduto;
+begin
+//  lProduto := TTelaPesquisaPadrao.Pesquisa<TProduto>();   //['id', 'Descricao', 'VlPrecoVenda']
+  lDadoLocalizado := TTelaPesquisaPadrao.Pesquisa<TProduto>(['id', 'Descricao', 'VlPrecoVenda']);
+
+  if (lDadoLocalizado.Codigo.IsEmpty()) then
+    Exit();
+
+  lProduto := FDAOProduto.FindOne(lDadoLocalizado.Codigo.ToInteger());
+
+  PreencherCampos(lProduto);
+
+  Self.HabilitarCamposPesquisaValida();
+end;
+
+procedure TTelaCadastroProduto.FormCreate(Sender: TObject);
+begin
+  inherited;
+  FDAOProduto := TDAOGenerico<TProduto>.NovaInstancia();
+end;
+
+procedure TTelaCadastroProduto.PreencherCampos(const pProduto: TProduto);
+begin
+  edtIdProduto.Text := pProduto.Id.ToString;
+  edtDescricaoProduto.Text := pProduto.Descricao;
+  lblVlPrecoVenda.Caption := FloatToStr(pProduto.PrecoVenda);
+  chkPossuiComposicao.Checked := pProduto.PossuiComposicao = '1';
+end;
+
 
 end.

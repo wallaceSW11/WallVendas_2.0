@@ -74,14 +74,21 @@ implementation
 procedure TTelaCadastroInventario.btnDuplicarClick(Sender: TObject);
 begin
   if (not Confirma('Deseja duplicar o inventário?', 'Duplicar inventário')) then
-    Exit;
+    Exit();
 
-  FNovoCadastro := True;
   edtIdInventario.Clear;
+  FNovoCadastro := True;
+  FCadastroDuplicado := True;
 
   btnSalvarClick(nil);
 
-
+  if (Confirma('Deseja editar o item duplicado?', 'Editar item')) then
+  begin
+    btnEditarClick(nil);
+    FNovoCadastro := False;
+    FCadastroDuplicado := False;
+    Exit();
+  end;
 
   inherited;
 end;
@@ -124,8 +131,6 @@ begin
       'Inner Join Produto on (Produto.id = InventarioItem.idProduto)',
       'IdInventario =' + QuotedStr(edtIdInventario.Text));
 
-  cdsInventarioItem.Open();
-
   for lInventarioItem in lListaInventarioItem do
   begin
     cdsInventarioItem.Append();
@@ -161,8 +166,6 @@ begin
   edtIdProdutoInventario.Text := lDadoLocalizado.Codigo;
   edtDescricaoProdutoInventario.Text := lDadoLocalizado.Descricao;
   edtUnidade.Text := lDadoLocalizado.Complemento;
-
-
 end;
 
 procedure TTelaCadastroInventario.btnSalvarClick(Sender: TObject);
@@ -175,7 +178,7 @@ begin
     'Nenhum produto foi informado no inventário.',
     edtIdProdutoInventario);
 
-  lInventario := TInventario.Create;
+  lInventario := TInventario.Create();
   try
     lInventario.Id := edtIdInventario.ToInteger;
     lInventario.Descricao := edtDescricaoInventario.Text;
@@ -207,8 +210,7 @@ begin
       cdsInventarioItem.Next();
     end;
   finally
-    cdsInventarioItem.Close();
-    cdsInventarioItem.CreateDataSet();
+    cdsInventarioItem.First();
     cdsInventarioItem.enableControls();
   end;
 

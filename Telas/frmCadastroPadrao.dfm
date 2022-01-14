@@ -88,6 +88,7 @@ object TelaCadastroPadrao: TTelaCadastroPadrao
           Align = alClient
           Caption = 'Duplicar'
           Flat = True
+          OnClick = btnDuplicarClick
           ExplicitLeft = 56
           ExplicitWidth = 75
           ExplicitHeight = 33

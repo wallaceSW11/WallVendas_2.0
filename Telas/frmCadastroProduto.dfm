@@ -8,6 +8,13 @@ inherited TelaCadastroProduto: TTelaCadastroProduto
       Caption = 'Produto'
       ExplicitWidth = 72
     end
+    inherited pnlBotoes: TPanel
+      inherited pnlPesquisar: TPanel
+        inherited btnPesquisar: TSpeedButton
+          OnClick = btnPesquisarClick
+        end
+      end
+    end
   end
   inherited pnlMain: TPanel
     object lblIdProduto: TLabel

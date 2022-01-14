@@ -5,7 +5,8 @@ interface
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.ExtCtrls, Vcl.Buttons, System.ImageList,
-  Vcl.ImgList, Styles, Vcl.ComCtrls, Vcl.DBGrids, WallVendas.Helper.DBGrid, Data.DB, Datasnap.DBClient;
+  Vcl.ImgList, Styles, Vcl.ComCtrls, Vcl.DBGrids, WallVendas.Helper.DBGrid, Data.DB, Datasnap.DBClient,
+  System.Generics.Collections;
 
 type
   TTelaCadastroPadrao = class(TForm)
@@ -44,6 +45,7 @@ type
     procedure OnMouseEnterButton(Sender: TObject);
     procedure OnMouseLeaveButton(Sender: TObject);
     procedure btnExcluirClick(Sender: TObject);
+    procedure btnDuplicarClick(Sender: TObject);
   private
     procedure PrepararBotoesEdicaoNovoCadastro();
     procedure PrepararBotoesIniciais;
@@ -55,6 +57,7 @@ type
     procedure LimparCamposDeAcordoComATag(pComponente: TWinControl);
   public
     FNovoCadastro: Boolean;
+    FCadastroDuplicado: Boolean;
     procedure HabilitarCamposPesquisaValida();
   end;
 
@@ -70,6 +73,12 @@ begin
   PrepararBotoesIniciais();
   LimparCampos();
   FNovoCadastro := False;
+  FCadastroDuplicado := False;
+end;
+
+procedure TTelaCadastroPadrao.btnDuplicarClick(Sender: TObject);
+begin
+  btnCancelarClick(nil);
 end;
 
 procedure TTelaCadastroPadrao.btnEditarClick(Sender: TObject);
@@ -86,13 +95,19 @@ procedure TTelaCadastroPadrao.btnNovoClick(Sender: TObject);
 begin
   PrepararBotoesEdicaoNovoCadastro();
   FNovoCadastro := True;
+  FCadastroDuplicado := False;
   LimparCampos();
 end;
 
 procedure TTelaCadastroPadrao.btnSalvarClick(Sender: TObject);
 begin
+  if (FCadastroDuplicado) then
+    Exit();
+
   PrepararBotoesIniciais();
+
   LimparCampos();
+
   if (FNovoCadastro) then
     btnNovoClick(nil);
 end;
@@ -106,6 +121,7 @@ begin
   PrepararBotoesIniciais();
   HabilitarCampos(False);
   FNovoCadastro := False;
+  FCadastroDuplicado := False;
 end;
 
 procedure TTelaCadastroPadrao.FormKeyPress(Sender: TObject; var Key: Char);
@@ -221,8 +237,7 @@ end;
 
 procedure TTelaCadastroPadrao.LimparCampos();
 var
-  I: Integer;
-  J: Integer;
+  I, J: Integer;
 begin
   for I := 0 to pnlMain.ControlCount -1 do
   begin
@@ -274,7 +289,6 @@ begin
     end;
   end;
 end;
-
 
 procedure TTelaCadastroPadrao.OnMouseEnterButton(Sender: TObject);
 begin

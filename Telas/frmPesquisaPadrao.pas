@@ -28,7 +28,8 @@ type
     procedure cbCampoChange(Sender: TObject);
     procedure FormResize(Sender: TObject);
   public
-    class function Pesquisa<T: class, constructor>(const pCampos: TArrayCamposSQL): TDadoLocalizado;
+    class function Pesquisa<T: class, constructor>(): T; overload;
+    class function Pesquisa<T: class, constructor>(const pCampos: TArrayCamposSQL): TDadoLocalizado; overload;
   end;
 
 var
@@ -69,6 +70,41 @@ begin
     end;
 
     Result := lDadoLocalizado;
+  finally
+    FreeAndNil(TelaPesquisaPadrao);
+  end;
+end;
+
+class function TTelaPesquisaPadrao.Pesquisa<T>(): T;
+var
+  lDAO: IDAO<T>;
+  lDadoLocalizado: TDadoLocalizado;
+  lCampo: string;
+  lEntidade: T;
+begin
+  TelaPesquisaPadrao := TTelaPesquisaPadrao.Create(nil);
+
+  lDAO := TDAOGenerico<T>.NovaInstancia();
+  lDAO.Find();
+
+  TelaPesquisaPadrao.cbCampo.Clear();
+
+//  for lCampo in pCampos do
+//    TelaPesquisaPadrao.cbCampo.Items.Add(lCampo.Replace('id', 'Código'));
+
+  TelaPesquisaPadrao.cbCampo.ItemIndex := 1;
+
+  try
+    if (TelaPesquisaPadrao.ShowModal = 1) then
+    begin
+//      lDadoLocalizado.Codigo := TelaPesquisaPadrao.dsPesquisa.DataSet.FieldByName(pCampos[0]).AsString;
+//      lDadoLocalizado.Descricao := TelaPesquisaPadrao.dsPesquisa.DataSet.FieldByName(pCampos[1]).AsString;
+//
+//      if (Length(pCampos) = 3) then
+//        lDadoLocalizado.Complemento := TelaPesquisaPadrao.dsPesquisa.DataSet.FieldByName(pCampos[2]).AsString;
+    end;
+
+   // Result := lDadoLocalizado;
   finally
     FreeAndNil(TelaPesquisaPadrao);
   end;
@@ -145,6 +181,8 @@ end;
 
 procedure TTelaPesquisaPadrao.FormShow(Sender: TObject);
 begin
+//  dbgPesquisa.Columns[0].Width := 20;
+//  dbgPesquisa.Columns[1].Width := 20;
   dbgPesquisa.AjustarColunas(1);
   edtTrecho.SetFocus();
 end;

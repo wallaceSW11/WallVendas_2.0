@@ -12,11 +12,6 @@ inherited TelaCadastroInventario: TTelaCadastroInventario
       ExplicitWidth = 88
     end
     inherited pnlBotoes: TPanel
-      inherited pnlDuplicar: TPanel
-        inherited btnDuplicar: TSpeedButton
-          OnClick = btnDuplicarClick
-        end
-      end
       inherited pnlPesquisar: TPanel
         inherited btnPesquisar: TSpeedButton
           OnClick = btnPesquisarClick

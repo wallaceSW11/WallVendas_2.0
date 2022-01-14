@@ -21,7 +21,8 @@ type
     procedure Update(pEntidade: T);
 //    procedure Insert();
     function Insert(pEntidade: T): Integer;
-    procedure Find(pCampos: TArrayCamposSQL);
+    procedure Find(pCampos: TArrayCamposSQL); overload;
+    procedure Find(); overload;
     procedure Delete(const pCampo: string; const pValor: string);
 //    function FindAll(): TObjectList<T>;
   end;
@@ -47,7 +48,8 @@ type
     procedure Update(pEntidade: T);
  //   procedure Insert();
     function Insert(pEntidade: T): Integer;
-    procedure Find(pCampos: TArrayCamposSQL);
+    procedure Find(pCampos: TArrayCamposSQL); overload;
+    procedure Find(); overload;
     function FindJoin(const pCamposSQL: string; const pJoinSQL: string; const pFiltroSQL: string): TObjectList<T>;
     procedure Delete(const pCampo: string; const pValor: string);
   end;
@@ -121,6 +123,11 @@ begin
       .Fields(string.Join(', ', pCampos))
     .&End
   .Find();
+end;
+
+procedure TDAOGenerico<T>.Find();
+begin
+  FDAOGenerico.Find(FListaEntidade);
 end;
 
 function TDAOGenerico<T>.FindOne(pIdentificador: Integer): T;

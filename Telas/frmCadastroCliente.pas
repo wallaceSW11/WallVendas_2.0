@@ -19,6 +19,8 @@ type
     procedure FormCreate(Sender: TObject);
     procedure btnSalvarClick(Sender: TObject);
     procedure btnPesquisarClick(Sender: TObject);
+    procedure btnExcluirClick(Sender: TObject);
+    procedure btnDuplicarClick(Sender: TObject);
   private
     FDAOCliente: IDAO<TPessoa>;
   public
@@ -31,6 +33,37 @@ var
 implementation
 
 {$R *.dfm}
+
+procedure TTelaCadastroCliente.btnDuplicarClick(Sender: TObject);
+begin
+  if (not Confirma('Deseja duplicar o cadastro do cliente?', 'Duplicar cadastro')) then
+    Exit();
+
+  edtIdPessoa.Clear;
+  FNovoCadastro := True;
+  FCadastroDuplicado := True;
+
+  btnSalvarClick(nil);
+
+  if (Confirma('Deseja editar o cadastro duplicado?', 'Editar o cadastro')) then
+  begin
+    btnEditarClick(nil);
+    FNovoCadastro := False;
+    FCadastroDuplicado := False;
+    Exit();
+  end;
+
+  inherited;
+end;
+
+procedure TTelaCadastroCliente.btnExcluirClick(Sender: TObject);
+begin
+  if (not Confirma('Confirma excluir o cadastro do cliente?', 'Exclusão de cadastro')) then
+    Exit();
+
+  FDAOCliente.Delete('id', edtIdPessoa.Text);
+  inherited;
+end;
 
 procedure TTelaCadastroCliente.btnPesquisarClick(Sender: TObject);
 var
@@ -58,20 +91,18 @@ begin
 
   lCliente := TPessoa.Create;
   try
+    lCliente.Id := edtIdPessoa.ToInteger;
     lCliente.Nome := edtNomePessoa.Text;
 
     if (FNovoCadastro) then
-    begin
-      FDAOCliente.Insert(lCliente);
-      Exit;
-    end;
-
-    lCliente.Id := edtIdPessoa.ToInteger;
-    FDAOCliente.Update(lCliente);
+      edtIdPessoa.Text := FDAOCliente.Insert(lCliente).ToString()
+    else
+      FDAOCliente.Update(lCliente);
   finally
     lCliente.Free();
   end;
 
+  FNovoCadastro := False;
   inherited;
 end;
 
