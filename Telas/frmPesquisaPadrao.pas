@@ -3,9 +3,10 @@ unit frmPesquisaPadrao;
 interface
 
 uses
-  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
-  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Data.DB, Vcl.Grids, Vcl.DBGrids, Vcl.Buttons, Vcl.StdCtrls,
-  WallVendas.DAO.Generico, System.Generics.Collections, WallVendas.Model.Pessoa, LibTypes,
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants,
+  System.Classes, Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Data.DB,
+  Vcl.Grids, Vcl.DBGrids, Vcl.Buttons, Vcl.StdCtrls, WallVendas.DAO.Generico,
+  System.Generics.Collections, WallVendas.Model.Pessoa, LibTypes,
   WallVendas.Helper.DBGrid;
 
 type
@@ -27,13 +28,13 @@ type
     procedure edtTrechoKeyPress(Sender: TObject; var Key: Char);
     procedure cbCampoChange(Sender: TObject);
     procedure FormResize(Sender: TObject);
-  public
-    class function Pesquisa<T: class, constructor>(): T; overload;
-    class function Pesquisa<T: class, constructor>(const pCampos: TArrayCamposSQL): TDadoLocalizado; overload;
+  public//    class function Pesquisa<T: class, constructor>(): T; overload;
+    class function Pesquisa<T: class, constructor>(const pCampos: TArrayCamposSQL; const pColunaPreco: Integer = 0): TDadoLocalizado; //overload;
   end;
 
 var
   TelaPesquisaPadrao: TTelaPesquisaPadrao;
+
 
 implementation
 
@@ -41,7 +42,7 @@ implementation
 
 { TTelaPesquisaPadrao }
 
-class function TTelaPesquisaPadrao.Pesquisa<T>(const pCampos: TArrayCamposSQL): TDadoLocalizado;
+class function TTelaPesquisaPadrao.Pesquisa<T>(const pCampos: TArrayCamposSQL; const pColunaPreco: Integer): TDadoLocalizado;
 var
   lDAO: IDAO<T>;
   lDadoLocalizado: TDadoLocalizado;
@@ -59,6 +60,13 @@ begin
 
   TelaPesquisaPadrao.cbCampo.ItemIndex := 1;
 
+//  if (pColunaPreco <> 0) then
+//    (TelaPesquisaPadrao.dsPesquisa.DataSet.Fields[pColunaPreco] as Tfloatfield).DisplayFormat := 'R$ #,##0.00';
+
+//      if (qryLocalizar.Fields.FindField('VlPrecoVenda') <> nil) then
+//    (qryLocalizar.FieldByName('VlPrecoVenda') as Tfloatfield).DisplayFormat := 'R$ ###,##0.00';
+
+
   try
     if (TelaPesquisaPadrao.ShowModal = 1) then
     begin
@@ -74,41 +82,41 @@ begin
     FreeAndNil(TelaPesquisaPadrao);
   end;
 end;
-
-class function TTelaPesquisaPadrao.Pesquisa<T>(): T;
-var
-  lDAO: IDAO<T>;
-  lDadoLocalizado: TDadoLocalizado;
-  lCampo: string;
-  lEntidade: T;
-begin
-  TelaPesquisaPadrao := TTelaPesquisaPadrao.Create(nil);
-
-  lDAO := TDAOGenerico<T>.NovaInstancia();
-  lDAO.Find();
-
-  TelaPesquisaPadrao.cbCampo.Clear();
-
-//  for lCampo in pCampos do
-//    TelaPesquisaPadrao.cbCampo.Items.Add(lCampo.Replace('id', 'Código'));
-
-  TelaPesquisaPadrao.cbCampo.ItemIndex := 1;
-
-  try
-    if (TelaPesquisaPadrao.ShowModal = 1) then
-    begin
-//      lDadoLocalizado.Codigo := TelaPesquisaPadrao.dsPesquisa.DataSet.FieldByName(pCampos[0]).AsString;
-//      lDadoLocalizado.Descricao := TelaPesquisaPadrao.dsPesquisa.DataSet.FieldByName(pCampos[1]).AsString;
 //
-//      if (Length(pCampos) = 3) then
-//        lDadoLocalizado.Complemento := TelaPesquisaPadrao.dsPesquisa.DataSet.FieldByName(pCampos[2]).AsString;
-    end;
-
-   // Result := lDadoLocalizado;
-  finally
-    FreeAndNil(TelaPesquisaPadrao);
-  end;
-end;
+//class function TTelaPesquisaPadrao.Pesquisa<T>(): T;
+//var
+//  lDAO: IDAO<T>;
+//  lDadoLocalizado: TDadoLocalizado;
+//  lCampo: string;
+//  lEntidade: T;
+//begin
+//  TelaPesquisaPadrao := TTelaPesquisaPadrao.Create(nil);
+//
+//  lDAO := TDAOGenerico<T>.NovaInstancia();
+//  lDAO.Find();
+//
+//  TelaPesquisaPadrao.cbCampo.Clear();
+//
+////  for lCampo in pCampos do
+////    TelaPesquisaPadrao.cbCampo.Items.Add(lCampo.Replace('id', 'Código'));
+//
+//  TelaPesquisaPadrao.cbCampo.ItemIndex := 1;
+//
+//  try
+//    if (TelaPesquisaPadrao.ShowModal = 1) then
+//    begin
+////      lDadoLocalizado.Codigo := TelaPesquisaPadrao.dsPesquisa.DataSet.FieldByName(pCampos[0]).AsString;
+////      lDadoLocalizado.Descricao := TelaPesquisaPadrao.dsPesquisa.DataSet.FieldByName(pCampos[1]).AsString;
+////
+////      if (Length(pCampos) = 3) then
+////        lDadoLocalizado.Complemento := TelaPesquisaPadrao.dsPesquisa.DataSet.FieldByName(pCampos[2]).AsString;
+//    end;
+//
+//   // Result := lDadoLocalizado;
+//  finally
+//    FreeAndNil(TelaPesquisaPadrao);
+//  end;
+//end;
 
 procedure TTelaPesquisaPadrao.btnCancelarClick(Sender: TObject);
 begin
@@ -158,8 +166,7 @@ procedure TTelaPesquisaPadrao.edtTrechoKeyDown(Sender: TObject; var Key: Word; S
 begin
   if (Key = VK_RETURN) then
   begin
-    if ((string(edtTrecho.Text).Trim().IsEmpty()) or
-        (dsPesquisa.DataSet.FieldByName('id').AsString = ''))  then
+    if ((string(edtTrecho.Text).Trim().IsEmpty()) or (dsPesquisa.DataSet.FieldByName('id').AsString = '')) then
       Exit;
 
     Close();
@@ -170,8 +177,8 @@ end;
 procedure TTelaPesquisaPadrao.edtTrechoKeyPress(Sender: TObject; var Key: Char);
 begin
   if (cbCampo.ItemIndex = 0) then
-    if not(CharInSet(key, ['0'..'9',#8,#13])) then
-      key := #0;
+    if not (CharInSet(Key, ['0'..'9', #8, #13])) then
+      Key := #0;
 end;
 
 procedure TTelaPesquisaPadrao.FormResize(Sender: TObject);
@@ -184,7 +191,10 @@ begin
 //  dbgPesquisa.Columns[0].Width := 20;
 //  dbgPesquisa.Columns[1].Width := 20;
   dbgPesquisa.AjustarColunas(1);
-  edtTrecho.SetFocus();
+ edtTrecho.SetFocus();
+
+ // (TelaPesquisaPadrao.dsPesquisa.DataSet.Fields[2] as Tfloatfield).DisplayFormat := 'R$ #,##0.00';
 end;
 
 end.
+

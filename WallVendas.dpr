@@ -33,7 +33,10 @@ uses
   WallVendas.Helper.DBGrid in 'Helper\WallVendas.Helper.DBGrid.pas',
   Vcl.Themes,
   Vcl.Styles,
-  WallVendas.Model.Produto in 'Model\WallVendas.Model.Produto.pas';
+  WallVendas.Model.Produto in 'Model\WallVendas.Model.Produto.pas',
+  Lib in 'lib\Lib.pas',
+  WallVendas.Model.ProdutoComposicao in 'Model\WallVendas.Model.ProdutoComposicao.pas',
+  LibConstantes in 'lib\LibConstantes.pas';
 
 {$R *.res}
 

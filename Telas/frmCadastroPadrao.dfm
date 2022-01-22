@@ -14,6 +14,7 @@ object TelaCadastroPadrao: TTelaCadastroPadrao
   OldCreateOrder = False
   OnCreate = FormCreate
   OnKeyPress = FormKeyPress
+  OnShow = FormShow
   PixelsPerInch = 96
   TextHeight = 17
   object pnlTop: TPanel

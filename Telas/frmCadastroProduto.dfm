@@ -1,5 +1,6 @@
 inherited TelaCadastroProduto: TTelaCadastroProduto
   Caption = 'Produto'
+  ExplicitTop = 1
   PixelsPerInch = 96
   TextHeight = 17
   inherited pnlTop: TPanel
@@ -39,6 +40,7 @@ inherited TelaCadastroProduto: TTelaCadastroProduto
       Caption = 'Pre'#231'o de compra:'
     end
     object lblVlPrecoCompra: TLabel
+      Tag = 6
       Left = 139
       Top = 64
       Width = 43
@@ -53,6 +55,7 @@ inherited TelaCadastroProduto: TTelaCadastroProduto
       Caption = 'Pre'#231'o de venda:'
     end
     object lblVlPrecoVenda: TLabel
+      Tag = 6
       Left = 340
       Top = 64
       Width = 43
@@ -64,7 +67,7 @@ inherited TelaCadastroProduto: TTelaCadastroProduto
       Top = 96
       Width = 959
       Height = 481
-      ActivePage = tsProdutoCusto
+      ActivePage = tsProdutoComposicao
       Anchors = [akLeft, akTop, akRight, akBottom]
       TabOrder = 0
       object tsProdutoCusto: TTabSheet
@@ -170,6 +173,7 @@ inherited TelaCadastroProduto: TTelaCadastroProduto
             'Metro Quadrado')
         end
         object edtQtEmbalagemCompra: TEdit
+          Tag = 4
           Left = 165
           Top = 28
           Width = 129
@@ -183,7 +187,7 @@ inherited TelaCadastroProduto: TTelaCadastroProduto
           Width = 121
           Height = 25
           Alignment = taRightJustify
-          TabOrder = 2
+          TabOrder = 3
         end
         object edtVlFreteCompra: TEdit
           Left = 3
@@ -191,7 +195,7 @@ inherited TelaCadastroProduto: TTelaCadastroProduto
           Width = 121
           Height = 25
           Alignment = taRightJustify
-          TabOrder = 3
+          TabOrder = 7
         end
         object edtAcrescimoDesconto: TEdit
           Left = 165
@@ -199,23 +203,27 @@ inherited TelaCadastroProduto: TTelaCadastroProduto
           Width = 127
           Height = 25
           Alignment = taRightJustify
-          TabOrder = 4
+          TabOrder = 8
         end
         object edtCustoReposicao: TEdit
+          Tag = 1
           Left = 327
           Top = 131
           Width = 121
           Height = 25
+          TabStop = False
           Alignment = taRightJustify
-          TabOrder = 5
+          TabOrder = 9
         end
         object edtCustoReposicaoUnitario: TEdit
+          Tag = 1
           Left = 489
           Top = 131
           Width = 121
           Height = 25
+          TabStop = False
           Alignment = taRightJustify
-          TabOrder = 6
+          TabOrder = 10
         end
         object dtDataCompra: TDateTimePicker
           Left = 489
@@ -224,7 +232,7 @@ inherited TelaCadastroProduto: TTelaCadastroProduto
           Height = 24
           Date = 44038.000000000000000000
           Time = 0.756530706021294500
-          TabOrder = 7
+          TabOrder = 2
         end
         object edtTempoMontagem: TEdit
           Left = 165
@@ -232,16 +240,18 @@ inherited TelaCadastroProduto: TTelaCadastroProduto
           Width = 127
           Height = 25
           Alignment = taRightJustify
-          TabOrder = 8
+          TabOrder = 4
         end
         object edtCustoMinuto: TEdit
+          Tag = 1
           Left = 327
           Top = 80
           Width = 121
           Height = 25
+          TabStop = False
           Alignment = taRightJustify
           Enabled = False
-          TabOrder = 9
+          TabOrder = 5
         end
         object edtCustoMontagem: TEdit
           Left = 489
@@ -250,12 +260,13 @@ inherited TelaCadastroProduto: TTelaCadastroProduto
           Height = 25
           Alignment = taRightJustify
           Enabled = False
-          TabOrder = 10
+          TabOrder = 6
         end
       end
       object tsProdutoComposicao: TTabSheet
         Caption = 'Composi'#231#227'o'
         ImageIndex = 1
+        OnShow = tsProdutoComposicaoShow
         DesignSize = (
           951
           449)
@@ -274,15 +285,15 @@ inherited TelaCadastroProduto: TTelaCadastroProduto
           Caption = 'Descri'#231#227'o'
         end
         object lblQtComposicao: TLabel
-          Left = 884
+          Left = 871
           Top = 5
           Width = 68
           Height = 17
           Anchors = [akTop, akRight]
           Caption = 'Quantidade'
-          ExplicitLeft = 639
         end
         object lblVlTotalInsumo: TLabel
+          Tag = 6
           Left = 901
           Top = 377
           Width = 43
@@ -329,6 +340,7 @@ inherited TelaCadastroProduto: TTelaCadastroProduto
           Width = 23
           Height = 22
           Caption = 'F2'
+          OnClick = btnLocalizarProdutoComposicaoClick
         end
         object lblCustoReposicaoComposicao: TLabel
           Left = 276
@@ -341,13 +353,12 @@ inherited TelaCadastroProduto: TTelaCadastroProduto
           ExplicitTop = 306
         end
         object lblCustoComp: TLabel
-          Left = 821
+          Left = 787
           Top = 5
           Width = 33
           Height = 17
           Anchors = [akTop, akRight]
           Caption = 'Custo'
-          ExplicitLeft = 576
         end
         object lblMargemLucro: TLabel
           Left = 409
@@ -369,12 +380,13 @@ inherited TelaCadastroProduto: TTelaCadastroProduto
           ExplicitLeft = 298
           ExplicitTop = 306
         end
-        object grdProdutoComposicao: TDBGrid
+        object dbgProdutoComposicao: TDBGrid
           Left = 3
           Top = 54
           Width = 943
           Height = 321
           Anchors = [akLeft, akTop, akRight, akBottom]
+          DataSource = dsComposicao
           Options = [dgTitles, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgConfirmDelete, dgCancelOnExit, dgTitleClick, dgTitleHotTrack]
           TabOrder = 4
           TitleFont.Charset = DEFAULT_CHARSET
@@ -382,40 +394,50 @@ inherited TelaCadastroProduto: TTelaCadastroProduto
           TitleFont.Height = -13
           TitleFont.Name = 'Segoe UI'
           TitleFont.Style = []
+          OnDblClick = dbgProdutoComposicaoDblClick
+          OnKeyDown = dbgProdutoComposicaoKeyDown
           Columns = <
             item
+              Alignment = taRightJustify
               Expanded = False
-              FieldName = 'idProdutoComposicao'
+              FieldName = 'Codigo'
               Title.Caption = 'C'#243'digo'
-              Width = 47
+              Width = 65
               Visible = True
             end
             item
               Expanded = False
               FieldName = 'Descricao'
               Title.Caption = 'Descri'#231#227'o'
-              Width = 303
               Visible = True
             end
             item
               Expanded = False
-              FieldName = 'VlCusto'
-              Title.Caption = 'Custo'
-              Width = 63
+              FieldName = 'Custo'
+              Visible = True
+            end
+            item
+              Alignment = taRightJustify
+              Expanded = False
+              FieldName = 'Altura'
+              Visible = False
+            end
+            item
+              Alignment = taRightJustify
+              Expanded = False
+              FieldName = 'Largura'
+              Visible = False
+            end
+            item
+              Expanded = False
+              FieldName = 'Quantidade'
+              Width = 84
               Visible = True
             end
             item
               Expanded = False
-              FieldName = 'QtComposicao'
-              Title.Caption = 'Quantidade'
-              Width = 82
-              Visible = True
-            end
-            item
-              Expanded = False
-              FieldName = 'VlItem'
-              Title.Caption = 'Total'
-              Width = 66
+              FieldName = 'ValorItem'
+              Title.Caption = 'Vl. Item'
               Visible = True
             end>
         end
@@ -431,6 +453,7 @@ inherited TelaCadastroProduto: TTelaCadastroProduto
           TabOrder = 7
         end
         object edtVlPrecoVenda: TEdit
+          Tag = 1
           Left = 806
           Top = 423
           Width = 121
@@ -453,11 +476,13 @@ inherited TelaCadastroProduto: TTelaCadastroProduto
           BiDiMode = bdRightToLeft
           ParentBiDiMode = False
           TabOrder = 0
+          OnExit = edtIdProdutoComposicaoExit
         end
         object edtDescricaoProdutoComposicao: TEdit
+          Tag = 1
           Left = 85
           Top = 24
-          Width = 730
+          Width = 698
           Height = 25
           TabStop = False
           Anchors = [akLeft, akTop, akRight]
@@ -465,16 +490,19 @@ inherited TelaCadastroProduto: TTelaCadastroProduto
           TabOrder = 1
         end
         object edtQuantidadeComposicao: TEdit
-          Left = 884
+          Tag = 4
+          Left = 871
           Top = 24
-          Width = 62
+          Width = 75
           Height = 25
           Alignment = taRightJustify
           Anchors = [akTop, akRight]
           TabOrder = 3
           Text = '1'
+          OnExit = edtQuantidadeComposicaoExit
         end
         object edtCustoResposicaoProduto: TEdit
+          Tag = 1
           Left = 276
           Top = 423
           Width = 121
@@ -489,9 +517,10 @@ inherited TelaCadastroProduto: TTelaCadastroProduto
           TabOrder = 5
         end
         object edtVlCustoComposicao: TEdit
-          Left = 821
+          Tag = 1
+          Left = 787
           Top = 24
-          Width = 57
+          Width = 78
           Height = 25
           TabStop = False
           Anchors = [akTop, akRight]
@@ -501,6 +530,7 @@ inherited TelaCadastroProduto: TTelaCadastroProduto
           TabOrder = 2
         end
         object edtMargemLucro: TEdit
+          Tag = 1
           Left = 409
           Top = 423
           Width = 121
@@ -511,6 +541,7 @@ inherited TelaCadastroProduto: TTelaCadastroProduto
           TabOrder = 6
         end
         object edtValorMagemLucro: TEdit
+          Tag = 1
           Left = 543
           Top = 423
           Width = 121
@@ -548,6 +579,41 @@ inherited TelaCadastroProduto: TTelaCadastroProduto
       Anchors = [akTop, akRight]
       Caption = 'Possui composi'#231#227'o'
       TabOrder = 3
+      Visible = False
     end
+  end
+  object cdsComposicao: TClientDataSet
+    Aggregates = <>
+    Params = <>
+    AfterPost = cdsComposicaoAfterPost
+    AfterDelete = cdsComposicaoAfterDelete
+    Left = 125
+    Top = 413
+    object cdsComposicaoCodigo: TStringField
+      FieldName = 'Codigo'
+    end
+    object cdsComposicaoDescricao: TStringField
+      FieldName = 'Descricao'
+    end
+    object cdsComposicaoCusto: TCurrencyField
+      FieldName = 'Custo'
+    end
+    object cdsComposicaoAltura: TStringField
+      FieldName = 'Altura'
+    end
+    object cdsComposicaoLargura: TStringField
+      FieldName = 'Largura'
+    end
+    object cdsComposicaoQuantidade: TFloatField
+      FieldName = 'Quantidade'
+    end
+    object cdsComposicaoValorItem: TCurrencyField
+      FieldName = 'ValorItem'
+    end
+  end
+  object dsComposicao: TDataSource
+    DataSet = cdsComposicao
+    Left = 213
+    Top = 413
   end
 end
