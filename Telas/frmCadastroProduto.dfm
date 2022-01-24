@@ -67,7 +67,7 @@ inherited TelaCadastroProduto: TTelaCadastroProduto
       Top = 96
       Width = 959
       Height = 481
-      ActivePage = tsProdutoComposicao
+      ActivePage = tsProdutoCusto
       Anchors = [akLeft, akTop, akRight, akBottom]
       TabOrder = 0
       object tsProdutoCusto: TTabSheet
@@ -180,6 +180,7 @@ inherited TelaCadastroProduto: TTelaCadastroProduto
           Height = 25
           Alignment = taRightJustify
           TabOrder = 1
+          OnChange = edtQtEmbalagemCompraChange
         end
         object edtCustoProduto: TEdit
           Left = 3
@@ -188,6 +189,7 @@ inherited TelaCadastroProduto: TTelaCadastroProduto
           Height = 25
           Alignment = taRightJustify
           TabOrder = 3
+          OnChange = edtCustoProdutoChange
         end
         object edtVlFreteCompra: TEdit
           Left = 3
@@ -196,6 +198,7 @@ inherited TelaCadastroProduto: TTelaCadastroProduto
           Height = 25
           Alignment = taRightJustify
           TabOrder = 7
+          OnChange = edtVlFreteCompraChange
         end
         object edtAcrescimoDesconto: TEdit
           Left = 165
@@ -204,6 +207,7 @@ inherited TelaCadastroProduto: TTelaCadastroProduto
           Height = 25
           Alignment = taRightJustify
           TabOrder = 8
+          OnChange = edtAcrescimoDescontoChange
         end
         object edtCustoReposicao: TEdit
           Tag = 1
@@ -241,6 +245,7 @@ inherited TelaCadastroProduto: TTelaCadastroProduto
           Height = 25
           Alignment = taRightJustify
           TabOrder = 4
+          OnChange = edtTempoMontagemChange
         end
         object edtCustoMinuto: TEdit
           Tag = 1
@@ -254,10 +259,12 @@ inherited TelaCadastroProduto: TTelaCadastroProduto
           TabOrder = 5
         end
         object edtCustoMontagem: TEdit
+          Tag = 1
           Left = 489
           Top = 80
           Width = 121
           Height = 25
+          TabStop = False
           Alignment = taRightJustify
           Enabled = False
           TabOrder = 6

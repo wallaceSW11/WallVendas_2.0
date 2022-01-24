@@ -56,10 +56,12 @@ type
     property VlFreteCompra: Currency read FVlFreteCompra write SetVlFreteCompra;
     [Campo('AcrescimoDescontoCompra')]
     property AcrescimoDescontoCompra: Currency read FAcrescimoDescontoCompra write SetAcrescimoDescontoCompra;
-    [Campo('CustoReposicao')]
-    property CustoReposicao: Currency read FCustoReposicao write SetCustoReposicao;
-    [Campo('CustoReposicaoUnitario')]
-    property CustoReposicaoUnitario: Currency read FCustoReposicaoUnitario write SetCustoReposicaoUnitario;
+
+//    [Ignore] //[Campo('CustoReposicao')]
+//    property CustoReposicao: Currency read FCustoReposicao write SetCustoReposicao;
+//    [Ignore] //[Campo('CustoReposicaoUnitario')]
+//    property CustoReposicaoUnitario: Currency read FCustoReposicaoUnitario write SetCustoReposicaoUnitario;
+
     [Campo('DataCompra')]
     property DataCompra: TDateTime read FDataCompra write SetDataCompra;
     [Campo('StPossuiComposicao')]
@@ -72,15 +74,41 @@ type
     property TempoMontagem: Integer read FTempoMontagem write SetTempoMontagem;
     [Campo('CustoMinuto')]
     property CustoMinuto: Currency read FCustoMinuto write SetCustoMinuto;
-    [Campo('CustoMontagem')]
-    property CustoMontagem: Currency read FCustoMontagem write SetCustoMontagem;
+//    [Campo('CustoMontagem')]
+//    property CustoMontagem: Currency read FCustoMontagem write SetCustoMontagem;
    [Campo('MargemLucro')]
     property MargemLucro: Double read FMargemLucro write SetMargemLucro;
+
+    function CustoReposicao(): Currency;
+    function CustoReposicaoUnitario: Currency;
+    function CustoMontagem(): Currency;
   end;
 
 implementation
 
 { TProduto }
+
+function TProduto.CustoMontagem: Currency;
+begin
+  Result := FTempoMontagem * FCustoMinuto;
+end;
+
+function TProduto.CustoReposicao: Currency;
+begin
+  Result :=
+    FValorCompra +
+    FCustoMontagem +
+    FVlFreteCompra +
+    FAcrescimoDescontoCompra;
+end;
+
+function TProduto.CustoReposicaoUnitario: Currency;
+begin
+  if ((CustoReposicao() <> 0) and (FQtEmbalagemCompra <> 0)) then
+    Exit(CustoReposicao() / FQtEmbalagemCompra);
+
+  Result := 0;
+end;
 
 function TProduto.GetPrecoVenda: Currency;
 begin

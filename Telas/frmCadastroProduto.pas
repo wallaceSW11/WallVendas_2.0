@@ -87,6 +87,12 @@ type
     procedure dbgProdutoComposicaoDblClick(Sender: TObject);
     procedure cdsComposicaoAfterDelete(DataSet: TDataSet);
     procedure dbgProdutoComposicaoKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+    procedure edtQtEmbalagemCompraChange(Sender: TObject);
+    procedure edtCustoProdutoChange(Sender: TObject);
+    procedure edtTempoMontagemChange(Sender: TObject);
+    procedure edtVlFreteCompraChange(Sender: TObject);
+    procedure edtAcrescimoDescontoChange(Sender: TObject);
+    procedure btnNovoClick(Sender: TObject);
   private
     FDAOProduto: IDAO<TProduto>;
     FDAOProdutoComposicao: IDAO<TProdutoComposicao>;
@@ -97,6 +103,7 @@ type
     procedure AdicionarProdutoComposicaoCasoValido;
     procedure AtualizarValorTotalProdutoComposicao;
     procedure DeletarProdutoDaGrid;
+    procedure CalcularCustoReposicao;
   public
     { Public declarations }
   end;
@@ -122,6 +129,12 @@ begin
   edtVlCustoComposicao.Text := lDadoLocalizado.Complemento;
 
   edtQuantidadeComposicao.Focar();
+end;
+
+procedure TTelaCadastroProduto.btnNovoClick(Sender: TObject);
+begin
+  inherited;
+  edtCustoMinuto.Text := '0,17';
 end;
 
 procedure TTelaCadastroProduto.btnPesquisarClick(Sender: TObject);
@@ -204,6 +217,16 @@ begin
 
 end;
 
+procedure TTelaCadastroProduto.edtAcrescimoDescontoChange(Sender: TObject);
+begin
+  CalcularCustoReposicao();
+end;
+
+procedure TTelaCadastroProduto.edtCustoProdutoChange(Sender: TObject);
+begin
+  CalcularCustoReposicao();
+end;
+
 procedure TTelaCadastroProduto.edtIdProdutoComposicaoExit(Sender: TObject);
 begin
   if (edtIdProdutoComposicao.IsEmpty()) then
@@ -212,10 +235,49 @@ begin
     LocalizarProdutoPeloIdentificador();
 end;
 
+procedure TTelaCadastroProduto.edtQtEmbalagemCompraChange(Sender: TObject);
+begin
+  CalcularCustoReposicao();
+
+end;
+
+procedure TTelaCadastroProduto.CalcularCustoReposicao();
+var
+  lProduto: TProduto;
+begin
+  lProduto := TProduto.Create();
+  try
+    lProduto.QtEmbalagemCompra := edtQtEmbalagemCompra.ToFloat;
+    lProduto.TempoMontagem := edtTempoMontagem.ToInteger;
+    lProduto.CustoMinuto := edtCustoMinuto.ToCurrency;
+    lProduto.ValorCompra := edtCustoProduto.ToCurrency;
+    lProduto.VlFreteCompra := edtVlFreteCompra.ToCurrency;
+    lProduto.AcrescimoDescontoCompra := edtAcrescimoDesconto.ToCurrency;
+
+    edtCustoMontagem.Text := lProduto.CustoMontagem.ValorMonetario;
+    edtCustoReposicao.Text := lProduto.CustoReposicao.ValorMonetario;
+    edtCustoReposicaoUnitario.Text := lProduto.CustoReposicaoUnitario.ValorMonetario;
+    edtCustoResposicaoProduto.Text := lProduto.CustoReposicaoUnitario.ValorMonetario;
+  finally
+    lProduto.Free();
+  end;
+end;
+
 procedure TTelaCadastroProduto.edtQuantidadeComposicaoExit(Sender: TObject);
 begin
   AdicionarProdutoComposicaoCasoValido();
 
+end;
+
+procedure TTelaCadastroProduto.edtTempoMontagemChange(Sender: TObject);
+begin
+  CalcularCustoReposicao();
+
+end;
+
+procedure TTelaCadastroProduto.edtVlFreteCompraChange(Sender: TObject);
+begin
+  CalcularCustoReposicao();
 end;
 
 procedure TTelaCadastroProduto.AdicionarProdutoComposicaoCasoValido();
@@ -275,6 +337,7 @@ procedure TTelaCadastroProduto.PreencherCampos(const pProduto: TProduto);
 begin
   edtIdProduto.Text := pProduto.Id.ToString;
   edtDescricaoProduto.Text := pProduto.Descricao;
+
   cbUnidadeCompra.ItemIndex := cbUnidadeCompra.Items.IndexOf(pProduto.UnidadeCompra);
   edtQtEmbalagemCompra.Text := pProduto.QtEmbalagemCompra.ToString;
   edtCustoProduto.Text := pProduto.ValorCompra.ValorMonetario;
@@ -282,15 +345,17 @@ begin
   edtAcrescimoDesconto.Text := pProduto.AcrescimoDescontoCompra.ValorMonetario;
   edtCustoReposicao.Text := pProduto.CustoReposicao.ValorMonetario;
   edtCustoReposicaoUnitario.Text := pProduto.CustoReposicaoUnitario.ValorMonetario;
+  edtCustoResposicaoProduto.Text := pProduto.CustoReposicaoUnitario.ValorMonetario;
   dtDataCompra.DateTime := pProduto.DataCompra;
+
   chkPossuiComposicao.Checked := CharToBoolean(pProduto.PossuiComposicao);
+
   edtAcrescimoDescontoVenda.Text := pProduto.AcrescimoDescontoVenda.ValorMonetario;
   edtVlPrecoVenda.Text := pProduto.PrecoVenda.ValorMonetario;
   edtTempoMontagem.Text := pProduto.TempoMontagem.ToString;
   edtCustoMinuto.Text := pProduto.CustoMinuto.ValorMonetario;
   edtCustoMontagem.Text := pProduto.CustoMontagem.ValorMonetario;
-  edtMargemLucro.Text := pProduto.MargemLucro.ValorMonetario;
-
+  edtMargemLucro.Text := pProduto.MargemLucro.ToString;
 
   lblVlPrecoCompra.Caption := pProduto.custoReposicao.ValorMonetarioCifrao;
   lblVlPrecoVenda.Caption := pProduto.PrecoVenda.ValorMonetarioCifrao;
