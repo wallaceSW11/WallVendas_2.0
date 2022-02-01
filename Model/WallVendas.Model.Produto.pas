@@ -4,7 +4,9 @@ interface
 
 uses
   WallVendas.Model.Base,
-  SimpleAttributes;
+  WallVendas.Model.ProdutoComposicao,
+  SimpleAttributes,
+  System.Generics.Collections;
 
 type
   [Tabela('Produto')]
@@ -20,12 +22,11 @@ type
     FCustoMinuto: Currency;
     FAcrescimoDescontoVenda: Currency;
     FDataCompra: TDateTime;
-    FCustoReposicao: Currency;
     FValorCompra: Currency;
     FAcrescimoDescontoCompra: Currency;
-    FCustoMontagem: Currency;
+
     FQtEmbalagemCompra: Double;
-    FCustoReposicaoUnitario: Currency;
+    FProdutosComposicao: TObjectList<TProdutoComposicao>;
     procedure SetDescricao(const Value: string);
     procedure SetUnidadeCompra(const Value: string);
     procedure SetPrecoVenda(const Value: Currency);
@@ -35,14 +36,12 @@ type
     procedure SetAcrescimoDescontoCompra(const Value: Currency);
     procedure SetAcrescimoDescontoVenda(const Value: Currency);
     procedure SetCustoMinuto(const Value: Currency);
-    procedure SetCustoMontagem(const Value: Currency);
-    procedure SetCustoReposicao(const Value: Currency);
-    procedure SetCustoReposicaoUnitario(const Value: Currency);
     procedure SetDataCompra(const Value: TDateTime);
     procedure SetQtEmbalagemCompra(const Value: Double);
     procedure SetTempoMontagem(const Value: Integer);
     procedure SetValorCompra(const Value: Currency);
     procedure SetVlFreteCompra(const Value: Currency);
+    procedure SetProdutosComposicao(const Value: TObjectList<TProdutoComposicao>);
   public
     [Campo('Descricao'), Display('Descrição')]
     property Descricao: string read FDescricao write SetDescricao;
@@ -56,12 +55,6 @@ type
     property VlFreteCompra: Currency read FVlFreteCompra write SetVlFreteCompra;
     [Campo('AcrescimoDescontoCompra')]
     property AcrescimoDescontoCompra: Currency read FAcrescimoDescontoCompra write SetAcrescimoDescontoCompra;
-
-//    [Ignore] //[Campo('CustoReposicao')]
-//    property CustoReposicao: Currency read FCustoReposicao write SetCustoReposicao;
-//    [Ignore] //[Campo('CustoReposicaoUnitario')]
-//    property CustoReposicaoUnitario: Currency read FCustoReposicaoUnitario write SetCustoReposicaoUnitario;
-
     [Campo('DataCompra')]
     property DataCompra: TDateTime read FDataCompra write SetDataCompra;
     [Campo('StPossuiComposicao')]
@@ -74,19 +67,33 @@ type
     property TempoMontagem: Integer read FTempoMontagem write SetTempoMontagem;
     [Campo('CustoMinuto')]
     property CustoMinuto: Currency read FCustoMinuto write SetCustoMinuto;
-//    [Campo('CustoMontagem')]
-//    property CustoMontagem: Currency read FCustoMontagem write SetCustoMontagem;
-   [Campo('MargemLucro')]
+    [Campo('MargemLucro')]
     property MargemLucro: Double read FMargemLucro write SetMargemLucro;
+
+    [Ignore]
+    property ProdutosComposicao: TObjectList<TProdutoComposicao> read FProdutosComposicao write SetProdutosComposicao;
+
+    constructor Create();
+    destructor Destroy; override;
 
     function CustoReposicao(): Currency;
     function CustoReposicaoUnitario: Currency;
     function CustoMontagem(): Currency;
+
+    function ValorTotalInsumos(): Currency;
+    function ValorPrecoVenda(): Currency;
+    function ValorMargemLucro(): Currency;
+    function ValorLucroFinal(): Currency;
   end;
 
 implementation
 
 { TProduto }
+
+constructor TProduto.Create;
+begin
+  FProdutosComposicao := TObjectList<TProdutoComposicao>.Create();
+end;
 
 function TProduto.CustoMontagem: Currency;
 begin
@@ -97,7 +104,7 @@ function TProduto.CustoReposicao: Currency;
 begin
   Result :=
     FValorCompra +
-    FCustoMontagem +
+    CustoMontagem() +
     FVlFreteCompra +
     FAcrescimoDescontoCompra;
 end;
@@ -110,9 +117,30 @@ begin
   Result := 0;
 end;
 
+destructor TProduto.Destroy;
+begin
+  FProdutosComposicao.Free();
+  inherited;
+end;
+
 function TProduto.GetPrecoVenda: Currency;
 begin
   Result := FPrecoVenda;
+end;
+
+function TProduto.ValorLucroFinal: Currency;
+begin
+  Result := ValorPrecoVenda() - ValorTotalInsumos;
+end;
+
+function TProduto.ValorMargemLucro: Currency;
+begin
+  Result := (CustoReposicaoUnitario + ValorTotalInsumos) * (MargemLucro / 100);
+end;
+
+function TProduto.ValorPrecoVenda: Currency;
+begin
+  Result := (CustoReposicaoUnitario + ValorTotalInsumos()) * (1 + (FMargemLucro / 100)) + FAcrescimoDescontoVenda;
 end;
 
 procedure TProduto.SetAcrescimoDescontoCompra(const Value: Currency);
@@ -128,21 +156,6 @@ end;
 procedure TProduto.SetCustoMinuto(const Value: Currency);
 begin
   FCustoMinuto := Value;
-end;
-
-procedure TProduto.SetCustoMontagem(const Value: Currency);
-begin
-  FCustoMontagem := Value;
-end;
-
-procedure TProduto.SetCustoReposicao(const Value: Currency);
-begin
-  FCustoReposicao := Value;
-end;
-
-procedure TProduto.SetCustoReposicaoUnitario(const Value: Currency);
-begin
-  FCustoReposicaoUnitario := Value;
 end;
 
 procedure TProduto.SetDataCompra(const Value: TDateTime);
@@ -170,6 +183,11 @@ begin
   FPrecoVenda := Value;
 end;
 
+procedure TProduto.SetProdutosComposicao(const Value: TObjectList<TProdutoComposicao>);
+begin
+  FProdutosComposicao := Value;
+end;
+
 procedure TProduto.SetQtEmbalagemCompra(const Value: Double);
 begin
   FQtEmbalagemCompra := Value;
@@ -193,6 +211,19 @@ end;
 procedure TProduto.SetVlFreteCompra(const Value: Currency);
 begin
   FVlFreteCompra := Value;
+end;
+
+function TProduto.ValorTotalInsumos: Currency;
+var
+  lTotalInsumos: Currency;
+  lProdutoComposicao: TProdutoComposicao;
+begin
+  lTotalInsumos := 0;
+
+  for lProdutoComposicao in Self.FProdutosComposicao do
+    lTotalInsumos := lTotalInsumos + lProdutoComposicao.ValorTotalItem;
+
+  Result := lTotalInsumos;
 end;
 
 end.

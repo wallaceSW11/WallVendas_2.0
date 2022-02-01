@@ -36,7 +36,8 @@ uses
   WallVendas.Model.Produto in 'Model\WallVendas.Model.Produto.pas',
   Lib in 'lib\Lib.pas',
   WallVendas.Model.ProdutoComposicao in 'Model\WallVendas.Model.ProdutoComposicao.pas',
-  LibConstantes in 'lib\LibConstantes.pas';
+  LibConstantes in 'lib\LibConstantes.pas',
+  WallVendas.DAO.Produto in 'DAO\WallVendas.DAO.Produto.pas';
 
 {$R *.res}
 

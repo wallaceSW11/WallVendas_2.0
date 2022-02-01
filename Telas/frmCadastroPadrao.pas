@@ -137,7 +137,7 @@ end;
 
 procedure TTelaCadastroPadrao.FormShow(Sender: TObject);
 begin
-  LimparCampos();
+//  LimparCampos();
 end;
 
 procedure TTelaCadastroPadrao.PrepararBotoesEdicaoNovoCadastro();
@@ -236,7 +236,7 @@ begin
        (pComponente.Controls[I] is TMemo) or (pComponente.Controls[I] is TCheckBox) or
        (pComponente.Controls[I] is TSpeedButton) or (pComponente.Controls[I] is TButton) or
        (pComponente.Controls[I] is TDateTimePicker) or (pComponente.Controls[I] is TDBGrid) then
-      if (pComponente.Controls[I].Tag in [TAG_DISABLE, TAG_DISABLE_TEXT_ONE]) then
+      if (pComponente.Controls[I].Tag in [TAG_DISABLE, TAG_DISABLE_TEXT_ONE, TAG_DISABLE_TEXT_ZERO_COMA_ZERO]) then
         pComponente.Controls[I].Enabled := False
       else
         pComponente.Controls[I].Enabled := pHabilitar;
@@ -285,7 +285,8 @@ begin
       TAG_ENABLE,
       TAG_DISABLE: TEdit(pComponente.Controls[I]).Clear();
       TAG_ENABLE_TEXT_ZERO: TEdit(pComponente.Controls[I]).Text := '0';
-      TAG_ENABLE_TEXT_ZERO_COMA_ZERO: TEdit(pComponente.Controls[I]).Text := '0,00';
+      TAG_ENABLE_TEXT_ZERO_COMA_ZERO,
+      TAG_DISABLE_TEXT_ZERO_COMA_ZERO: TEdit(pComponente.Controls[I]).Text := '0,00';
       TAG_ENABLE_TEXT_ONE,
       TAG_DISABLE_TEXT_ONE: TEdit(pComponente.Controls[I]).Text := '1';
     end;

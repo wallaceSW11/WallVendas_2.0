@@ -7,7 +7,7 @@ uses
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, frmCadastroPadrao, Vcl.Buttons, Vcl.StdCtrls, Vcl.ExtCtrls, Data.DB, Vcl.Grids, Vcl.DBGrids, Vcl.ComCtrls,
   LibTypes, wallvendas.Model.Produto, frmPesquisaPadrao, System.Generics.Collections, WallVendas.DAO.Generico, Lib,
   WallVendas.Helper.Numbers, Datasnap.DBClient, wallvendas.Helper.DBGrid, wallvendas.Model.ProdutoComposicao,
-  WallVendas.Helper.TEdit, LibMessages;
+  WallVendas.Helper.TEdit, LibMessages, EditNumber, EditCurrency, WallVendas.DAO.Produto;
 
 type
   TTelaCadastroProduto = class(TTelaCadastroPadrao)
@@ -32,16 +32,7 @@ type
     lblValorCustoMontagem: TLabel;
     btnMetroQuadrado: TSpeedButton;
     cbUnidadeCompra: TComboBox;
-    edtQtEmbalagemCompra: TEdit;
-    edtCustoProduto: TEdit;
-    edtVlFreteCompra: TEdit;
-    edtAcrescimoDesconto: TEdit;
-    edtCustoReposicao: TEdit;
-    edtCustoReposicaoUnitario: TEdit;
     dtDataCompra: TDateTimePicker;
-    edtTempoMontagem: TEdit;
-    edtCustoMinuto: TEdit;
-    edtCustoMontagem: TEdit;
     tsProdutoComposicao: TTabSheet;
     lblIdProdutoComposicao: TLabel;
     lblDescricaoProdutoComposicao: TLabel;
@@ -56,14 +47,12 @@ type
     lblMargemLucro: TLabel;
     lblValorMargemLucro: TLabel;
     dbgProdutoComposicao: TDBGrid;
-    edtAcrescimoDescontoVenda: TEdit;
     edtVlPrecoVenda: TEdit;
     edtIdProdutoComposicao: TEdit;
     edtDescricaoProdutoComposicao: TEdit;
     edtQuantidadeComposicao: TEdit;
     edtCustoResposicaoProduto: TEdit;
     edtVlCustoComposicao: TEdit;
-    edtMargemLucro: TEdit;
     edtValorMagemLucro: TEdit;
     edtIdProduto: TEdit;
     edtDescricaoProduto: TEdit;
@@ -77,6 +66,17 @@ type
     cdsComposicaoQuantidade: TFloatField;
     cdsComposicaoValorItem: TCurrencyField;
     cdsComposicaoCusto: TCurrencyField;
+    edtCustoProduto: TEditCurrency;
+    edtVlFreteCompra: TEditCurrency;
+    edtAcrescimoDesconto: TEditCurrency;
+    edtCustoReposicao: TEditCurrency;
+    edtCustoReposicaoUnitario: TEditCurrency;
+    edtCustoMinuto: TEditCurrency;
+    edtCustoMontagem: TEditCurrency;
+    edtQtEmbalagemCompra: TEditNumber;
+    edtTempoMontagem: TEditNumber;
+    edtMargemLucro: TEditNumber;
+    edtAcrescimoDescontoVenda: TEditCurrency;
     procedure btnPesquisarClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure tsProdutoComposicaoShow(Sender: TObject);
@@ -87,23 +87,21 @@ type
     procedure dbgProdutoComposicaoDblClick(Sender: TObject);
     procedure cdsComposicaoAfterDelete(DataSet: TDataSet);
     procedure dbgProdutoComposicaoKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
-    procedure edtQtEmbalagemCompraChange(Sender: TObject);
-    procedure edtCustoProdutoChange(Sender: TObject);
-    procedure edtTempoMontagemChange(Sender: TObject);
-    procedure edtVlFreteCompraChange(Sender: TObject);
-    procedure edtAcrescimoDescontoChange(Sender: TObject);
     procedure btnNovoClick(Sender: TObject);
+    procedure AtualizarValoresDoProduto(Sender: TObject);
+    procedure btnSalvarClick(Sender: TObject);
   private
-    FDAOProduto: IDAO<TProduto>;
+    FDAOProduto: IDAOProduto;
     FDAOProdutoComposicao: IDAO<TProdutoComposicao>;
+    FValorTotalInsumo: Currency;
     procedure PreencherCampos(const pProduto: TProduto);
-    procedure PreencherComposicao(const pIdentificadorProduto: Integer);
+//    procedure PreencherComposicao(const pIdentificadorProduto: Integer);
     procedure LimparCamposProdutoComposicao;
     procedure LocalizarProdutoPeloIdentificador;
     procedure AdicionarProdutoComposicaoCasoValido;
     procedure AtualizarValorTotalProdutoComposicao;
     procedure DeletarProdutoDaGrid;
-    procedure CalcularCustoReposicao;
+    procedure PreencherObjeto(var pProduto: TProduto);
   public
     { Public declarations }
   end;
@@ -135,6 +133,7 @@ procedure TTelaCadastroProduto.btnNovoClick(Sender: TObject);
 begin
   inherited;
   edtCustoMinuto.Text := '0,17';
+  edtMargemLucro.Text := '40';
 end;
 
 procedure TTelaCadastroProduto.btnPesquisarClick(Sender: TObject);
@@ -147,7 +146,7 @@ begin
   if (lDadoLocalizado.Codigo.IsEmpty()) then
     Exit();
 
-  lProduto := FDAOProduto.FindOne(lDadoLocalizado.Codigo.ToInteger());
+  lProduto := FDAOProduto.Find(lDadoLocalizado.Codigo.ToInteger());
   try
     PreencherCampos(lProduto);
   finally
@@ -155,6 +154,24 @@ begin
   end;
 
   Self.HabilitarCamposPesquisaValida();
+end;
+
+procedure TTelaCadastroProduto.btnSalvarClick(Sender: TObject);
+var
+  lProduto: TProduto;
+begin
+  //validar produto
+
+  lProduto := TProduto.Create();
+  try
+    PreencherObjeto(lProduto);
+    FDAOProduto.Insert(lProduto);
+  finally
+    lProduto.Free();
+  end;
+
+  inherited;
+
 end;
 
 procedure TTelaCadastroProduto.cdsComposicaoAfterDelete(DataSet: TDataSet);
@@ -190,8 +207,12 @@ begin
   if (cdsComposicao.IsEmpty()) then
     Exit;
 
-  if (Confirma('Confirmar excluir o produto selecionado?', 'Excluir produto')) then
-    cdsComposicao.Delete();
+  if (not Confirma('Confirmar excluir o produto selecionado?', 'Excluir produto')) then
+    Exit;
+
+  FValorTotalInsumo := FValorTotalInsumo - cdscomposicaoValorItem.AsCurrency;
+  cdsComposicao.Delete();
+  AtualizarValoresDoProduto(nil);
 end;
 
 procedure TTelaCadastroProduto.AtualizarValorTotalProdutoComposicao();
@@ -217,16 +238,6 @@ begin
 
 end;
 
-procedure TTelaCadastroProduto.edtAcrescimoDescontoChange(Sender: TObject);
-begin
-  CalcularCustoReposicao();
-end;
-
-procedure TTelaCadastroProduto.edtCustoProdutoChange(Sender: TObject);
-begin
-  CalcularCustoReposicao();
-end;
-
 procedure TTelaCadastroProduto.edtIdProdutoComposicaoExit(Sender: TObject);
 begin
   if (edtIdProdutoComposicao.IsEmpty()) then
@@ -235,15 +246,11 @@ begin
     LocalizarProdutoPeloIdentificador();
 end;
 
-procedure TTelaCadastroProduto.edtQtEmbalagemCompraChange(Sender: TObject);
-begin
-  CalcularCustoReposicao();
-
-end;
-
-procedure TTelaCadastroProduto.CalcularCustoReposicao();
+procedure TTelaCadastroProduto.AtualizarValoresDoProduto(Sender: TObject);
 var
   lProduto: TProduto;
+  lProdutoComposicao: TProdutoComposicao;
+  lRecNo: Integer;
 begin
   lProduto := TProduto.Create();
   try
@@ -254,10 +261,46 @@ begin
     lProduto.VlFreteCompra := edtVlFreteCompra.ToCurrency;
     lProduto.AcrescimoDescontoCompra := edtAcrescimoDesconto.ToCurrency;
 
+    lProduto.MargemLucro := edtMargemLucro.ToFloat;
+    lProduto.AcrescimoDescontoVenda := edtAcrescimoDescontoVenda.ToCurrency;
+
+
+
+    //Produto composicao \\
+    cdsComposicao.Open();
+    cdsComposicao.DisableControls();
+    lRecNo := cdsComposicao.RecNo;
+
+    cdsComposicao.First();
+
+    while (not cdsComposicao.Eof) do
+    begin
+      lProdutoComposicao := TProdutoComposicao.Create();
+      lProdutoComposicao.ValorCusto := cdsComposicaoCusto.AsCurrency;
+      lProdutoComposicao.Quantidade := cdsComposicaoQuantidade.AsFloat;
+      lProduto.ProdutosComposicao.Add(lProdutoComposicao);
+      cdsComposicao.Next();
+    end;
+
+    cdsComposicao.RecNo := lRecNo;
+    cdsComposicao.EnableControls();
+
+
+
     edtCustoMontagem.Text := lProduto.CustoMontagem.ValorMonetario;
     edtCustoReposicao.Text := lProduto.CustoReposicao.ValorMonetario;
     edtCustoReposicaoUnitario.Text := lProduto.CustoReposicaoUnitario.ValorMonetario;
     edtCustoResposicaoProduto.Text := lProduto.CustoReposicaoUnitario.ValorMonetario;
+
+    edtVlPrecoVenda.Text := lProduto.ValorPrecoVenda.ValorMonetario();
+    edtVlPrecoVenda.Hint := 'Lucro final: ' + lProduto.ValorLucroFinal.ValorMonetarioCifrao();
+
+    lblVlPrecoVenda.Caption := 'R$ ' + edtVlPrecoVenda.Text;
+
+    edtValorMagemLucro.Text := lProduto.ValorMargemLucro.ValorMonetario();
+
+
+
   finally
     lProduto.Free();
   end;
@@ -267,17 +310,6 @@ procedure TTelaCadastroProduto.edtQuantidadeComposicaoExit(Sender: TObject);
 begin
   AdicionarProdutoComposicaoCasoValido();
 
-end;
-
-procedure TTelaCadastroProduto.edtTempoMontagemChange(Sender: TObject);
-begin
-  CalcularCustoReposicao();
-
-end;
-
-procedure TTelaCadastroProduto.edtVlFreteCompraChange(Sender: TObject);
-begin
-  CalcularCustoReposicao();
 end;
 
 procedure TTelaCadastroProduto.AdicionarProdutoComposicaoCasoValido();
@@ -293,7 +325,12 @@ begin
 //  cdsComposicaoLargura.AsInteger := lProdutoComposicao.Largura;
   cdsComposicaoQuantidade.AsFloat := edtQuantidadeComposicao.ToFloat;
   cdscomposicaoValorItem.AsCurrency := edtQuantidadeComposicao.ToFloat * edtVlCustoComposicao.ToCurrency;
+
+  FValorTotalInsumo := FValorTotalInsumo + cdscomposicaoValorItem.AsCurrency;
+
   cdsComposicao.Post();
+
+  AtualizarValoresDoProduto(nil);
 
   LimparCamposProdutoComposicao();
   edtIdProdutoComposicao.Focar();
@@ -311,7 +348,7 @@ procedure TTelaCadastroProduto.LocalizarProdutoPeloIdentificador();
 var
   lProduto: TProduto;
 begin
-  lProduto := FDAOProduto.FindOne(edtIdProdutoComposicao.ToInteger);
+  lProduto := FDAOProduto.Find(edtIdProdutoComposicao.ToInteger);
 
   MensagemCritica(
     (lProduto.Id = 0),
@@ -327,13 +364,16 @@ end;
 procedure TTelaCadastroProduto.FormCreate(Sender: TObject);
 begin
   inherited;
-  FDAOProduto := TDAOGenerico<TProduto>.NovaInstancia();
+  FDAOProduto := TDAOProduto.NovaInstancia();
   FDAOProdutoComposicao := TDAOGenerico<TProdutoComposicao>.NovaInstancia();
   pcProdutoComplemento.ActivePageIndex := 0;
   cdsComposicao.CreateDataSet();
+  FValorTotalInsumo := 0;
 end;
 
 procedure TTelaCadastroProduto.PreencherCampos(const pProduto: TProduto);
+var
+  lProdutoComposicao: TProdutoComposicao;
 begin
   edtIdProduto.Text := pProduto.Id.ToString;
   edtDescricaoProduto.Text := pProduto.Descricao;
@@ -357,39 +397,96 @@ begin
   edtCustoMontagem.Text := pProduto.CustoMontagem.ValorMonetario;
   edtMargemLucro.Text := pProduto.MargemLucro.ToString;
 
-  lblVlPrecoCompra.Caption := pProduto.custoReposicao.ValorMonetarioCifrao;
-  lblVlPrecoVenda.Caption := pProduto.PrecoVenda.ValorMonetarioCifrao;
-
   if (CharToBoolean(pProduto.PossuiComposicao)) then
-    PreencherComposicao(pProduto.Id);
+    for lProdutoComposicao in pProduto.ProdutosComposicao do
+    begin
+       cdsComposicao.Append();
+       cdsComposicaoCodigo.AsInteger := lProdutoComposicao.IdentificadorProdutoComposicao;
+       cdsComposicaoDescricao.AsString := lProdutoComposicao.Descricao;
+       cdsComposicaoCusto.AsCurrency := lProdutoComposicao.ValorCusto;
+       cdsComposicaoAltura.AsInteger := lProdutoComposicao.Altura;
+       cdsComposicaoLargura.AsInteger := lProdutoComposicao.Largura;
+       cdsComposicaoQuantidade.AsFloat := lProdutoComposicao.Quantidade;
+       cdscomposicaoValorItem.AsCurrency := lProdutoComposicao.ValorTotalItem();
+       cdsComposicao.Post();
+    end;
+
+
+  lblVlPrecoCompra.Caption := pProduto.custoReposicao.ValorMonetarioCifrao();
+  lblVlPrecoVenda.Caption := pProduto.PrecoVenda.ValorMonetarioCifrao();
 end;
 
 
-procedure TTelaCadastroProduto.PreencherComposicao(const pIdentificadorProduto: Integer);
+procedure TTelaCadastroProduto.PreencherObjeto(var pProduto: TProduto);
 var
   lProdutoComposicao: TProdutoComposicao;
-  lListaProdutoComposicao: TObjectList<TProdutoComposicao>;
 begin
-  lListaProdutoComposicao :=
-    FDAOProdutoComposicao.FindJoin(
-      'ProdutoComposicao.*, ' +
-      'Produto.Descricao',
-      'Inner Join Produto on (Produto.id = ProdutoComposicao.IdProdutoComposicao)',
-      'IdProduto =' + QuotedStr(pIdentificadorProduto.ToString));
+ // pProduto.Id := edtIdProduto.toInteger;
+  pProduto.Descricao := edtDescricaoProduto.Text;
 
-  for lProdutoComposicao in lListaProdutoComposicao do
+  pProduto.UnidadeCompra := cbUnidadeCompra.Text;
+  pProduto.QtEmbalagemCompra := edtQtEmbalagemCompra.ToFloat;
+  pProduto.ValorCompra := edtCustoProduto.ToCurrency;
+  pProduto.VlFreteCompra := edtVlFreteCompra.ToCurrency;
+  pProduto.AcrescimoDescontoCompra := edtAcrescimoDesconto.ToCurrency;
+  pProduto.DataCompra := dtDataCompra.DateTime;
+
+  pProduto.PossuiComposicao := BooleanToChar(not cdsComposicao.IsEmpty);
+
+  pProduto.AcrescimoDescontoVenda := edtAcrescimoDescontoVenda.ToCurrency;
+  pProduto.PrecoVenda := edtVlPrecoVenda.ToCurrency;
+  pProduto.TempoMontagem := edtTempoMontagem.ToInteger;
+  pProduto.CustoMinuto := edtCustoMinuto.ToCurrency;
+  pProduto.MargemLucro := edtMargemLucro.ToFloat;
+
+  if (CharToBoolean(pProduto.PossuiComposicao)) then
   begin
-     cdsComposicao.Append();
-     cdsComposicaoCodigo.AsInteger := lProdutoComposicao.IdentificadorProdutoComposicao;
-     cdsComposicaoDescricao.AsString := lProdutoComposicao.Descricao;
-     cdsComposicaoCusto.AsCurrency := lProdutoComposicao.ValorCusto;
-     cdsComposicaoAltura.AsInteger := lProdutoComposicao.Altura;
-     cdsComposicaoLargura.AsInteger := lProdutoComposicao.Largura;
-     cdsComposicaoQuantidade.AsFloat := lProdutoComposicao.Quantidade;
-     cdscomposicaoValorItem.AsCurrency := lProdutoComposicao.ValorItem;
-     cdsComposicao.Post();
+    cdsComposicao.DisableControls();
+    cdsComposicao.First();
+
+    while (not cdsComposicao.Eof) do
+    begin
+      lProdutoComposicao := TProdutoComposicao.Create();
+      lProdutoComposicao.IdentificadorProdutoComposicao := cdsComposicaoCodigo.AsInteger;
+      lProdutoComposicao.Descricao := cdsComposicaoDescricao.AsString;
+      lProdutoComposicao.ValorCusto := cdsComposicaoCusto.AsCurrency;
+//      lProdutoComposicao.Altura := cdsComposicaoAltura.AsInteger;
+//      lProdutoComposicao.Largura := cdsComposicaoLargura.AsInteger;
+      lProdutoComposicao.Quantidade := cdsComposicaoQuantidade.AsFloat;
+      pProduto.ProdutosComposicao.Add(lProdutoComposicao);
+
+      cdsComposicao.Next();
+    end;
+
+    cdsComposicao.EnableControls();
   end;
 end;
+
+//procedure TTelaCadastroProduto.PreencherComposicao(const pIdentificadorProduto: Integer);
+//var
+//  lProdutoComposicao: TProdutoComposicao;
+//  lListaProdutoComposicao: TObjectList<TProdutoComposicao>;
+//begin
+//  lListaProdutoComposicao :=
+//    FDAOProdutoComposicao.FindJoin(
+//      'ProdutoComposicao.*, ' +
+//      'Produto.Descricao',
+//      'Inner Join Produto on (Produto.id = ProdutoComposicao.IdProdutoComposicao)',
+//      'IdProduto =' + QuotedStr(pIdentificadorProduto.ToString));
+//
+//  for lProdutoComposicao in lListaProdutoComposicao do
+//  begin
+//     cdsComposicao.Append();
+//     cdsComposicaoCodigo.AsInteger := lProdutoComposicao.IdentificadorProdutoComposicao;
+//     cdsComposicaoDescricao.AsString := lProdutoComposicao.Descricao;
+//     cdsComposicaoCusto.AsCurrency := lProdutoComposicao.ValorCusto;
+//     cdsComposicaoAltura.AsInteger := lProdutoComposicao.Altura;
+//     cdsComposicaoLargura.AsInteger := lProdutoComposicao.Largura;
+//     cdsComposicaoQuantidade.AsFloat := lProdutoComposicao.Quantidade;
+//     cdscomposicaoValorItem.AsCurrency := lProdutoComposicao.ValorTotalItem();
+//     cdsComposicao.Post();
+//  end;
+//end;
 
 procedure TTelaCadastroProduto.tsProdutoComposicaoShow(Sender: TObject);
 begin

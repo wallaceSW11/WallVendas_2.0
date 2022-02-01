@@ -67,13 +67,14 @@ inherited TelaCadastroProduto: TTelaCadastroProduto
       Top = 96
       Width = 959
       Height = 481
-      ActivePage = tsProdutoCusto
+      ActivePage = tsProdutoComposicao
       Anchors = [akLeft, akTop, akRight, akBottom]
       TabOrder = 0
+      OnChange = AtualizarValoresDoProduto
       object tsProdutoCusto: TTabSheet
         Caption = 'Custo'
         object lblQtEmbalagemCompra: TLabel
-          Left = 165
+          Left = 177
           Top = 7
           Width = 90
           Height = 17
@@ -101,58 +102,58 @@ inherited TelaCadastroProduto: TTelaCadastroProduto
           Caption = 'Frete'
         end
         object lblCustoReposicao: TLabel
-          Left = 327
+          Left = 350
           Top = 112
           Width = 98
           Height = 17
           Caption = 'Custo Reposi'#231#227'o'
         end
         object lblCustoReposicaoUnitario: TLabel
-          Left = 489
+          Left = 525
           Top = 112
           Width = 148
           Height = 17
           Caption = 'Custo Reposi'#231#227'o Unit'#225'rio'
         end
         object lblAcrescimoDesconto: TLabel
-          Left = 165
+          Left = 177
           Top = 112
           Width = 128
           Height = 17
           Caption = 'Acr'#233'scimo / Desconto'
         end
         object lblDataCompra: TLabel
-          Left = 489
+          Left = 525
           Top = 7
           Width = 95
           Height = 17
           Caption = 'Data de compra'
         end
         object lblTempoTrabalho: TLabel
-          Left = 165
+          Left = 177
           Top = 59
           Width = 159
           Height = 17
           Caption = 'Tempo montagem (minuto)'
         end
         object lblCustoMinuto: TLabel
-          Left = 327
+          Left = 350
           Top = 59
           Width = 77
           Height = 17
           Caption = 'Custo minuto'
         end
         object lblValorCustoMontagem: TLabel
-          Left = 489
+          Left = 525
           Top = 59
           Width = 132
           Height = 17
           Caption = 'Valor custo montagem'
         end
         object btnMetroQuadrado: TSpeedButton
-          Left = 327
+          Left = 350
           Top = 28
-          Width = 122
+          Width = 160
           Height = 22
           Caption = 'Calcular m'#178
           Enabled = False
@@ -160,7 +161,7 @@ inherited TelaCadastroProduto: TTelaCadastroProduto
         object cbUnidadeCompra: TComboBox
           Left = 3
           Top = 28
-          Width = 120
+          Width = 160
           Height = 25
           Style = csDropDownList
           TabOrder = 0
@@ -172,102 +173,122 @@ inherited TelaCadastroProduto: TTelaCadastroProduto
             'Metro'
             'Metro Quadrado')
         end
-        object edtQtEmbalagemCompra: TEdit
-          Tag = 4
-          Left = 165
-          Top = 28
-          Width = 129
-          Height = 25
-          Alignment = taRightJustify
-          TabOrder = 1
-          OnChange = edtQtEmbalagemCompraChange
-        end
-        object edtCustoProduto: TEdit
-          Left = 3
-          Top = 80
-          Width = 121
-          Height = 25
-          Alignment = taRightJustify
-          TabOrder = 3
-          OnChange = edtCustoProdutoChange
-        end
-        object edtVlFreteCompra: TEdit
-          Left = 3
-          Top = 131
-          Width = 121
-          Height = 25
-          Alignment = taRightJustify
-          TabOrder = 7
-          OnChange = edtVlFreteCompraChange
-        end
-        object edtAcrescimoDesconto: TEdit
-          Left = 165
-          Top = 131
-          Width = 127
-          Height = 25
-          Alignment = taRightJustify
-          TabOrder = 8
-          OnChange = edtAcrescimoDescontoChange
-        end
-        object edtCustoReposicao: TEdit
-          Tag = 1
-          Left = 327
-          Top = 131
-          Width = 121
-          Height = 25
-          TabStop = False
-          Alignment = taRightJustify
-          TabOrder = 9
-        end
-        object edtCustoReposicaoUnitario: TEdit
-          Tag = 1
-          Left = 489
-          Top = 131
-          Width = 121
-          Height = 25
-          TabStop = False
-          Alignment = taRightJustify
-          TabOrder = 10
-        end
         object dtDataCompra: TDateTimePicker
-          Left = 489
+          Left = 525
           Top = 28
-          Width = 121
+          Width = 160
           Height = 24
           Date = 44038.000000000000000000
           Time = 0.756530706021294500
           TabOrder = 2
         end
-        object edtTempoMontagem: TEdit
-          Left = 165
+        object edtCustoProduto: TEditCurrency
+          Tag = 6
+          Left = 3
+          Top = 81
+          Width = 160
+          Height = 25
+          Alignment = taRightJustify
+          TabOrder = 3
+          Text = '0,00'
+          OnChange = AtualizarValoresDoProduto
+          ExibirCifrao = False
+        end
+        object edtVlFreteCompra: TEditCurrency
+          Tag = 3
+          Left = 3
+          Top = 135
+          Width = 160
+          Height = 25
+          Alignment = taRightJustify
+          TabOrder = 7
+          Text = '0,00'
+          OnChange = AtualizarValoresDoProduto
+          ExibirCifrao = False
+        end
+        object edtAcrescimoDesconto: TEditCurrency
+          Tag = 3
+          Left = 177
+          Top = 135
+          Width = 160
+          Height = 25
+          Alignment = taRightJustify
+          TabOrder = 8
+          Text = '0,00'
+          OnChange = AtualizarValoresDoProduto
+          ExibirCifrao = False
+        end
+        object edtCustoReposicao: TEditCurrency
+          Tag = 7
+          Left = 351
+          Top = 135
+          Width = 160
+          Height = 25
+          TabStop = False
+          Alignment = taRightJustify
+          TabOrder = 9
+          Text = '0,00'
+          ExibirCifrao = False
+        end
+        object edtCustoReposicaoUnitario: TEditCurrency
+          Tag = 7
+          Left = 525
+          Top = 135
+          Width = 160
+          Height = 25
+          TabStop = False
+          Alignment = taRightJustify
+          TabOrder = 10
+          Text = '0,00'
+          ExibirCifrao = False
+        end
+        object edtCustoMinuto: TEditCurrency
+          Tag = 7
+          Left = 350
           Top = 80
-          Width = 127
+          Width = 160
+          Height = 25
+          TabStop = False
+          Alignment = taRightJustify
+          TabOrder = 5
+          Text = '0,00'
+          ExibirCifrao = False
+        end
+        object edtCustoMontagem: TEditCurrency
+          Tag = 7
+          Left = 525
+          Top = 80
+          Width = 160
+          Height = 25
+          TabStop = False
+          Alignment = taRightJustify
+          TabOrder = 6
+          Text = '0,00'
+          ExibirCifrao = False
+        end
+        object edtQtEmbalagemCompra: TEditNumber
+          Tag = 4
+          Left = 177
+          Top = 28
+          Width = 160
+          Height = 25
+          Alignment = taRightJustify
+          TabOrder = 1
+          Text = '0'
+          OnChange = AtualizarValoresDoProduto
+          AceitaVirgula = True
+        end
+        object edtTempoMontagem: TEditNumber
+          Tag = 2
+          Left = 177
+          Top = 81
+          Width = 160
           Height = 25
           Alignment = taRightJustify
           TabOrder = 4
-          OnChange = edtTempoMontagemChange
-        end
-        object edtCustoMinuto: TEdit
-          Tag = 1
-          Left = 327
-          Top = 80
-          Width = 121
-          Height = 25
-          TabStop = False
-          Alignment = taRightJustify
-          Enabled = False
-          TabOrder = 5
-        end
-        object edtCustoMontagem: TEdit
-          Tag = 1
-          Left = 489
-          Top = 80
-          Width = 121
-          Height = 25
-          TabStop = False
-          Alignment = taRightJustify
-          Enabled = False
-          TabOrder = 6
+          Text = '0'
+          OnChange = AtualizarValoresDoProduto
+          AceitaVirgula = False
         end
       end
       object tsProdutoComposicao: TTabSheet
@@ -322,14 +343,12 @@ inherited TelaCadastroProduto: TTelaCadastroProduto
           ExplicitTop = 281
         end
         object lblAcrescimoComposicao: TLabel
-          Left = 674
+          Left = 672
           Top = 402
           Width = 60
           Height = 17
           Anchors = [akRight, akBottom]
           Caption = 'Acr'#233'scimo'
-          ExplicitLeft = 429
-          ExplicitTop = 306
         end
         object lblPrecoVendaFinal: TLabel
           Left = 806
@@ -350,14 +369,12 @@ inherited TelaCadastroProduto: TTelaCadastroProduto
           OnClick = btnLocalizarProdutoComposicaoClick
         end
         object lblCustoReposicaoComposicao: TLabel
-          Left = 276
+          Left = 267
           Top = 402
           Width = 95
           Height = 17
           Anchors = [akRight, akBottom]
           Caption = 'Custo reposi'#231#227'o'
-          ExplicitLeft = 31
-          ExplicitTop = 306
         end
         object lblCustoComp: TLabel
           Left = 787
@@ -368,24 +385,20 @@ inherited TelaCadastroProduto: TTelaCadastroProduto
           Caption = 'Custo'
         end
         object lblMargemLucro: TLabel
-          Left = 409
+          Left = 402
           Top = 402
           Width = 125
           Height = 17
           Anchors = [akRight, akBottom]
           Caption = 'Margem de lucro (%)'
-          ExplicitLeft = 164
-          ExplicitTop = 306
         end
         object lblValorMargemLucro: TLabel
-          Left = 543
+          Left = 539
           Top = 402
           Width = 125
           Height = 17
           Anchors = [akRight, akBottom]
           Caption = 'Margem de lucro (Vl)'
-          ExplicitLeft = 298
-          ExplicitTop = 306
         end
         object dbgProdutoComposicao: TDBGrid
           Left = 3
@@ -448,22 +461,11 @@ inherited TelaCadastroProduto: TTelaCadastroProduto
               Visible = True
             end>
         end
-        object edtAcrescimoDescontoVenda: TEdit
-          Left = 674
-          Top = 423
-          Width = 121
-          Height = 25
-          Alignment = taRightJustify
-          Anchors = [akRight, akBottom]
-          BiDiMode = bdLeftToRight
-          ParentBiDiMode = False
-          TabOrder = 7
-        end
         object edtVlPrecoVenda: TEdit
-          Tag = 1
+          Tag = 3
           Left = 806
           Top = 423
-          Width = 121
+          Width = 126
           Height = 25
           TabStop = False
           Alignment = taRightJustify
@@ -473,7 +475,7 @@ inherited TelaCadastroProduto: TTelaCadastroProduto
           ParentShowHint = False
           ReadOnly = True
           ShowHint = True
-          TabOrder = 8
+          TabOrder = 6
         end
         object edtIdProdutoComposicao: TEdit
           Left = 3
@@ -509,10 +511,10 @@ inherited TelaCadastroProduto: TTelaCadastroProduto
           OnExit = edtQuantidadeComposicaoExit
         end
         object edtCustoResposicaoProduto: TEdit
-          Tag = 1
-          Left = 276
+          Tag = 7
+          Left = 267
           Top = 423
-          Width = 121
+          Width = 126
           Height = 25
           TabStop = False
           Alignment = taRightJustify
@@ -536,28 +538,42 @@ inherited TelaCadastroProduto: TTelaCadastroProduto
           ReadOnly = True
           TabOrder = 2
         end
-        object edtMargemLucro: TEdit
-          Tag = 1
-          Left = 409
-          Top = 423
-          Width = 121
-          Height = 25
-          TabStop = False
-          Alignment = taRightJustify
-          Anchors = [akRight, akBottom]
-          TabOrder = 6
-        end
         object edtValorMagemLucro: TEdit
-          Tag = 1
-          Left = 543
+          Tag = 7
+          Left = 539
           Top = 423
-          Width = 121
+          Width = 126
           Height = 25
           TabStop = False
           Alignment = taRightJustify
           Anchors = [akRight, akBottom]
           Enabled = False
+          TabOrder = 7
+        end
+        object edtMargemLucro: TEditNumber
+          Left = 402
+          Top = 423
+          Width = 121
+          Height = 25
+          Alignment = taRightJustify
+          Anchors = [akRight, akBottom]
+          TabOrder = 8
+          Text = '0'
+          OnChange = AtualizarValoresDoProduto
+          AceitaVirgula = True
+        end
+        object edtAcrescimoDescontoVenda: TEditCurrency
+          Tag = 3
+          Left = 672
+          Top = 423
+          Width = 121
+          Height = 25
+          Alignment = taRightJustify
+          Anchors = [akRight, akBottom]
           TabOrder = 9
+          Text = '0,00'
+          OnChange = AtualizarValoresDoProduto
+          ExibirCifrao = False
         end
       end
     end

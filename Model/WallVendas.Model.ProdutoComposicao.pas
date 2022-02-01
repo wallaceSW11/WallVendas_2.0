@@ -13,7 +13,7 @@ type
     FIdentificadorProdutoComposicao: Integer;
     FIdentificadorProduto: Integer;
     FQuantidade: Double;
-    FValorItem: Currency;
+//    FValorItem: Currency;
     FDescricao: string;
     FAltura: Integer;
     FLargura: Integer;
@@ -21,10 +21,11 @@ type
     procedure SetIdentificadorProdutoComposicao(const Value: Integer);
     procedure SetQuantidade(const Value: Double);
     procedure SetValorCusto(const Value: Currency);
-    procedure SetValorItem(const Value: Currency);
+//    procedure SetValorItem(const Value: Currency);
     procedure SetDescricao(const Value: string);
     procedure SetAltura(const Value: Integer);
     procedure SetLargura(const Value: Integer);
+//    procedure SetValorItem(const Value: Currency);
   public
     [Campo('idProduto')]
     property IdentificadorProduto: Integer read FIdentificadorProduto write SetIdentificadorProduto;
@@ -40,8 +41,10 @@ type
     property Largura: Integer read FLargura write SetLargura;
     [Campo('QtComposicao')]
     property Quantidade: Double read FQuantidade write SetQuantidade;
-    [Campo('VlItem')]
-    property ValorItem: Currency read FValorItem write SetValorItem;
+//    [Campo('VlItem')]
+//    property ValorItem: Currency read FValorItem write SetValorItem;
+
+   function ValorTotalItem(): Currency;
 
   end;
 
@@ -84,9 +87,14 @@ begin
   FValorCusto := Value;
 end;
 
-procedure TProdutoComposicao.SetValorItem(const Value: Currency);
+//procedure TProdutoComposicao.SetValorItem(const Value: Currency);
+//begin
+//  FValorItem := Value;
+//end;
+
+function TProdutoComposicao.ValorTotalItem: Currency;
 begin
-  FValorItem := Value;
+  Result := FQuantidade * FValorCusto;
 end;
 
 end.

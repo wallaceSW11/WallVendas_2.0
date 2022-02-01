@@ -23,6 +23,7 @@ type
     function Insert(pEntidade: T): Integer;
     procedure Find(pCampos: TArrayCamposSQL); overload;
     procedure Find(); overload;
+    function FindWhere(const pFiltroSQL: string): TObjectList<T>;
     procedure Delete(const pCampo: string; const pValor: string);
 //    function FindAll(): TObjectList<T>;
   end;
@@ -45,6 +46,7 @@ type
     class function NovaInstancia(var pDataSource: TDataSource): IDAO<T>; overload;
     function FindOne(): T; overload;
     function FindOne(pIdentificador: Integer): T; overload;
+    function FindWhere(const pFiltroSQL: string): TObjectList<T>;
     procedure Update(pEntidade: T);
  //   procedure Insert();
     function Insert(pEntidade: T): Integer;
@@ -149,6 +151,17 @@ begin
   Result := FListaEntidade;
 end;
 
+function TDAOGenerico<T>.FindWhere(const pFiltroSQL: string): TObjectList<T>;
+begin
+  FDAOGenerico
+      .SQL
+        .Where(pFiltroSQL)
+      .&End
+      .Find(FListaEntidade);
+
+  Result := FListaEntidade;
+end;
+
 function TDAOGenerico<T>.Insert(pEntidade: T): Integer;
 begin
   FDAOGenerico.Insert(pEntidade);
@@ -162,11 +175,12 @@ begin
   lQuery := TFDQuery.Create(nil);
   try
     lQuery.Connection := FConexao.Conexao;
-    lQuery.SQL.Add('select seq from sqlite_sequence where name=:Tabela');
-    lQuery.Params.ParamByName('Tabela').AsString := Copy(pTabela, 2, Length(pTabela));
+    //lQuery.SQL.Add('select seq from sqlite_sequence where name=:Tabela');
+    lQuery.SQL.Add('Select id From ' + Copy(pTabela, 2, Length(pTabela)) + ' order by id desc limit 1');
+    //lQuery.Params.ParamByName('Tabela').AsString := Copy(pTabela, 2, Length(pTabela));
     lQuery.Open();
 
-    Result := lQuery.FieldByName('seq').AsInteger;
+    Result := lQuery.FieldByName('id').AsInteger;
   finally
     lQuery.Connection.Close;
     lQuery.Free();
