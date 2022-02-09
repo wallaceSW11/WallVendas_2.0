@@ -84,7 +84,7 @@ type
     function ValorPrecoVenda(): Currency;
     function ValorMargemLucro(): Currency;
     function ValorLucroFinal(): Currency;
-  end;
+   end;
 
 implementation
 
@@ -93,6 +93,12 @@ implementation
 constructor TProduto.Create;
 begin
   FProdutosComposicao := TObjectList<TProdutoComposicao>.Create();
+end;
+
+destructor TProduto.Destroy;
+begin
+  FProdutosComposicao.Free();
+  inherited;
 end;
 
 function TProduto.CustoMontagem: Currency;
@@ -115,12 +121,6 @@ begin
     Exit(CustoReposicao() / FQtEmbalagemCompra);
 
   Result := 0;
-end;
-
-destructor TProduto.Destroy;
-begin
-  FProdutosComposicao.Free();
-  inherited;
 end;
 
 function TProduto.GetPrecoVenda: Currency;

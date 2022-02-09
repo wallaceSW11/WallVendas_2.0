@@ -72,6 +72,7 @@ type
     FTela: TForm;
     procedure ExibirTela<T: TForm>(Sender: TObject);
     procedure ToggleMenu();
+    procedure TelaCheia;
   public
     { Public declarations }
   end;
@@ -103,7 +104,7 @@ begin
   ExibirTela<TTelaCadastroVenda>(Sender);
 end;
 
-procedure TfrmWallVendas.ExibirTela<T>(Sender: TObject);
+ procedure TfrmWallVendas.ExibirTela<T>(Sender: TObject);
 var
   I: Integer;
 begin
@@ -129,12 +130,18 @@ begin
 end;
 
 procedure TfrmWallVendas.FormCreate(Sender: TObject);
+
+begin
+  ReportMemoryLeaksOnShutdown := True;
+
+  TelaCheia();
+end;
+
+procedure TfrmWallVendas.TelaCheia();
 var
   TaskBarH: THandle;
   TaskBarR: TRect;
 begin
-  ReportMemoryLeaksOnShutdown := True;
-
   TaskBarH := FindWindow('Shell_TrayWnd', nil);
   GetWindowRect(TaskBarH, TaskBarR);
   Self.Top := 0;

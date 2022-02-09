@@ -1,6 +1,5 @@
 inherited TelaCadastroProduto: TTelaCadastroProduto
   Caption = 'Produto'
-  ExplicitTop = 1
   PixelsPerInch = 96
   TextHeight = 17
   inherited pnlTop: TPanel
@@ -67,7 +66,7 @@ inherited TelaCadastroProduto: TTelaCadastroProduto
       Top = 96
       Width = 959
       Height = 481
-      ActivePage = tsProdutoComposicao
+      ActivePage = tsProdutoCusto
       Anchors = [akLeft, akTop, akRight, akBottom]
       TabOrder = 0
       OnChange = AtualizarValoresDoProduto
@@ -183,7 +182,7 @@ inherited TelaCadastroProduto: TTelaCadastroProduto
           TabOrder = 2
         end
         object edtCustoProduto: TEditCurrency
-          Tag = 6
+          Tag = 3
           Left = 3
           Top = 81
           Width = 160
@@ -593,16 +592,6 @@ inherited TelaCadastroProduto: TTelaCadastroProduto
       Height = 25
       Anchors = [akLeft, akTop, akRight]
       TabOrder = 2
-    end
-    object chkPossuiComposicao: TCheckBox
-      Left = 837
-      Top = 65
-      Width = 129
-      Height = 17
-      Anchors = [akTop, akRight]
-      Caption = 'Possui composi'#231#227'o'
-      TabOrder = 3
-      Visible = False
     end
   end
   object cdsComposicao: TClientDataSet

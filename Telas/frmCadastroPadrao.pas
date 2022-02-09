@@ -71,7 +71,6 @@ implementation
 
 procedure TTelaCadastroPadrao.btnCancelarClick(Sender: TObject);
 begin
-
   LimparCampos();
   PrepararBotoesIniciais();
   FNovoCadastro := False;

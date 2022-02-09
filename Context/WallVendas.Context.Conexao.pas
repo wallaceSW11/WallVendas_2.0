@@ -11,7 +11,7 @@ uses
 type
   IConexao = interface
     ['{A2E842E4-9727-4799-9F06-E9BA1090F038}']
-  function Conexao(): TFDConnection;
+    function Conexao(): TFDConnection;
   end;
 
   TConexao = class(TInterfacedObject, IConexao)
@@ -55,7 +55,7 @@ end;
 destructor TConexao.Destroy;
 begin
   FConexao.Connected := False;
-  FreeAndNil(FConexao);
+  FConexao.Free();
   inherited;
 end;
 

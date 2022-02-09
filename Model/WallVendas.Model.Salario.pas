@@ -34,6 +34,8 @@ type
     [Campo('VlTotalDespesas')]
     property Despesas: Currency read FDespesas write SetDespesas;
 
+    constructor Create();
+    destructor Destroy; override;
     function ValorDoSalarioPorMinuto: Currency;
     function ValorDoSalarioPorHora: Currency;
     function TotalDeHorasTrabalhadasPorSemana: Double;
@@ -44,6 +46,17 @@ type
 implementation
 
 { TSalario }
+
+constructor TSalario.Create;
+begin
+
+end;
+
+destructor TSalario.Destroy;
+begin
+
+  inherited;
+end;
 
 procedure TSalario.SetDespesas(const Value: Currency);
 begin

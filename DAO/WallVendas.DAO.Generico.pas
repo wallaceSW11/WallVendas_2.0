@@ -17,7 +17,7 @@ type
     ['{8A8D2025-68C3-4DD7-A747-C6141939FB82}']
     function FindOne(): T; overload;
     function FindOne(pIdentificador: Integer): T; overload;
-    function FindJoin(const pCamposSQL: string; const pJoinSQL: string; const pFiltroSQL: string): TObjectList<T>;
+    procedure FindJoin(const pCamposSQL: string; const pJoinSQL: string; const pFiltroSQL: string; var pListaEntidade: TObjectList<T>);
     procedure Update(pEntidade: T);
 //    procedure Insert();
     function Insert(pEntidade: T): Integer;
@@ -25,6 +25,7 @@ type
     procedure Find(); overload;
     function FindWhere(const pFiltroSQL: string): TObjectList<T>;
     procedure Delete(const pCampo: string; const pValor: string);
+    function FindConfiguration(const pNomeConfiguracao: string): T;
 //    function FindAll(): TObjectList<T>;
   end;
 
@@ -52,7 +53,8 @@ type
     function Insert(pEntidade: T): Integer;
     procedure Find(pCampos: TArrayCamposSQL); overload;
     procedure Find(); overload;
-    function FindJoin(const pCamposSQL: string; const pJoinSQL: string; const pFiltroSQL: string): TObjectList<T>;
+    procedure FindJoin(const pCamposSQL: string; const pJoinSQL: string; const pFiltroSQL: string; var pListaEntidade: TObjectList<T>);
+    function FindConfiguration(const pNomeConfiguracao: string): T;
     procedure Delete(const pCampo: string; const pValor: string);
   end;
 
@@ -66,9 +68,9 @@ begin
   FConexao := TConexao.NovaInstancia();
 
   FDAOGenerico := TSimpleDAO<T>
-                  .New(TSimpleQueryFiredac.New(FConexao.Conexao));
+                    .New(TSimpleQueryFiredac.New(FConexao.Conexao));
 
-  FListaEntidade := TObjectList<T>.Create;
+  FListaEntidade := TObjectList<T>.Create();
 end;
 
 constructor TDAOGenerico<T>.Create(var pDataSource: TDataSource);
@@ -88,7 +90,6 @@ begin
 
   FDAOGenerico := TSimpleDAO<T>
                   .New(TSimpleQueryFiredac.New(FConexao.Conexao));
-                  //.BindForm(pBindForm);
 end;
 
 procedure TDAOGenerico<T>.Delete(const pCampo: string; const pValor: string);
@@ -98,6 +99,9 @@ end;
 
 destructor TDAOGenerico<T>.Destroy;
 begin
+//  if (Assigned(FEntidade)) then
+//    FEntidade.Free();
+
   FreeAndNil(FListaEntidade);
   inherited;
 end;
@@ -134,22 +138,42 @@ end;
 
 function TDAOGenerico<T>.FindOne(pIdentificador: Integer): T;
 begin
-  FEntidade := FDAOGenerico.Find(pIdentificador);
+//  FEntidade := FDAOGenerico.Find(pIdentificador);
+  Result := FDAOGenerico.Find(pIdentificador); //FEntidade;
+end;
+
+function TDAOGenerico<T>.FindConfiguration(const pNomeConfiguracao: string): T;
+var
+  lLista: TObjectList<T>;
+begin
+  lLista := TObjectList<T>.Create;
+
+  try
+    FDAOGenerico
+      .SQL
+        .Where('NomeConfiguracao =' + QuotedStr(pNomeConfiguracao))
+      . &End
+    .Find(lLista);
+
+    FEntidade := lLista[0];
+  finally
+    lLista.Free();
+  end;
+
   Result := FEntidade;
 end;
 
-function TDAOGenerico<T>.FindJoin(const pCamposSQL: string; const pJoinSQL: string; const pFiltroSQL: string): TObjectList<T>;
+procedure TDAOGenerico<T>.FindJoin(const pCamposSQL: string; const pJoinSQL: string; const pFiltroSQL: string; var pListaEntidade: TObjectList<T>);
 begin
   FDAOGenerico
-      .SQL
-        .Fields(pCamposSQL)
-        .Join(pJoinSQL)
-        .Where(pFiltroSQL)
-      .&End
-      .Find(FListaEntidade);
-
-  Result := FListaEntidade;
+    .SQL
+      .Fields(pCamposSQL)
+      .Join(pJoinSQL)
+      .Where(pFiltroSQL)
+    .&End
+    .Find(pListaEntidade);
 end;
+
 
 function TDAOGenerico<T>.FindWhere(const pFiltroSQL: string): TObjectList<T>;
 begin
@@ -175,9 +199,7 @@ begin
   lQuery := TFDQuery.Create(nil);
   try
     lQuery.Connection := FConexao.Conexao;
-    //lQuery.SQL.Add('select seq from sqlite_sequence where name=:Tabela');
     lQuery.SQL.Add('Select id From ' + Copy(pTabela, 2, Length(pTabela)) + ' order by id desc limit 1');
-    //lQuery.Params.ParamByName('Tabela').AsString := Copy(pTabela, 2, Length(pTabela));
     lQuery.Open();
 
     Result := lQuery.FieldByName('id').AsInteger;
@@ -186,11 +208,6 @@ begin
     lQuery.Free();
   end;
 end;
-
-//procedure TDAOGenerico<T>.Insert();
-//begin
-//  FDAOGenerico.Insert();
-//end;
 
 class function TDAOGenerico<T>.NovaInstancia(var pBindForm: TForm): IDAO<T>;
 begin

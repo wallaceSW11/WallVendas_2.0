@@ -16,6 +16,7 @@ object TelaPesquisaPadrao: TTelaPesquisaPadrao
   OldCreateOrder = False
   Position = poMainFormCenter
   StyleName = 'Glow'
+  OnKeyDown = FormKeyDown
   OnResize = FormResize
   OnShow = FormShow
   DesignSize = (

@@ -8,7 +8,9 @@ uses
   Vcl.StdCtrls, Vcl.Buttons, Vcl.ExtCtrls, LibTypes, frmPesquisaPadrao, WallVendas.DAO.Generico,
   WallVendas.Model.Inventario, WallVendas.Model.InventarioItem,
   System.Generics.Collections, WallVendas.Helper.DBGrid, LibMessages, wallvendas.Helper.TEdit,
-  Datasnap.DBClient, Wallvendas.Model.Produto;
+  Datasnap.DBClient, Wallvendas.Model.Produto,
+
+  wallvendas.model.ProdutoComposicao;
 
 type
   TTelaCadastroInventario = class(TTelaCadastroPadrao)
@@ -56,6 +58,8 @@ type
     FDAOInventario: IDAO<TInventario>;
     FDAOInventarioItem: IDAO<TInventarioItem>;
     FDAOProduto: IDAO<TProduto>;
+
+    FDAOProdutoComposicao: IDAO<TProdutoComposicao>;
     procedure LocalizarProduto;
     procedure LocalizarProdutoPeloIdentificador;
     procedure LimparCamposProdutoInventario;
@@ -125,22 +129,31 @@ begin
   edtDescricaoInventario.Text := lDadoLocalizado.Descricao;
   dtInventario.DateTime := StrToDateTime(lDadoLocalizado.Complemento);
 
-  lListaInventarioItem := FDAOInventarioItem
-    .FindJoin(
-      'InventarioItem.*, Produto.Descricao',
-      'Inner Join Produto on (Produto.id = InventarioItem.idProduto)',
-      'IdInventario =' + QuotedStr(edtIdInventario.Text));
+  lListaInventarioItem := TObjectList<TInventarioItem>.Create();
 
-  for lInventarioItem in lListaInventarioItem do
-  begin
-    cdsInventarioItem.Append();
-    cdsInventarioItemCodigo.AsInteger := lInventarioItem.IdProduto;
-    cdsInventarioItemDescricao.AsString := lInventarioItem.Descricao;
-    cdsInventarioItemUnidade.AsString := lInventarioItem.Unidade;
-    cdsInventarioItemAltura.AsString := lInventarioItem.Altura;
-    cdsInventarioItemLargura.AsString := lInventarioItem.Largura;
-    cdsInventarioItemQuantidade.AsFloat := lInventarioItem.Quantidade;
-    cdsInventarioItem.Post();
+  try
+    FDAOInventarioItem
+      .FindJoin(
+        'InventarioItem.*, Produto.Descricao',
+        'Inner Join Produto on (Produto.id = InventarioItem.idProduto)',
+        'IdInventario =' + QuotedStr(edtIdInventario.Text),
+        lListaInventarioItem);
+
+    cdsInventarioItem.EmptyDataSet();
+
+    for lInventarioItem in lListaInventarioItem do
+    begin
+      cdsInventarioItem.Append();
+      cdsInventarioItemCodigo.AsInteger := lInventarioItem.IdProduto;
+      cdsInventarioItemDescricao.AsString := lInventarioItem.Descricao;
+      cdsInventarioItemUnidade.AsString := lInventarioItem.Unidade;
+      cdsInventarioItemAltura.AsString := lInventarioItem.Altura;
+      cdsInventarioItemLargura.AsString := lInventarioItem.Largura;
+      cdsInventarioItemQuantidade.AsFloat := lInventarioItem.Quantidade;
+      cdsInventarioItem.Post();
+    end;
+  finally
+    lListaInventarioItem.Free();
   end;
 
   dbgInventario.AjustarColunas(1);
@@ -317,6 +330,8 @@ begin
   FDAOInventarioItem := TDAOGenerico<TInventarioItem>.NovaInstancia();
   FDAOProduto := TDAOGenerico<TProduto>.NovaInstancia();
   cdsInventarioItem.CreateDataSet();
+
+  FDAOProdutoComposicao := TDAOGenerico<TProdutoComposicao>.NovaInstancia();
 end;
 
 procedure TTelaCadastroInventario.FormResize(Sender: TObject);
