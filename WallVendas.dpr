@@ -39,7 +39,8 @@ uses
   LibConstantes in 'lib\LibConstantes.pas',
   WallVendas.DAO.Produto in 'DAO\WallVendas.DAO.Produto.pas',
   WallVendas.DAO.Configuracao in 'DAO\WallVendas.DAO.Configuracao.pas',
-  WallVendas.Model.Configuracao in 'Model\WallVendas.Model.Configuracao.pas';
+  WallVendas.Model.Configuracao in 'Model\WallVendas.Model.Configuracao.pas',
+  frmCalculoMetroQuadrado in 'Telas\frmCalculoMetroQuadrado.pas' {TelaCalcularPrecoMetroQuadrado};
 
 {$R *.res}
 
@@ -47,5 +48,6 @@ begin
   Application.Initialize;
   Application.MainFormOnTaskbar := True;
   Application.CreateForm(TfrmWallVendas, frmWallVendas);
+  Application.CreateForm(TTelaCalcularPrecoMetroQuadrado, TelaCalcularPrecoMetroQuadrado);
   Application.Run;
 end.

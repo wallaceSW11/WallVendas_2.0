@@ -20,6 +20,8 @@ type
     function Insert(const pProduto: TProduto): Integer;
     procedure Update(const pProduto: TProduto);
     procedure Delete(const pIdentificadorProduto: Integer);
+    function ProdutoPossuiVenda(const pIdentificadorProduto: Integer): Boolean;
+    function ProdutoEstaComoInsumo(const pIdentificadorProduto: Integer): Boolean;
   end;
 
   TDAOProduto = class (TInterfacedObject, IDAOProduto)
@@ -34,6 +36,8 @@ type
     function Insert(const pProduto: TProduto): Integer;
     procedure Update(const pProduto: TProduto);
     procedure Delete(const pIdentificadorProduto: Integer);
+    function ProdutoPossuiVenda(const pIdentificadorProduto: Integer): Boolean;
+    function ProdutoEstaComoInsumo(const pIdentificadorProduto: Integer): Boolean;
 
   end;
 
@@ -49,7 +53,8 @@ end;
 
 procedure TDAOProduto.Delete(const pIdentificadorProduto: Integer);
 begin
-  FDAOGenericoProduto.Delete('idProduto', pIdentificadorProduto.ToString);
+  FDAOGenericoProdutoComposicao.Delete('idProduto', pIdentificadorProduto.ToString);
+  FDAOGenericoProduto.Delete('id', pIdentificadorProduto.ToString);
 end;
 
 destructor TDAOProduto.Destroy;
@@ -73,6 +78,8 @@ begin
           'ProdutoComposicao.id,' +
           'ProdutoComposicao.idProduto,' +
           'ProdutoComposicao.idProdutoComposicao,' +
+          'ProdutoComposicao.Altura,' +
+          'ProdutoComposicao.Largura,' +
           'ProdutoComposicao.VlCusto,' +
           'ProdutoComposicao.QtComposicao,' +
           'Produto.Descricao',
@@ -88,6 +95,8 @@ begin
       Result.ProdutosComposicao[I].Descricao := lListaProdutoComposicao[I].Descricao;
       Result.ProdutosComposicao[I].Quantidade := lListaProdutoComposicao[I].Quantidade;
       Result.ProdutosComposicao[I].ValorCusto := lListaProdutoComposicao[I].ValorCusto;
+      Result.ProdutosComposicao[I].Altura := lListaProdutoComposicao[I].Altura;
+      Result.ProdutosComposicao[I].Largura := lListaProdutoComposicao[I].Largura;
     end;
   finally
     lListaProdutoComposicao.Free();
@@ -113,6 +122,17 @@ end;
 class function TDAOProduto.NovaInstancia: IDAOProduto;
 begin
   Result := Self.Create;
+end;
+
+function TDAOProduto.ProdutoEstaComoInsumo(const pIdentificadorProduto: Integer): Boolean;
+begin
+  Result :=
+    (FDAOGenericoProdutoComposicao.FindWhere('idProdutoComposicao = ' + QuotedStr(pIdentificadorProduto.ToString)).Count > 0);
+end;
+
+function TDAOProduto.ProdutoPossuiVenda(const pIdentificadorProduto: Integer): Boolean;
+begin
+  Result := False;
 end;
 
 procedure TDAOProduto.Update(const pProduto: TProduto);

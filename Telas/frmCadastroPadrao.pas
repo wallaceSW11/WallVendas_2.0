@@ -226,6 +226,9 @@ begin
 end;
 
 procedure TTelaCadastroPadrao.HabilitarComponentes(pComponente: TWinControl; pHabilitar: Boolean);
+const
+  TAGS_DISABLE : array of Integer =
+    [TAG_DISABLE, TAG_DISABLE_TEXT_ONE, TAG_DISABLE_TEXT_ZERO_COMA_ZERO, TAG_DISABLE_TEXT_ZERO];
 var
   I: Integer;
 begin
@@ -235,7 +238,7 @@ begin
        (pComponente.Controls[I] is TMemo) or (pComponente.Controls[I] is TCheckBox) or
        (pComponente.Controls[I] is TSpeedButton) or (pComponente.Controls[I] is TButton) or
        (pComponente.Controls[I] is TDateTimePicker) or (pComponente.Controls[I] is TDBGrid) then
-      if (pComponente.Controls[I].Tag in [TAG_DISABLE, TAG_DISABLE_TEXT_ONE, TAG_DISABLE_TEXT_ZERO_COMA_ZERO]) then
+      if (pComponente.Controls[I].Tag in [TAG_DISABLE, TAG_DISABLE_TEXT_ONE, TAG_DISABLE_TEXT_ZERO_COMA_ZERO, TAG_DISABLE_TEXT_ZERO]) then
         pComponente.Controls[I].Enabled := False
       else
         pComponente.Controls[I].Enabled := pHabilitar;
@@ -283,7 +286,8 @@ begin
     case TEdit(pComponente.Controls[I]).Tag of
       TAG_ENABLE,
       TAG_DISABLE: TEdit(pComponente.Controls[I]).Clear();
-      TAG_ENABLE_TEXT_ZERO: TEdit(pComponente.Controls[I]).Text := '0';
+      TAG_ENABLE_TEXT_ZERO,
+      TAG_DISABLE_TEXT_ZERO: TEdit(pComponente.Controls[I]).Text := '0';
       TAG_ENABLE_TEXT_ZERO_COMA_ZERO,
       TAG_DISABLE_TEXT_ZERO_COMA_ZERO: TEdit(pComponente.Controls[I]).Text := '0,00';
       TAG_ENABLE_TEXT_ONE,

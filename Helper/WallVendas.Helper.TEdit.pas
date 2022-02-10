@@ -32,7 +32,8 @@ end;
 
 function TEditHelper.ToFloat(): Double;
 begin
-  Result := StrToFloat(FormatFloat(MASCARA_VALOR_MONETARIO, StrToFloatDef(Self.Text, 0)));
+  FormatSettings.DecimalSeparator := ',';
+  Result := StrToFloat(FormatFloat(MASCARA_VALOR_MONETARIO, StrToFloatDef(string(Self.Text).Replace('.', ''), 0)));
 end;
 
 function TEditHelper.ToInteger(): Integer;

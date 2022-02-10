@@ -143,24 +143,14 @@ begin
 end;
 
 function TDAOGenerico<T>.FindConfiguration(const pNomeConfiguracao: string): T;
-var
-  lLista: TObjectList<T>;
 begin
-  lLista := TObjectList<T>.Create;
+  FDAOGenerico
+    .SQL
+      .Where('NomeConfiguracao =' + QuotedStr(pNomeConfiguracao))
+    . &End
+  .Find(FListaEntidade);
 
-  try
-    FDAOGenerico
-      .SQL
-        .Where('NomeConfiguracao =' + QuotedStr(pNomeConfiguracao))
-      . &End
-    .Find(lLista);
-
-    FEntidade := lLista[0];
-  finally
-    lLista.Free();
-  end;
-
-  Result := FEntidade;
+  Result := FListaEntidade[0];
 end;
 
 procedure TDAOGenerico<T>.FindJoin(const pCamposSQL: string; const pJoinSQL: string; const pFiltroSQL: string; var pListaEntidade: TObjectList<T>);

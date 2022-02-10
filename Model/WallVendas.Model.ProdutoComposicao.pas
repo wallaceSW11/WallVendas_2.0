@@ -13,7 +13,6 @@ type
     FIdentificadorProdutoComposicao: Integer;
     FIdentificadorProduto: Integer;
     FQuantidade: Double;
-//    FValorItem: Currency;
     FDescricao: string;
     FAltura: Integer;
     FLargura: Integer;
@@ -21,11 +20,9 @@ type
     procedure SetIdentificadorProdutoComposicao(const Value: Integer);
     procedure SetQuantidade(const Value: Double);
     procedure SetValorCusto(const Value: Currency);
-//    procedure SetValorItem(const Value: Currency);
     procedure SetDescricao(const Value: string);
     procedure SetAltura(const Value: Integer);
     procedure SetLargura(const Value: Integer);
-//    procedure SetValorItem(const Value: Currency);
   public
     [Campo('idProduto')]
     property IdentificadorProduto: Integer read FIdentificadorProduto write SetIdentificadorProduto;
@@ -35,14 +32,12 @@ type
     property Descricao: string read FDescricao write SetDescricao;
     [Campo('VlCusto')]
     property ValorCusto: Currency read FValorCusto write SetValorCusto;
-    [Ignore]
+    [Campo('Altura')]
     property Altura: Integer read FAltura write SetAltura;
-    [Ignore]
+    [Campo('Largura')]
     property Largura: Integer read FLargura write SetLargura;
     [Campo('QtComposicao')]
     property Quantidade: Double read FQuantidade write SetQuantidade;
-//    [Campo('VlItem')]
-//    property ValorItem: Currency read FValorItem write SetValorItem;
 
    function ValorTotalItem(): Currency;
 

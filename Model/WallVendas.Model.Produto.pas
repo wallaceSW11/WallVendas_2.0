@@ -27,6 +27,9 @@ type
 
     FQtEmbalagemCompra: Double;
     FProdutosComposicao: TObjectList<TProdutoComposicao>;
+    FAltura: Integer;
+    FLargura: Integer;
+    FPrecoMetroQuadrado: Currency;
     procedure SetDescricao(const Value: string);
     procedure SetUnidadeCompra(const Value: string);
     procedure SetPrecoVenda(const Value: Currency);
@@ -42,6 +45,9 @@ type
     procedure SetValorCompra(const Value: Currency);
     procedure SetVlFreteCompra(const Value: Currency);
     procedure SetProdutosComposicao(const Value: TObjectList<TProdutoComposicao>);
+    procedure SetAltura(const Value: Integer);
+    procedure SetLargura(const Value: Integer);
+    procedure SetPrecoMetroQuadrado(const Value: Currency);
   public
     [Campo('Descricao'), Display('Descrição')]
     property Descricao: string read FDescricao write SetDescricao;
@@ -69,6 +75,12 @@ type
     property CustoMinuto: Currency read FCustoMinuto write SetCustoMinuto;
     [Campo('MargemLucro')]
     property MargemLucro: Double read FMargemLucro write SetMargemLucro;
+    [Campo('Altura')]
+    property Altura: Integer read FAltura write SetAltura;
+    [Campo('Largura')]
+    property Largura: Integer read FLargura write SetLargura;
+    [Campo('precometroquadrado')]
+    property PrecoMetroQuadrado: Currency read FPrecoMetroQuadrado write SetPrecoMetroQuadrado;
 
     [Ignore]
     property ProdutosComposicao: TObjectList<TProdutoComposicao> read FProdutosComposicao write SetProdutosComposicao;
@@ -153,6 +165,11 @@ begin
   FAcrescimoDescontoVenda := Value;
 end;
 
+procedure TProduto.SetAltura(const Value: Integer);
+begin
+  FAltura := Value;
+end;
+
 procedure TProduto.SetCustoMinuto(const Value: Currency);
 begin
   FCustoMinuto := Value;
@@ -168,6 +185,11 @@ begin
   FDescricao := Value;
 end;
 
+procedure TProduto.SetLargura(const Value: Integer);
+begin
+  FLargura := Value;
+end;
+
 procedure TProduto.SetMargemLucro(const Value: Double);
 begin
   FMargemLucro := Value;
@@ -176,6 +198,11 @@ end;
 procedure TProduto.SetPossuiComposicao(const Value: Char);
 begin
   FPossuiComposicao := Value;
+end;
+
+procedure TProduto.SetPrecoMetroQuadrado(const Value: Currency);
+begin
+  FPrecoMetroQuadrado := Value;
 end;
 
 procedure TProduto.SetPrecoVenda(const Value: Currency);
