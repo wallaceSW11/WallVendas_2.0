@@ -241,7 +241,7 @@ object TelaCadastroPadrao: TTelaCadastroPadrao
         BevelOuter = bvNone
         TabOrder = 7
       end
-      object pnlCanelar: TPanel
+      object pnlCancelar: TPanel
         Left = 355
         Top = 6
         Width = 75

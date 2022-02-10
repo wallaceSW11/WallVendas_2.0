@@ -40,7 +40,10 @@ uses
   WallVendas.DAO.Produto in 'DAO\WallVendas.DAO.Produto.pas',
   WallVendas.DAO.Configuracao in 'DAO\WallVendas.DAO.Configuracao.pas',
   WallVendas.Model.Configuracao in 'Model\WallVendas.Model.Configuracao.pas',
-  frmCalculoMetroQuadrado in 'Telas\frmCalculoMetroQuadrado.pas' {TelaCalcularPrecoMetroQuadrado};
+  frmCalculoMetroQuadrado in 'Telas\frmCalculoMetroQuadrado.pas' {TelaCalcularPrecoMetroQuadrado},
+  WallVendas.Model.Venda in 'Model\WallVendas.Model.Venda.pas',
+  WallVendas.DAO.Venda in 'DAO\WallVendas.DAO.Venda.pas',
+  frmCadastroVendaDetalhe in 'Telas\frmCadastroVendaDetalhe.pas' {TelaCadastroVendaDetalhe};
 
 {$R *.res}
 
@@ -48,6 +51,6 @@ begin
   Application.Initialize;
   Application.MainFormOnTaskbar := True;
   Application.CreateForm(TfrmWallVendas, frmWallVendas);
-  Application.CreateForm(TTelaCalcularPrecoMetroQuadrado, TelaCalcularPrecoMetroQuadrado);
+  Application.CreateForm(TTelaCadastroVendaDetalhe, TelaCadastroVendaDetalhe);
   Application.Run;
 end.

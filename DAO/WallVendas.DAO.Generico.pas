@@ -24,6 +24,7 @@ type
     procedure Find(pCampos: TArrayCamposSQL); overload;
     procedure Find(); overload;
     function FindWhere(const pFiltroSQL: string): TObjectList<T>;
+    procedure FindWhereDataSource(const pCampos: string; const pInnerJoin: string; const pFiltroSQL: string);
     procedure Delete(const pCampo: string; const pValor: string);
     function FindConfiguration(const pNomeConfiguracao: string): T;
 //    function FindAll(): TObjectList<T>;
@@ -48,6 +49,7 @@ type
     function FindOne(): T; overload;
     function FindOne(pIdentificador: Integer): T; overload;
     function FindWhere(const pFiltroSQL: string): TObjectList<T>;
+    procedure FindWhereDataSource(const pCampos: string; const pInnerJoin: string; const pFiltroSQL: string);
     procedure Update(pEntidade: T);
  //   procedure Insert();
     function Insert(pEntidade: T): Integer;
@@ -174,6 +176,17 @@ begin
       .Find(FListaEntidade);
 
   Result := FListaEntidade;
+end;
+
+procedure TDAOGenerico<T>.FindWhereDataSource(const pCampos: string; const pInnerJoin: string; const pFiltroSQL: string);
+begin
+  FDAOGenerico
+    .SQL
+      .Fields(pCampos)//('Documento.*, Pessoa.Nome as NomePessoa')
+      .Join(pInnerJoin)//('Inner Join Pessoa on (Pessoa.id = Documento.IdPessoa)')
+      .Where(pFiltroSQL)
+    .&End
+    .Find();
 end;
 
 function TDAOGenerico<T>.Insert(pEntidade: T): Integer;

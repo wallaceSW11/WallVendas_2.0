@@ -28,7 +28,7 @@ type
     pnlSalvar: TPanel;
     btnSalvar: TSpeedButton;
     Panel10: TPanel;
-    pnlCanelar: TPanel;
+    pnlCancelar: TPanel;
     btnCancelar: TSpeedButton;
     Panel12: TPanel;
     pnlExcluir: TPanel;
@@ -50,7 +50,7 @@ type
   private
     procedure PrepararBotoesEdicaoNovoCadastro();
     procedure PrepararBotoesIniciais;
-    procedure HabilitarCampos(const pHabilitar: Boolean = True);
+
     procedure AplicarCorBotao(pPainel: TPanel; pButton: TSpeedButton; pCorPrimaria: Boolean);
     procedure HabilitarComponentes(pComponente: TWinControl; pHabilitar: Boolean);
     procedure FocarPrimeiroCampo;
@@ -60,6 +60,7 @@ type
     FNovoCadastro: Boolean;
     FCadastroDuplicado: Boolean;
     procedure HabilitarCamposPesquisaValida();
+    procedure HabilitarCampos(const pHabilitar: Boolean = True);
   end;
 
 var

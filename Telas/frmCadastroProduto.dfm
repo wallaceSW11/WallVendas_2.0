@@ -66,7 +66,7 @@ inherited TelaCadastroProduto: TTelaCadastroProduto
       Top = 96
       Width = 959
       Height = 481
-      ActivePage = tsProdutoComposicao
+      ActivePage = tsProdutoCusto
       Anchors = [akLeft, akTop, akRight, akBottom]
       TabOrder = 0
       OnChange = AtualizarValoresDoProduto

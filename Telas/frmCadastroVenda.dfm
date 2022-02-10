@@ -1,5 +1,6 @@
 inherited TelaCadastroVenda: TTelaCadastroVenda
   Caption = 'Venda'
+  OnResize = FormResize
   PixelsPerInch = 96
   TextHeight = 17
   inherited pnlTop: TPanel
@@ -9,22 +10,14 @@ inherited TelaCadastroVenda: TTelaCadastroVenda
       ExplicitWidth = 54
     end
     inherited pnlBotoes: TPanel
-      inherited pnlNovo: TPanel
-        ExplicitLeft = 91
-      end
-      inherited Panel6: TPanel
-        ExplicitLeft = 81
-      end
-      inherited Panel8: TPanel
-        ExplicitLeft = 166
-      end
-      inherited Panel10: TPanel
-        ExplicitLeft = 260
+      inherited pnlPesquisar: TPanel
+        inherited btnPesquisar: TSpeedButton
+          OnClick = btnPesquisarClick
+        end
       end
     end
   end
   inherited pnlMain: TPanel
-    ExplicitTop = 65
     object btnFiltarVendas: TButton
       Left = 891
       Top = 22
@@ -33,6 +26,7 @@ inherited TelaCadastroVenda: TTelaCadastroVenda
       Anchors = [akTop, akRight]
       Caption = 'Filtrar'
       TabOrder = 0
+      OnClick = btnFiltarVendasClick
     end
     object grpPeriodo: TGroupBox
       Left = 10
@@ -141,10 +135,11 @@ inherited TelaCadastroVenda: TTelaCadastroVenda
     end
     object dbgVenda: TDBGrid
       Left = 10
-      Top = 58
+      Top = 61
       Width = 958
       Height = 519
       Anchors = [akLeft, akTop, akRight, akBottom]
+      DataSource = dsVenda
       Options = [dgTitles, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgConfirmDelete, dgCancelOnExit, dgTitleClick, dgTitleHotTrack]
       TabOrder = 4
       TitleFont.Charset = DEFAULT_CHARSET
@@ -152,12 +147,13 @@ inherited TelaCadastroVenda: TTelaCadastroVenda
       TitleFont.Height = -13
       TitleFont.Name = 'Segoe UI'
       TitleFont.Style = []
+      OnDblClick = dbgVendaDblClick
       Columns = <
         item
           Expanded = False
           FieldName = 'id'
           Title.Caption = 'C'#243'digo'
-          Width = 47
+          Width = 71
           Visible = True
         end
         item
@@ -176,28 +172,33 @@ inherited TelaCadastroVenda: TTelaCadastroVenda
         end
         item
           Expanded = False
-          FieldName = 'TipoVenda'
-          Title.Caption = 'Tipo'
-          Width = 78
+          FieldName = 'Tipo'
+          Width = 100
           Visible = True
         end
         item
           Expanded = False
-          FieldName = 'StatusVenda'
-          Title.Caption = 'Status'
-          Width = 78
+          FieldName = 'Status'
+          Width = 93
           Visible = True
         end
         item
           Expanded = False
-          FieldName = 'DataEntregaVenda'
+          FieldName = 'DataCadastro'
+          Title.Caption = 'Dt. Cadastro'
+          Width = 85
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'DataEntrega'
           Title.Caption = 'Dt. Entrega'
-          Width = 80
+          Width = 97
           Visible = True
         end
         item
           Expanded = False
-          FieldName = 'ValorTotalVenda'
+          FieldName = 'VlTotalVenda'
           Title.Caption = 'Valor total'
           Width = 85
           Visible = True
@@ -211,5 +212,9 @@ inherited TelaCadastroVenda: TTelaCadastroVenda
       Caption = 'Fechamento'
       TabOrder = 5
     end
+  end
+  object dsVenda: TDataSource
+    Left = 64
+    Top = 217
   end
 end

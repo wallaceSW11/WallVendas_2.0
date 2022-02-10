@@ -7,6 +7,7 @@ uses
 
 Type
   TTipoVenda = (tvOrcamento, tvEncomenda, tvVenda);
+  TTipoStatus = (tsAberto, tsFinalizado);
   TTipoIconeMensagem = (timInformacao, timAtencao, timAsteristico, timPergunta, timStop, timErro, timMao);
   TTipoBotaoMensagem = (tbmOk, tbmOKCancelar, tbmAbortar, tbmSimNaoCancelar, tbmSimNao, tbmTentarCancelar);
   TTipoOperacao = (toCadastro, toAlteracao, toVisualizacao, toReabertura);
