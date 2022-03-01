@@ -43,7 +43,9 @@ uses
   frmCalculoMetroQuadrado in 'Telas\frmCalculoMetroQuadrado.pas' {TelaCalcularPrecoMetroQuadrado},
   WallVendas.Model.Venda in 'Model\WallVendas.Model.Venda.pas',
   WallVendas.DAO.Venda in 'DAO\WallVendas.DAO.Venda.pas',
-  frmCadastroVendaDetalhe in 'Telas\frmCadastroVendaDetalhe.pas' {TelaCadastroVendaDetalhe};
+  frmCadastroVendaDetalhe in 'Telas\frmCadastroVendaDetalhe.pas' {TelaCadastroVendaDetalhe},
+  WallVendas.Model.VendaItem in 'Model\WallVendas.Model.VendaItem.pas',
+  WallVendas.Model.VendaPagamento in 'Model\WallVendas.Model.VendaPagamento.pas';
 
 {$R *.res}
 

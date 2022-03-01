@@ -32,6 +32,8 @@ type
     procedure btnFiltarVendasClick(Sender: TObject);
     procedure btnPesquisarClick(Sender: TObject);
     procedure dbgVendaDblClick(Sender: TObject);
+    procedure btnNovoClick(Sender: TObject);
+    procedure btnEditarClick(Sender: TObject);
   private
     FDAOVenda: IDAOVenda;
   public
@@ -45,10 +47,25 @@ implementation
 
 {$R *.dfm}
 
+procedure TTelaCadastroVenda.btnEditarClick(Sender: TObject);
+begin
+//  inherited;
+  if (dsVenda.DataSet.IsEmpty) then
+    Exit;
+
+  TelaCadastroVendaDetalhe.Exibir(dsVenda.DataSet.FieldByName('id').AsInteger);
+end;
+
 procedure TTelaCadastroVenda.btnFiltarVendasClick(Sender: TObject);
 begin
   inherited;
   FDAOVenda.Find(dtpVendaInicial.DateTime, dtpVendaFinal.DateTime);
+end;
+
+procedure TTelaCadastroVenda.btnNovoClick(Sender: TObject);
+begin
+//  inherited;
+  TelaCadastroVendaDetalhe.Exibir();
 end;
 
 procedure TTelaCadastroVenda.btnPesquisarClick(Sender: TObject);
@@ -60,7 +77,7 @@ end;
 
 procedure TTelaCadastroVenda.dbgVendaDblClick(Sender: TObject);
 begin
-  if (dsVenda.DataSet.IsEmpty) then
+   if (dsVenda.DataSet.IsEmpty) then
     Exit;
 
   TelaCadastroVendaDetalhe.Exibir(dsVenda.DataSet.FieldByName('id').AsInteger);
@@ -88,6 +105,7 @@ begin
   pnlSalvar.Visible := False;
   pnlCancelar.Visible := False;
   HabilitarCampos();
+  btnEditar.Enabled := True;
 
   dtpVendaInicial.DateTime := StartOfTheMonth(Now());
   dtpVendaFinal.DateTime := EndOfTheMonth(Now());

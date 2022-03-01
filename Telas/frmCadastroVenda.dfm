@@ -15,6 +15,11 @@ inherited TelaCadastroVenda: TTelaCadastroVenda
           OnClick = btnPesquisarClick
         end
       end
+      inherited pnlEditar: TPanel
+        inherited btnEditar: TSpeedButton
+          ExplicitLeft = -4
+        end
+      end
     end
   end
   inherited pnlMain: TPanel

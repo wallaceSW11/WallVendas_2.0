@@ -4,6 +4,9 @@ interface
 
 uses
   wallvendas.Model.Base,
+  WallVendas.Model.VendaItem,
+  WallVendas.Model.VendaPagamento,
+  System.Generics.Collections,
   SimpleAttributes,
   libTypes;
 
@@ -24,6 +27,8 @@ type
     FValorAcrescimoVenda: Currency;
     FTipo: Char;
     FNomePessoa: string;
+    FRecebimentos: TObjectList<TVendaPagamento>;
+    FItensVenda: TObjectList<TVendaItem>;
     procedure SetDataCadastro(const Value: TDateTime);
     procedure SetDataEntrega(const Value: TDateTime);
     procedure SetIdentificadorPessoa(const Value: Integer);
@@ -37,6 +42,8 @@ type
     procedure SetValorTotalInsumo(const Value: Currency);
     procedure SetValorTotalVenda(const Value: Currency);
     procedure SetNomePessoa(const Value: string);
+    procedure SetFItensVenda(const Value: TObjectList<TVendaItem>);
+    procedure SetFRecebimentos(const Value: TObjectList<TVendaPagamento>);
   public
     [Campo('Tipo')]
     property Tipo: Char read FTipo write SetTipo;
@@ -65,11 +72,32 @@ type
     [Campo('VlTotalInsumo')]
     property ValorTotalInsumo: Currency read FValorTotalInsumo write SetValorTotalInsumo;
 
+    [Ignore]
+    property ItensVenda: TObjectList<TVendaItem> read FItensVenda write SetFItensVenda;
+    [Ignore]
+    property Recebimentos: TObjectList<TVendaPagamento> read FRecebimentos write SetFRecebimentos;
+
+    constructor Create();
+    destructor Destroy(); override;
+
   end;
 
 implementation
 
 { TVenda }
+
+constructor TVenda.Create;
+begin
+  FItensVenda := TObjectList<TVendaItem>.Create();
+  FRecebimentos := TObjectList<TVendaPagamento>.Create();
+end;
+
+destructor TVenda.Destroy;
+begin
+  FItensVenda.Free();
+  FRecebimentos.Free();
+  inherited;
+end;
 
 procedure TVenda.SetDataCadastro(const Value: TDateTime);
 begin
@@ -79,6 +107,16 @@ end;
 procedure TVenda.SetDataEntrega(const Value: TDateTime);
 begin
   FDataEntrega := Value;
+end;
+
+procedure TVenda.SetFItensVenda(const Value: TObjectList<TVendaItem>);
+begin
+  FItensVenda := Value;
+end;
+
+procedure TVenda.SetFRecebimentos(const Value: TObjectList<TVendaPagamento>);
+begin
+  FRecebimentos := Value;
 end;
 
 procedure TVenda.SetIdentificadorPessoa(const Value: Integer);

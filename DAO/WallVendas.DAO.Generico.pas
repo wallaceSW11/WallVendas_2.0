@@ -23,7 +23,8 @@ type
     function Insert(pEntidade: T): Integer;
     procedure Find(pCampos: TArrayCamposSQL); overload;
     procedure Find(); overload;
-    function FindWhere(const pFiltroSQL: string): TObjectList<T>;
+    function FindWhere(const pFiltroSQL: string): TObjectList<T>; overload;
+    procedure FindWhere(const pFiltroSQL: string; var pListaResultado: TObjectList<T>); overload;
     procedure FindWhereDataSource(const pCampos: string; const pInnerJoin: string; const pFiltroSQL: string);
     procedure Delete(const pCampo: string; const pValor: string);
     function FindConfiguration(const pNomeConfiguracao: string): T;
@@ -48,7 +49,8 @@ type
     class function NovaInstancia(var pDataSource: TDataSource): IDAO<T>; overload;
     function FindOne(): T; overload;
     function FindOne(pIdentificador: Integer): T; overload;
-    function FindWhere(const pFiltroSQL: string): TObjectList<T>;
+    function FindWhere(const pFiltroSQL: string): TObjectList<T>; overload;
+    procedure FindWhere(const pFiltroSQL: string; var pListaResultado: TObjectList<T>); overload;
     procedure FindWhereDataSource(const pCampos: string; const pInnerJoin: string; const pFiltroSQL: string);
     procedure Update(pEntidade: T);
  //   procedure Insert();
@@ -178,12 +180,21 @@ begin
   Result := FListaEntidade;
 end;
 
+procedure TDAOGenerico<T>.FindWhere(const pFiltroSQL: string; var pListaResultado: TObjectList<T>);
+begin
+  FDAOGenerico
+    .SQL
+      .Where(pFiltroSQL)
+    .&End
+    .Find(pListaResultado);
+end;
+
 procedure TDAOGenerico<T>.FindWhereDataSource(const pCampos: string; const pInnerJoin: string; const pFiltroSQL: string);
 begin
   FDAOGenerico
     .SQL
-      .Fields(pCampos)//('Documento.*, Pessoa.Nome as NomePessoa')
-      .Join(pInnerJoin)//('Inner Join Pessoa on (Pessoa.id = Documento.IdPessoa)')
+      .Fields(pCampos)
+      .Join(pInnerJoin)
       .Where(pFiltroSQL)
     .&End
     .Find();
