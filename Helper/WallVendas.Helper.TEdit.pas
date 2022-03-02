@@ -15,8 +15,9 @@ type
     function ToCurrency(): Currency;
     function ToFloat(): Double;
     function ToInteger(): Integer;
-    procedure Focar();
     function IsEmpty():Boolean;
+    function ZeradoComVirgula:string;
+    procedure Focar();
   end;
 
 implementation
@@ -53,6 +54,11 @@ end;
 function TEditHelper.IsEmpty():Boolean;
 begin
   Result := Trim(Self.Text).IsEmpty();
+end;
+
+function TEditHelper.ZeradoComVirgula: string;
+begin
+  Self.Text := '0,00';
 end;
 
 end.

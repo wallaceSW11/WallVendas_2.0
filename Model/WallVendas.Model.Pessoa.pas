@@ -15,11 +15,25 @@ type
   public
     [Campo('Nome')]
     property Nome: string read FNome write SetNome;
+
+    constructor Create();
+    destructor Destroy; override;
   end;
 
 implementation
 
 { TPessoa }
+
+constructor TPessoa.Create;
+begin
+
+end;
+
+destructor TPessoa.Destroy;
+begin
+
+  inherited;
+end;
 
 procedure TPessoa.SetNome(const Value: string);
 begin

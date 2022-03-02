@@ -49,11 +49,11 @@ implementation
 
 procedure TTelaCadastroVenda.btnEditarClick(Sender: TObject);
 begin
-//  inherited;
   if (dsVenda.DataSet.IsEmpty) then
     Exit;
 
-  TelaCadastroVendaDetalhe.Exibir(dsVenda.DataSet.FieldByName('id').AsInteger);
+  TTelaCadastroVendaDetalhe.Exibir(dsVenda.DataSet.FieldByName('id').AsInteger);
+  btnFiltarVendasClick(nil);
 end;
 
 procedure TTelaCadastroVenda.btnFiltarVendasClick(Sender: TObject);
@@ -64,8 +64,8 @@ end;
 
 procedure TTelaCadastroVenda.btnNovoClick(Sender: TObject);
 begin
-//  inherited;
-  TelaCadastroVendaDetalhe.Exibir();
+  TTelaCadastroVendaDetalhe.Exibir();
+  btnFiltarVendasClick(nil);
 end;
 
 procedure TTelaCadastroVenda.btnPesquisarClick(Sender: TObject);
@@ -80,7 +80,7 @@ begin
    if (dsVenda.DataSet.IsEmpty) then
     Exit;
 
-  TelaCadastroVendaDetalhe.Exibir(dsVenda.DataSet.FieldByName('id').AsInteger);
+  TTelaCadastroVendaDetalhe.Exibir(dsVenda.DataSet.FieldByName('id').AsInteger);
 end;
 
 procedure TTelaCadastroVenda.FormCreate(Sender: TObject);

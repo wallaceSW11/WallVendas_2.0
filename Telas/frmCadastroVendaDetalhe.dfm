@@ -10,9 +10,12 @@ object TelaCadastroVendaDetalhe: TTelaCadastroVendaDetalhe
   Font.Height = -13
   Font.Name = 'Segoe UI'
   Font.Style = []
+  KeyPreview = True
   OldCreateOrder = False
   Position = poOwnerFormCenter
   OnCreate = FormCreate
+  OnKeyDown = FormKeyDown
+  OnKeyPress = FormKeyPress
   OnResize = FormResize
   OnShow = FormShow
   DesignSize = (
@@ -21,33 +24,33 @@ object TelaCadastroVendaDetalhe: TTelaCadastroVendaDetalhe
   PixelsPerInch = 96
   TextHeight = 17
   object btnFinalizar: TSpeedButton
-    Left = 699
-    Top = 600
-    Width = 81
-    Height = 49
+    Left = 711
+    Top = 621
+    Width = 80
+    Height = 33
     Anchors = [akRight, akBottom]
     Caption = 'Finalizar'
   end
   object btnOk: TSpeedButton
-    Left = 792
-    Top = 600
-    Width = 81
-    Height = 49
+    Left = 797
+    Top = 621
+    Width = 80
+    Height = 33
     Anchors = [akRight, akBottom]
     Caption = 'OK'
     OnClick = btnOkClick
   end
   object btnCancelar: TSpeedButton
-    Left = 887
-    Top = 600
-    Width = 81
-    Height = 49
+    Left = 883
+    Top = 621
+    Width = 80
+    Height = 33
     Anchors = [akRight, akBottom]
     Caption = 'Cancelar'
     OnClick = btnCancelarClick
   end
   object lblDtVenda: TLabel
-    Left = 765
+    Left = 755
     Top = 6
     Width = 101
     Height = 17
@@ -88,7 +91,7 @@ object TelaCadastroVendaDetalhe: TTelaCadastroVendaDetalhe
     ParentFont = False
   end
   object lblStatusVenda: TLabel
-    Left = 226
+    Left = 231
     Top = 6
     Width = 35
     Height = 17
@@ -115,7 +118,7 @@ object TelaCadastroVendaDetalhe: TTelaCadastroVendaDetalhe
   end
   object btnLocalizarPessoaVenda: TSpeedButton
     Left = 84
-    Top = 80
+    Top = 75
     Width = 23
     Height = 22
     Font.Charset = DEFAULT_CHARSET
@@ -124,10 +127,11 @@ object TelaCadastroVendaDetalhe: TTelaCadastroVendaDetalhe
     Font.Name = 'Segoe UI'
     Font.Style = []
     ParentFont = False
+    OnClick = btnLocalizarPessoaVendaClick
   end
   object lblCodigoPessoa: TLabel
     Left = 9
-    Top = 62
+    Top = 57
     Width = 43
     Height = 17
     Caption = 'C'#243'digo'
@@ -140,7 +144,7 @@ object TelaCadastroVendaDetalhe: TTelaCadastroVendaDetalhe
   end
   object lblNomePessoa: TLabel
     Left = 114
-    Top = 62
+    Top = 57
     Width = 41
     Height = 17
     Caption = 'Pessoa'
@@ -180,7 +184,7 @@ object TelaCadastroVendaDetalhe: TTelaCadastroVendaDetalhe
     ParentFont = False
   end
   object lblValorTotalProduto: TLabel
-    Left = 794
+    Left = 782
     Top = 411
     Width = 94
     Height = 17
@@ -194,7 +198,7 @@ object TelaCadastroVendaDetalhe: TTelaCadastroVendaDetalhe
     ParentFont = False
   end
   object lblVlTotalProduto: TLabel
-    Left = 920
+    Left = 908
     Top = 411
     Width = 43
     Height = 17
@@ -224,7 +228,7 @@ object TelaCadastroVendaDetalhe: TTelaCadastroVendaDetalhe
     ParentFont = False
   end
   object lblQuantidadeTotal: TLabel
-    Left = 170
+    Left = 179
     Top = 411
     Width = 7
     Height = 17
@@ -313,9 +317,9 @@ object TelaCadastroVendaDetalhe: TTelaCadastroVendaDetalhe
     ParentFont = False
   end
   object dtpCadastroVenda: TDateTimePicker
-    Left = 765
+    Left = 755
     Top = 24
-    Width = 97
+    Width = 100
     Height = 25
     Anchors = [akTop, akRight]
     Date = 44220.000000000000000000
@@ -331,7 +335,7 @@ object TelaCadastroVendaDetalhe: TTelaCadastroVendaDetalhe
   object dtpEntregaVenda: TDateTimePicker
     Left = 871
     Top = 24
-    Width = 97
+    Width = 100
     Height = 25
     Anchors = [akTop, akRight]
     Date = 44220.000000000000000000
@@ -365,7 +369,7 @@ object TelaCadastroVendaDetalhe: TTelaCadastroVendaDetalhe
       'Venda')
   end
   object cbbStatusVenda: TComboBox
-    Left = 226
+    Left = 228
     Top = 24
     Width = 112
     Height = 25
@@ -401,8 +405,8 @@ object TelaCadastroVendaDetalhe: TTelaCadastroVendaDetalhe
     TabOrder = 4
   end
   object edtIdPessoa: TEdit
-    Left = 9
-    Top = 80
+    Left = 8
+    Top = 75
     Width = 70
     Height = 25
     Alignment = taRightJustify
@@ -413,10 +417,11 @@ object TelaCadastroVendaDetalhe: TTelaCadastroVendaDetalhe
     Font.Style = []
     ParentFont = False
     TabOrder = 5
+    OnExit = edtIdPessoaExit
   end
   object edtNomePessoa: TEdit
     Left = 114
-    Top = 80
+    Top = 75
     Width = 853
     Height = 25
     TabStop = False
@@ -432,9 +437,9 @@ object TelaCadastroVendaDetalhe: TTelaCadastroVendaDetalhe
   end
   object dbgProduto: TDBGrid
     Left = 10
-    Top = 145
+    Top = 135
     Width = 958
-    Height = 260
+    Height = 275
     Anchors = [akLeft, akTop, akRight, akBottom]
     DataSource = dsProduto
     Font.Charset = DEFAULT_CHARSET
@@ -450,6 +455,8 @@ object TelaCadastroVendaDetalhe: TTelaCadastroVendaDetalhe
     TitleFont.Height = -13
     TitleFont.Name = 'Segoe UI'
     TitleFont.Style = []
+    OnCellClick = dbgProdutoCellClick
+    OnDblClick = dbgProdutoDblClick
     Columns = <
       item
         Expanded = False
@@ -501,7 +508,7 @@ object TelaCadastroVendaDetalhe: TTelaCadastroVendaDetalhe
   end
   object pnlProduto: TPanel
     Left = 10
-    Top = 121
+    Top = 111
     Width = 958
     Height = 25
     Anchors = [akLeft, akTop, akRight]
@@ -521,6 +528,7 @@ object TelaCadastroVendaDetalhe: TTelaCadastroVendaDetalhe
       Align = alLeft
       Caption = '+'
       TabOrder = 0
+      OnClick = btnAdicionarProdutoClick
     end
     object btnEditarProduto: TBitBtn
       Left = 24
@@ -531,6 +539,7 @@ object TelaCadastroVendaDetalhe: TTelaCadastroVendaDetalhe
       Caption = 'E'
       Enabled = False
       TabOrder = 1
+      OnClick = dbgProdutoDblClick
     end
     object btnRemoverProduto: TBitBtn
       Left = 47
@@ -541,6 +550,7 @@ object TelaCadastroVendaDetalhe: TTelaCadastroVendaDetalhe
       Caption = '-'
       Enabled = False
       TabOrder = 2
+      OnClick = btnRemoverProdutoClick
     end
     object btnRelatorio: TBitBtn
       Left = 934
@@ -586,10 +596,12 @@ object TelaCadastroVendaDetalhe: TTelaCadastroVendaDetalhe
         TitleFont.Height = -13
         TitleFont.Name = 'Segoe UI'
         TitleFont.Style = []
+        OnCellClick = dbgRecebimentoCellClick
+        OnDblClick = dbgRecebimentoDblClick
         Columns = <
           item
             Expanded = False
-            FieldName = 'Id'
+            FieldName = 'id'
             Visible = False
           end
           item
@@ -632,6 +644,7 @@ object TelaCadastroVendaDetalhe: TTelaCadastroVendaDetalhe
           Caption = '-'
           Enabled = False
           TabOrder = 0
+          OnClick = btnRemoverRecebimentoClick
         end
         object btnEditarRecebimento: TBitBtn
           Left = 24
@@ -642,6 +655,9 @@ object TelaCadastroVendaDetalhe: TTelaCadastroVendaDetalhe
           Caption = 'E'
           Enabled = False
           TabOrder = 1
+          OnClick = btnEditarRecebimentoClick
+          ExplicitLeft = 18
+          ExplicitTop = -1
         end
         object btnAdicionarRecebimento: TBitBtn
           Left = 1
@@ -651,6 +667,7 @@ object TelaCadastroVendaDetalhe: TTelaCadastroVendaDetalhe
           Align = alLeft
           Caption = '+'
           TabOrder = 2
+          OnClick = btnAdicionarRecebimentoClick
         end
       end
     end
@@ -787,6 +804,8 @@ object TelaCadastroVendaDetalhe: TTelaCadastroVendaDetalhe
   object cdsProduto: TClientDataSet
     Aggregates = <>
     Params = <>
+    AfterPost = cdsProdutoAfterPost
+    AfterDelete = cdsProdutoAfterDelete
     Left = 616
     Top = 280
     object cdsProdutoid: TIntegerField
@@ -848,6 +867,8 @@ object TelaCadastroVendaDetalhe: TTelaCadastroVendaDetalhe
   object cdsRecebimento: TClientDataSet
     Aggregates = <>
     Params = <>
+    AfterPost = cdsRecebimentoAfterPost
+    AfterDelete = cdsRecebimentoAfterDelete
     Left = 588
     Top = 502
     object cdsRecebimentoid: TIntegerField

@@ -56,7 +56,7 @@ type
     [Campo('IdPessoa')]
     property IdentificadorPessoa: Integer read FIdentificadorPessoa write SetIdentificadorPessoa;
     [Ignore]
-    property NomePessoa: string read FNomePessoa write SetNomePessoa;
+    property Nome: string read FNomePessoa write SetNomePessoa;
     [Campo('VlAcrescimoVenda')]
     property ValorAcrescimoVenda: Currency read FValorAcrescimoVenda write SetValorAcrescimoVenda;
     [Campo('VlDescontoVenda')]
@@ -79,6 +79,11 @@ type
 
     constructor Create();
     destructor Destroy(); override;
+
+    function ValorTotalItem(): Currency;
+    function TotalItens(): Double;
+    function TotalProdutos(): Double;
+    function ValorTotalRecebimento(): Currency;
 
   end;
 
@@ -172,6 +177,41 @@ end;
 procedure TVenda.SetValorTotalVenda(const Value: Currency);
 begin
   FValorTotalVenda := Value;
+end;
+
+function TVenda.TotalItens: Double;
+begin
+  Result := FItensVenda.Count;
+end;
+
+function TVenda.TotalProdutos: Double;
+var
+  lVendaItem: TVendaItem;
+begin
+  Result := 0;
+
+  for lVendaItem in Self.FItensVenda do
+    Result := Result + lVendaItem.QuantidadeItem;
+end;
+
+function TVenda.ValorTotalItem: Currency;
+var
+  lVendaItem: TVendaItem;
+begin
+  Result := 0;
+
+  for lVendaItem in Self.FItensVenda do
+    Result := Result + lVendaItem.ValorItem;
+end;
+
+function TVenda.ValorTotalRecebimento: Currency;
+var
+  lRecebimento: TVendaPagamento;
+begin
+  Result := 0;
+
+  for lRecebimento in Self.Recebimentos do
+    Result := Result + lRecebimento.ValorPagamento;
 end;
 
 end.

@@ -17,6 +17,7 @@ type
     ['{8A8D2025-68C3-4DD7-A747-C6141939FB82}']
     function FindOne(): T; overload;
     function FindOne(pIdentificador: Integer): T; overload;
+    function FindOneInnerJoin(const pIdentificador: Integer; const pInnerJoin: string): T;
     procedure FindJoin(const pCamposSQL: string; const pJoinSQL: string; const pFiltroSQL: string; var pListaEntidade: TObjectList<T>);
     procedure Update(pEntidade: T);
 //    procedure Insert();
@@ -50,6 +51,7 @@ type
     function FindOne(): T; overload;
     function FindOne(pIdentificador: Integer): T; overload;
     function FindWhere(const pFiltroSQL: string): TObjectList<T>; overload;
+    function FindOneInnerJoin(const pIdentificador: Integer; const pInnerJoin: string): T;
     procedure FindWhere(const pFiltroSQL: string; var pListaResultado: TObjectList<T>); overload;
     procedure FindWhereDataSource(const pCampos: string; const pInnerJoin: string; const pFiltroSQL: string);
     procedure Update(pEntidade: T);
@@ -103,10 +105,11 @@ end;
 
 destructor TDAOGenerico<T>.Destroy;
 begin
-//  if (Assigned(FEntidade)) then
+  FreeAndNil(FListaEntidade);
+
+//  if Assigned(FEntidade) then
 //    FEntidade.Free();
 
-  FreeAndNil(FListaEntidade);
   inherited;
 end;
 
@@ -142,8 +145,17 @@ end;
 
 function TDAOGenerico<T>.FindOne(pIdentificador: Integer): T;
 begin
-//  FEntidade := FDAOGenerico.Find(pIdentificador);
-  Result := FDAOGenerico.Find(pIdentificador); //FEntidade;
+  Result := FDAOGenerico.Find(pIdentificador);
+end;
+
+function TDAOGenerico<T>.FindOneInnerJoin(const pIdentificador: Integer; const pInnerJoin: string): T;
+begin
+  Result :=
+    FDAOGenerico
+      .SQL
+        .Join(pInnerJoin)
+      .&End
+      .Find(pIdentificador);
 end;
 
 function TDAOGenerico<T>.FindConfiguration(const pNomeConfiguracao: string): T;
@@ -203,7 +215,8 @@ end;
 function TDAOGenerico<T>.Insert(pEntidade: T): Integer;
 begin
   FDAOGenerico.Insert(pEntidade);
-  Result := Self.LastId(pEntidade.ClassName);
+  Result := Self.LastId(pEntidade.ClassName.Replace('Venda', 'Documento'));
+
 end;
 
 function TDAOGenerico<T>.LastId(const pTabela: string): Integer;

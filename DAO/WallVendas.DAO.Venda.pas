@@ -8,14 +8,15 @@ uses
   Data.DB, System.SysUtils,
   System.Generics.Collections,
   WallVendas.Model.VendaItem,
-  WallVendas.Model.VendaPagamento;
+  WallVendas.Model.VendaPagamento,
+  WallVendas.Model.Pessoa;
 
 type
   IDAOVenda = interface
     ['{13D92361-AC60-4144-B82A-E92E6B42AAA9}']
     function Find(const pIdentificador: Integer): TVenda; overload;
     procedure Find(const pDataInicial: TDateTime; const pDataFinal: TDateTime); overload;
-    function Insert(const pVenda: TVenda): Integer;
+    function Insert(pVenda: TVenda): Integer;
     procedure Update(const pVenda: TVenda);
     procedure Delete(const pIdentificadorVenda: Integer);
   end;
@@ -25,6 +26,7 @@ type
     FDAOVenda: IDAO<TVenda>;
     FDAOVendaItem: IDAO<TVendaItem>;
     FDAOVendaPagamento: IDAO<TVendaPagamento>;
+    FDAOPessoa: IDAO<TPessoa>;
     constructor Create(var pDataSource: TDataSource); overload;
     constructor Create(); overload;
   public
@@ -33,7 +35,7 @@ type
     class function NovaInstancia(): IDAOVenda; overload;
     function Find(const pIdentificador: Integer): TVenda; overload;
     procedure Find(const pDataInicial: TDateTime; const pDataFinal: TDateTime); overload;
-    function Insert(const pVenda: TVenda): Integer;
+    function Insert(pVenda: TVenda): Integer;
     procedure Update(const pVenda: TVenda);
     procedure Delete(const pIdentificadorVenda: Integer);
   end;
@@ -47,6 +49,7 @@ begin
   FDAOVenda := TDAOGenerico<TVenda>.NovaInstancia(pDataSource);
   FDAOVendaItem := TDAOGenerico<TVendaItem>.NovaInstancia();
   FDAOVendaPagamento := TDAOGenerico<TVendaPagamento>.NovaInstancia();
+  FDAOPessoa := TDAOGenerico<TPessoa>.NovaInstancia();
 end;
 
 constructor TDAOVenda.Create();
@@ -54,6 +57,7 @@ begin
   FDAOVenda := TDAOGenerico<TVenda>.NovaInstancia();
   FDAOVendaItem := TDAOGenerico<TVendaItem>.NovaInstancia();
   FDAOVendaPagamento := TDAOGenerico<TVendaPagamento>.NovaInstancia();
+  FDAOPessoa := TDAOGenerico<TPessoa>.NovaInstancia();
 end;
 
 procedure TDAOVenda.Delete(const pIdentificadorVenda: Integer);
@@ -71,9 +75,16 @@ function TDAOVenda.Find(const pIdentificador: Integer): TVenda;
 var
   lItens: TObjectList<TVendaItem>;
   lRecebimentos: TObjectList<TVendaPagamento>;
+  lPessoa: TPessoa;
   I: Integer;
 begin
   Result := FDAOVenda.FindOne(pIdentificador);
+  lPessoa := FDAOPessoa.FindOne(Result.IdentificadorPessoa);
+  try
+    Result.Nome := lPessoa.Nome;
+  finally
+    lPessoa.Free();
+  end;
 
   lItens := TObjectList<TVendaItem>.Create;
   lRecebimentos := TObjectList<TVendaPagamento>.Create();
@@ -122,9 +133,24 @@ begin
      QuotedStr(FormatDateTime('yyyy-mm-dd', pDataFinal)) + ')' );
 end;
 
-function TDAOVenda.Insert(const pVenda: TVenda): Integer;
+function TDAOVenda.Insert(pVenda: TVenda): Integer;
+var
+  lVendaItem: TVendaItem;
+  lRecebimento: TVendaPagamento;
 begin
-  Result := 0;
+  Result := FDAOVenda.Insert(pVenda);
+
+  for lVendaItem in pVenda.ItensVenda do
+  begin
+    lVendaItem.IdentificadorDocumento := Result;
+    FDAOVendaItem.Insert(lVendaItem);
+  end;
+
+  for lRecebimento in pVenda.Recebimentos do
+  begin
+    lRecebimento.IdentificadorDocumento := Result;
+    FDAOVendaPagamento.Insert(lRecebimento);
+  end;
 end;
 
 class function TDAOVenda.NovaInstancia(var pDataSource: TDataSource): IDAOVenda;
@@ -138,7 +164,22 @@ begin
 end;
 
 procedure TDAOVenda.Update(const pVenda: TVenda);
+var
+  lVendaItem: TVendaItem;
+  lRecebimento: TVendaPagamento;
 begin
+  FDAOVenda.Update(pVenda);
+
+  FDAOVendaItem.Delete('IdDocumento', pVenda.Id.ToString);
+
+  for lVendaItem in pVenda.ItensVenda do
+    FDAOVendaItem.Insert(lVendaItem);
+
+
+  FDAOVendaPagamento.Delete('IdDocumento', pVenda.Id.ToString);
+
+  for lRecebimento in pVenda.Recebimentos do
+    FDAOVendaPagamento.Insert(lRecebimento);
 
 end;
 

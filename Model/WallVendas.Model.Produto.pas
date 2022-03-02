@@ -142,6 +142,9 @@ end;
 
 function TProduto.ValorLucroFinal: Currency;
 begin
+  if (ValorCompra = ValorPrecoVenda) then
+    Exit(0);
+
   Result := ValorPrecoVenda() - ValorTotalInsumos;
 end;
 
@@ -242,15 +245,12 @@ end;
 
 function TProduto.ValorTotalInsumos: Currency;
 var
-  lTotalInsumos: Currency;
   lProdutoComposicao: TProdutoComposicao;
 begin
-  lTotalInsumos := 0;
+  Result := 0;
 
   for lProdutoComposicao in Self.FProdutosComposicao do
-    lTotalInsumos := lTotalInsumos + lProdutoComposicao.ValorTotalItem;
-
-  Result := lTotalInsumos;
+    Result := Result + lProdutoComposicao.ValorTotalItem;
 end;
 
 end.

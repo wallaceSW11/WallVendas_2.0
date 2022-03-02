@@ -45,7 +45,10 @@ uses
   WallVendas.DAO.Venda in 'DAO\WallVendas.DAO.Venda.pas',
   frmCadastroVendaDetalhe in 'Telas\frmCadastroVendaDetalhe.pas' {TelaCadastroVendaDetalhe},
   WallVendas.Model.VendaItem in 'Model\WallVendas.Model.VendaItem.pas',
-  WallVendas.Model.VendaPagamento in 'Model\WallVendas.Model.VendaPagamento.pas';
+  WallVendas.Model.VendaPagamento in 'Model\WallVendas.Model.VendaPagamento.pas',
+  frmCadastroVendaProduto in 'Telas\frmCadastroVendaProduto.pas' {TelaCadastroVendaProduto},
+  WallVendas.Helper.DataSet in 'Helper\WallVendas.Helper.DataSet.pas',
+  frmCadastroVendaRecebimento in 'Telas\frmCadastroVendaRecebimento.pas' {TelaCadastroVendaRecebimento};
 
 {$R *.res}
 
@@ -53,6 +56,5 @@ begin
   Application.Initialize;
   Application.MainFormOnTaskbar := True;
   Application.CreateForm(TfrmWallVendas, frmWallVendas);
-  Application.CreateForm(TTelaCadastroVendaDetalhe, TelaCadastroVendaDetalhe);
   Application.Run;
 end.
